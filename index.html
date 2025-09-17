@@ -492,7 +492,7 @@
                 <h1>🔮 Tarot del Ogro azul ✨</h1>
                 <p>Descubre los secretos que las cartas de este ogro tienen para ti</p>
                 <div class="ogre-area">
-                    <img src="Ogro.png" alt="Ogro" style="max-width: 150px; height: auto;">
+                    <img id="ogre-image" src="Ogro.png" alt="Ogro" style="max-width: 150px; height: auto;">
                     <div class="speech-bubble" id="ogre-interpretation">
                         El Ogro espera tu tirada...
                     </div>
@@ -775,8 +775,13 @@
         let currentReading = [];
         let isReading = false;
         
+        // --- CAMBIOS PARA EL CONTROL DE AUDIO ---
         let audioCtx;
         let intervalId;
+        let ambientMasterGain; // Nodo de volumen maestro para la música de fondo
+        let audioUnlocked = false; // Flag para saber si el usuario ya ha interactuado
+        // --- FIN DE CAMBIOS ---
+        
         const notas = [261.63, 293.66, 311.13, 349.23, 392.00, 440.00, 466.16, 523.25];
         let isMuted = false;
         
@@ -827,14 +832,19 @@
             source.start(audioCtx.currentTime);
         }
 
+        // --- FUNCIÓN MODIFICADA ---
         function setupAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                // Creamos el nodo de ganancia maestro para la música ambiental la primera vez
+                ambientMasterGain = audioCtx.createGain();
+                ambientMasterGain.gain.setValueAtTime(1.0, audioCtx.currentTime); // Volumen inicial al 100%
+                ambientMasterGain.connect(audioCtx.destination);
             }
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
-            if (!intervalId) {
+            if (!intervalId && !isMuted) {
                 intervalId = setInterval(generarMelodia, 400);
             }
         }
@@ -854,8 +864,9 @@
             }
         }
         
+        // --- FUNCIÓN MODIFICADA ---
         function tocarNota(frecuencia, duracion) {
-            if (!audioCtx || isMuted) return;
+            if (!audioCtx || isMuted || !ambientMasterGain) return; // Verificamos que el nodo maestro exista
             let oscillator = audioCtx.createOscillator();
             let gainNode = audioCtx.createGain();
             oscillator.type = 'triangle';
@@ -864,12 +875,25 @@
             reverb.delayTime.value = 0.2;
             oscillator.connect(reverb);
             reverb.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+            
+            // CONECTAMOS AL NODO MAESTRO en lugar del destino final
+            gainNode.connect(ambientMasterGain); 
+            
             gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
             oscillator.start();
             oscillator.stop(audioCtx.currentTime + duracion);
         }
 
+        // --- NUEVA FUNCIÓN PARA ATENUAR EL VOLUMEN ---
+        function fadeAmbientVolume(targetVolume, duration) {
+            if (ambientMasterGain && audioCtx) {
+                // Usamos una rampa exponencial para una transición suave
+                // El valor mínimo debe ser mayor que 0 para la rampa exponencial
+                const effectiveVolume = Math.max(0.001, targetVolume);
+                ambientMasterGain.gain.exponentialRampToValueAtTime(effectiveVolume, audioCtx.currentTime + duration);
+            }
+        }
+        
         function generarMelodia() {
             let nota = notas[Math.floor(Math.random() * notas.length)];
             tocarNota(nota, 0.6);
@@ -989,7 +1013,23 @@
             }, 500);
         }
 
+        // --- FUNCIÓN MODIFICADA ---
         async function startReading() {
+            // --- NUEVO! Bloque para desbloquear el audio con el primer clic ---
+            if (!audioUnlocked) {
+                try {
+                    // Crea un audio silencioso, lo reproduce y lo descarta.
+                    // Esto es suficiente para "desbloquear" el permiso del navegador.
+                    const unlockSound = new Audio("data:audio/mp3;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKn");
+                    await unlockSound.play();
+                    audioUnlocked = true;
+                    console.log("Permiso de audio desbloqueado.");
+                } catch (err) {
+                    console.error("No se pudo desbloquear el audio automáticamente:", err);
+                }
+            }
+            // --- FIN DEL NUEVO BLOQUE ---
+
             if (isReading) return;
             isReading = true;
             setupAudio();
@@ -1083,12 +1123,50 @@
             }, cards.length * 300 + 1000);
         }
         
-        // Función para llamar a la API de Gemini a través del PROXY de Netlify
-        // Función para llamar a la API de Gemini a través del PROXY de Netlify
+        // --- FUNCIÓN MODIFICADA ---
+        function playOgreAnimation() {
+            const ogreArea = document.querySelector('.ogre-area');
+            const ogreImage = document.getElementById('ogre-image');
+            if (!ogreImage) return;
+
+            // BAJAMOS EL VOLUMEN DE LA MÚSICA AMBIENTAL
+            fadeAmbientVolume(0.2, 1.0); // Baja al 20% del volumen en 1 segundo
+
+            const ogreVideo = document.createElement('video');
+            ogreVideo.src = 'Ogro.webm';
+            ogreVideo.id = 'ogre-video';
+            ogreVideo.autoplay = true;
+            ogreVideo.muted = false; // REPRODUCIR CON SONIDO
+            ogreVideo.playsInline = true;
+            ogreVideo.style.maxWidth = '150px';
+            ogreVideo.style.height = 'auto';
+
+            ogreVideo.addEventListener('ended', () => {
+                // SUBIMOS EL VOLUMEN DE LA MÚSICA AMBIENTAL
+                fadeAmbientVolume(1.0, 1.5); // Sube al 100% del volumen en 1.5 segundos
+
+                if (ogreVideo.parentNode) {
+                    ogreArea.replaceChild(ogreImage, ogreVideo);
+                }
+            }, { once: true });
+            
+            ogreArea.replaceChild(ogreVideo, ogreImage);
+            
+            // Intentamos reproducir explícitamente y capturamos errores
+            ogreVideo.play().catch(error => {
+                 console.error("Error al reproducir el video del ogro:", error);
+                 // Si falla, volvemos a poner la imagen y subimos la música
+                 ogreArea.replaceChild(ogreImage, ogreVideo);
+                 fadeAmbientVolume(1.0, 0.5);
+            });
+        }
+
         async function getOgreInterpretation(reading) {
             const ogreBubble = document.getElementById('ogre-interpretation');
             ogreBubble.style.display = 'block';
             ogreBubble.innerHTML = '<span class="loading"></span> El Ogro está consultando el cosmos...';
+            
+            playOgreAnimation();
 
             const PROXY_URL = '/.netlify/functions/api-proxy';
 
@@ -1106,23 +1184,14 @@
                     systemInstruction: { parts: [{ text: systemPrompt }] },
                 };
 
-                // 1. Registro de lo que se envía
-                console.log("[CLIENTE]: Enviando este payload al proxy:", JSON.stringify(payload, null, 2));
-                
                 const response = await fetch(PROXY_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                // 2. Registro de la respuesta cruda
-                console.log("[CLIENTE]: Respuesta recibida del proxy:", response);
-
                 if (!response.ok) {
-                    // 3. Intentamos leer el cuerpo del error para más detalles
                     const errorBody = await response.text();
-                    console.error("[CLIENTE]: El cuerpo del error recibido del proxy es:", errorBody);
-                    // Actualizamos el mensaje de error para ser más útil
                     throw new Error(`Error de la API: ${response.status} ${response.statusText}. Detalles: ${errorBody}`);
                 }
 
@@ -1132,12 +1201,10 @@
                 if (text) {
                     ogreBubble.innerHTML = text.replace(/\n/g, '<br>');
                 } else {
-                    console.warn("[CLIENTE]: La respuesta de Gemini fue exitosa pero no contenía texto.", result);
                     ogreBubble.textContent = "Vaya, el cosmos está tímido hoy. No logro ver nada claro.";
                 }
 
             } catch (error) {
-                // El error que se muestra aquí será ahora mucho más detallado
                 console.error("Error al contactar con el Ogro:", error);
                 ogreBubble.textContent = "¡Argh! Mis visiones se han nublado. Revisa la consola (F12) para ver el error técnico.";
             }
