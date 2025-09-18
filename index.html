@@ -80,6 +80,7 @@
             align-items: center;
             gap: 20px;
             flex-wrap: wrap;
+            min-height: 170px; /* Para evitar saltos de layout */
         }
 
         .speech-bubble {
@@ -207,41 +208,27 @@
             text-align: center;
             margin: 40px 0;
             position: relative;
-            height: 250px; /* Asegura espacio para la animación */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform-style: preserve-3d;
-        }
-
-        .shuffling-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .shuffling-card {
-            position: absolute;
-            width: 120px;
-            height: 180px;
-            background: linear-gradient(135deg, #1e0c3a, #2d1b69);
-            border-radius: 12px;
-            border: 3px solid #c0a87a;
-            transition: transform 1s, opacity 1s;
-            backface-visibility: hidden;
         }
 
         .deck {
+            display: inline-block;
             position: relative;
             width: 120px;
             height: 180px;
             margin: 20px;
             cursor: pointer;
             transition: transform 0.3s ease;
+        }
+        
+        .shuffle-animation {
+            animation: shuffle 2s ease-in-out;
+        }
+
+        @keyframes shuffle {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.1); }
+            50% { transform: rotate(-3deg) scale(1.05); }
+            75% { transform: rotate(2deg) scale(1.1); }
         }
 
         .deck:hover {
@@ -347,7 +334,7 @@
         }
 
         .card-name {
-            font-size: 0.85rem; /* MODIFICADO */
+            font-size: 0.85rem;
             margin-bottom: 10px;
             color: #8b4513;
         }
@@ -634,7 +621,6 @@
             animation: spin-and-return 1s ease-in-out;
         }
 
-        /* ESTILOS PARA ARCANOS MAYORES Y EFECTO FOIL */
         .card.card--major-arcana .card-content {
             background: radial-gradient(circle, #001d57 0%, #000814 100%);
             color: #f0f0f0;
@@ -685,11 +671,6 @@
             opacity: 0.8; 
         }
         
-        .ogre-gif {
-            max-width: 150px;
-            height: auto;
-            border-radius: 10px;
-        }
     </style>
 </head>
 <body>
@@ -756,7 +737,6 @@
         </div>
 
         <div class="deck-area" id="deck-area">
-            <div id="shuffling-container" style="display: none;"></div>
             <div class="deck" id="deck" onclick="startReading()">
                 <div class="card-back"></div>
                 <div class="card-back"></div>
@@ -877,7 +857,6 @@
 
         const COURT_CARDS = ['Sota', 'Caballero', 'Reina', 'Rey'];
         
-        // Base de datos de interpretaciones
         const INTERPRETATIONS = {
             "El Loco": { keyword: "Inicio", upright: "Nuevos comienzos, espontaneidad, aventura, fe en el futuro. Es momento de dar un salto de fe.", reversed: "Imprudencia, falta de dirección, decisiones precipitadas. Necesitas más planificación." },
             "El Mago": { keyword: "Acción", upright: "Poder personal, manifestación, recursos disponibles. Tienes todo lo que necesitas para triunfar.", reversed: "Manipulación, falta de energía, recursos desperdiciados. Revisa tus intenciones." },
@@ -889,7 +868,7 @@
             "El Carro": { keyword: "Voluntad", upright: "Triunfo, determinación, control, avance. Tu fuerza de voluntad te llevará al éxito.", reversed: "Falta de dirección, pérdida de control, agresividad. Necesitas enfocar tu energía." },
             "La Justicia": { keyword: "Equilibrio", upright: "Justicia, equilibrio, verdad, responsabilidad. Las consecuencias de tus actos se manifiestan.", reversed: "Injusticia, desequilibrio, falta de responsabilidad. Busca la equidad en tus decisiones." },
             "El Ermitaño": { keyword: "Búsqueda", upright: "Búsqueda interior, soledad constructiva, guía espiritual. Es tiempo de introspección.", reversed: "Aislamiento, terquedad, rechazo de consejos. No te cierres a la ayuda externa." },
-            "Fortuna": { keyword: "Cambio", upright: "Cambios, ciclos, destino, buena suerte. Los vientos del cambio soplan a tu favor.", reversed: "Mala suerte, resistencia al cambio, ciclos negativos. Acepta que todo es temporal." },
+            "La Fortuna": { keyword: "Cambio", upright: "Cambios, ciclos, destino, buena suerte. Los vientos del cambio soplan a tu favor.", reversed: "Mala suerte, resistencia al cambio, ciclos negativos. Acepta que todo es temporal." },
             "La Fuerza": { keyword: "Dominio", upright: "Fuerza interior, valor, paciencia, autocontrol. Tu verdadera fuerza viene de dentro.", reversed: "Debilidad, falta de autocontrol, miedo. Reconecta con tu poder interior." },
             "El Colgado": { keyword: "Rendición", upright: "Sacrificio, nueva perspectiva, pausa, rendición. A veces hay que ceder para avanzar.", reversed: "Martirio, resistencia inútil, retrasos. Deja de luchar contra lo inevitable." },
             "La Muerte": { keyword: "Transformación", upright: "Final de ciclos, transformación, renacimiento. Un capítulo termina, otro comienza.", reversed: "Resistencia al cambio, estancamiento, miedo a la transformación. Abraza el cambio necesario." },
@@ -974,7 +953,6 @@
         let currentReading = [];
         let isReading = false;
         
-        // Audio
         let audioCtx;
         let intervalId;
         let ambientMasterGain;
@@ -1014,6 +992,7 @@
         
         function playShuffleSound() {
             if (isMuted) return;
+            setupAudio(); // Ensure audio context is ready
             const shuffleBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
             const shuffleData = shuffleBuffer.getChannelData(0);
             for (let i = 0; i < shuffleData.length; i++) {
@@ -1220,9 +1199,7 @@
             playShuffleSound();
             
             const shuffleBtn = document.getElementById('shuffleBtn');
-            const deckArea = document.getElementById('deck-area');
             const deck = document.getElementById('deck');
-            const shufflingContainer = document.getElementById('shuffling-container');
             const deckStatus = document.getElementById('deckStatus');
             const resultsDiv = document.getElementById('results');
             const exportBtn = document.getElementById('exportBtn');
@@ -1235,54 +1212,24 @@
             exportBtn.style.display = 'none';
             ogreBubble.style.display = 'none';
             
-            // Oculta el mazo principal
-            deck.style.display = 'none';
-            shufflingContainer.style.display = 'flex';
-
-            const numShufflingCards = 20;
-            const shuffledCards = [];
-            for(let i = 0; i < numShufflingCards; i++) {
-                const card = document.createElement('div');
-                card.className = 'shuffling-card';
-                card.style.top = `${Math.random() * 50 - 25}px`;
-                card.style.left = `${Math.random() * 50 - 25}px`;
-                card.style.transform = `translate3d(0, 0, 0) rotateY(${Math.random() * 360}deg) rotateZ(${Math.random() * 360}deg)`;
-                card.style.opacity = '0';
-                shufflingContainer.appendChild(card);
-                shuffledCards.push(card);
-            }
-
-            // Inicia la animación de dispersión
-            setTimeout(() => {
-                shuffledCards.forEach(card => {
-                    card.style.transform = `translate3d(${Math.random() * 300 - 150}px, ${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotateY(${Math.random() * 720 + 360}deg) rotateZ(${Math.random() * 720 + 360}deg)`;
-                    card.style.opacity = '1';
-                });
-            }, 50);
-
-            // Espera a que termine la animación de dispersión y empieza la de retorno
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            shuffledCards.forEach(card => {
-                card.style.transform = `translate3d(0, 0, 0) rotateY(0deg) rotateZ(0deg)`;
-                card.style.opacity = '0';
-            });
-
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            shuffledCards.forEach(card => card.remove());
-            shufflingContainer.style.display = 'none';
-            deck.style.display = 'block';
-
+            deck.classList.add('shuffle-animation');
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            deck.classList.remove('shuffle-animation');
+            
             deckStatus.textContent = 'Cortando el mazo...';
-
             const deckType = document.getElementById('deckType').value;
             const spreadType = parseInt(document.getElementById('spreadType').value);
             currentDeck = createDeck(deckType === 'major');
             currentDeck = shuffleDeck(currentDeck);
+            
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             deckStatus.textContent = 'Extrayendo cartas...';
             const cutPoint = Math.floor(Math.random() * currentDeck.length);
             currentDeck = [...currentDeck.slice(cutPoint), ...currentDeck.slice(0, cutPoint)];
+            
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             const positions = getSpreadPositions(spreadType);
@@ -1355,22 +1302,19 @@
             const ogreImage = document.getElementById('ogre-image');
             if (!ogreImage) return;
 
-            // BAJAMOS EL VOLUMEN DE LA MÚSICA AMBIENTAL
-            fadeAmbientVolume(0.2, 1.0); // Baja al 20% del volumen en 1 segundo
+            fadeAmbientVolume(0.2, 1.0);
 
             const ogreVideo = document.createElement('video');
-            ogreVideo.src = 'Ogro.webm'; // RUTA AL VÍDEO
+            ogreVideo.src = 'Ogro.webm';
             ogreVideo.id = 'ogre-video';
             ogreVideo.autoplay = true;
-            ogreVideo.muted = false; // REPRODUCIR CON SONIDO
+            ogreVideo.muted = false;
             ogreVideo.playsInline = true;
             ogreVideo.style.maxWidth = '150px';
             ogreVideo.style.height = 'auto';
 
             ogreVideo.addEventListener('ended', () => {
-                // SUBIMOS EL VOLUMEN DE LA MÚSICA AMBIENTAL
-                fadeAmbientVolume(1.0, 1.5); // Sube al 100% del volumen en 1.5 segundos
-
+                fadeAmbientVolume(1.0, 1.5);
                 if (ogreVideo.parentNode) {
                     ogreArea.replaceChild(ogreImage, ogreVideo);
                 }
@@ -1378,10 +1322,8 @@
             
             ogreArea.replaceChild(ogreVideo, ogreImage);
             
-            // Intentamos reproducir explícitamente y capturamos errores
             ogreVideo.play().catch(error => {
                  console.error("Error al reproducir el video del ogro:", error);
-                 // Si falla, volvemos a poner la imagen y subimos la música
                  ogreArea.replaceChild(ogreImage, ogreVideo);
                  fadeAmbientVolume(1.0, 0.5);
             });
