@@ -475,6 +475,15 @@
                 margin-top: 0;
             }
         }
+        @keyframes spin-and-return {
+            0% { transform: rotateY(0deg) scale(1); }
+            50% { transform: rotateY(360deg) scale(1.05); }
+            100% { transform: rotateY(720deg) scale(1); }
+        }
+
+        .card.spinning {
+            animation: spin-and-return 1s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -996,8 +1005,19 @@
                 cardEl.querySelector('.card-content').style.display = 'none';
             }
             cardEl.addEventListener('click', () => {
-                playClickSound();
-                if (!cardEl.classList.contains('revealed')) {
+                if (cardEl.classList.contains('revealed')) {
+                    // Si la carta ya está revelada, hacemos el nuevo efecto de giro
+                    cardEl.classList.add('spinning');
+                    playClickSound(); // O puedes crear un sonido diferente para este efecto
+                    
+                    // Eliminamos la clase 'spinning' después de que la animación termine
+                    // para que pueda ser activada de nuevo en un futuro clic.
+                    setTimeout(() => {
+                        cardEl.classList.remove('spinning');
+                    }, 1000); // El tiempo (1000ms) debe coincidir con la duración de la animación CSS.
+            
+                } else {
+                    // Si no está revelada, la revelamos
                     revealCard(cardEl, card);
                 }
             });
