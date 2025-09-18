@@ -601,13 +601,16 @@
         .card.spinning {
             animation: spin-and-return 1s ease-in-out;
         }
-        /* --- ESTILOS PARA ARCANOS MAYORES Y EFECTO FOIL --- */
+        /* --- ESTILOS PARA ARCANOS MAYORES Y EFECTO FOIL (VERSIÓN CORREGIDA) --- */
         
-        /* 1. Estilo base para el fondo de los Arcanos Mayores */
+        /* 1. Estilo base con el NUEVO FONDO AZUL NOCHE */
         .card.card--major-arcana .card-content {
-            /* Un fondo oscuro y místico que parece un cielo nocturno */
-            background: radial-gradient(circle, #4a2d7c 0%, #1e0c3a 100%);
-            color: #f0f0f0; /* Cambiamos el color del texto para que contraste */
+            /* RECOMENDACIÓN: Un fondo azul noche profundo y místico */
+            background: radial-gradient(circle, #001d57 0%, #000814 100%);
+            color: #f0f0f0;
+            
+            position: relative;
+            overflow: hidden; 
         }
         
         /* Hacemos que el nombre de la carta también resalte */
@@ -615,7 +618,12 @@
             color: #ffd700;
         }
         
-        /* 2. Creamos la capa para el efecto holográfico (invisible por defecto) */
+        /* ¡NUEVO! Cambiamos el color del texto de orientación para que sea legible */
+        .card.card--major-arcana .card-orientation {
+            color: #f0e6d2; /* Un color crema/hueso muy legible */
+        }
+        
+        /* 2. Capa para el efecto holográfico */
         .card.card--major-arcana .card-content::after {
             content: '';
             position: absolute;
@@ -630,32 +638,25 @@
                 transparent 80%
             );
         
-            /* ¡SOLUCIÓN! Evita el efecto "tablero de ajedrez" al no repetir el degradado */
             background-repeat: no-repeat;
-            
             background-size: 250% 250%;
             
             opacity: 0.5; 
             transition: opacity 0.4s ease-in-out;
             pointer-events: none;
             
-            animation: foil-shimmer 3s ease-in-out infinite; 
+            animation: foil-shimmer 2.5s ease-in-out infinite; /* He ajustado la velocidad a 2.5s como ejemplo */
         }
         
         /* 3. Definimos la animación que moverá el brillo */
         @keyframes foil-shimmer {
-            0% {
-                background-position: 150% 150%;
-            }
-            100% {
-                background-position: -50% -50%;
-            }
+            0% { background-position: 150% 150%; }
+            100% { background-position: -50% -50%; }
         }
         
-        /* 4. Activamos el efecto y la animación cuando pasamos el ratón por encima */
-        .card.card--major-arcana:hover::after {
-            opacity: 1; /* Hacemos visible la capa de brillo */
-            animation: foil-shimmer 1.5s ease-in-out infinite; /* Aplicamos la animación */
+        /* 4. Al pasar el ratón, intensificamos el brillo */
+        .card.card--major-arcana:hover .card-content::after {
+            opacity: 0.8; 
         }
         
     </style>
