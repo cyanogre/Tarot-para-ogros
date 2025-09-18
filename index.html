@@ -601,6 +601,59 @@
         .card.spinning {
             animation: spin-and-return 1s ease-in-out;
         }
+        /* --- ESTILOS PARA ARCANOS MAYORES Y EFECTO FOIL --- */
+        
+        /* 1. Estilo base para el fondo de los Arcanos Mayores */
+        .card.card--major-arcana .card-content {
+            /* Un fondo oscuro y místico que parece un cielo nocturno */
+            background: radial-gradient(circle, #4a2d7c 0%, #1e0c3a 100%);
+            color: #f0f0f0; /* Cambiamos el color del texto para que contraste */
+        }
+        
+        /* Hacemos que el nombre de la carta también resalte */
+        .card.card--major-arcana .card-name {
+            color: #ffd700;
+        }
+        
+        /* 2. Creamos la capa para el efecto holográfico (invisible por defecto) */
+        .card.card--major-arcana::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            
+            /* El gradiente que simula el brillo del arcoíris */
+            background: linear-gradient(
+                115deg,
+                transparent 20%,
+                rgba(193, 222, 255, 0.4) 46%,
+                rgba(255, 187, 220, 0.4) 50%,
+                rgba(215, 255, 201, 0.4) 54%,
+                transparent 80%
+            );
+            
+            background-size: 200% 200%; /* Hacemos el gradiente más grande que la carta */
+            border-radius: 9px; /* Para que coincida con el borde de la carta */
+            opacity: 0; /* Lo hacemos invisible por defecto */
+            transition: opacity 0.4s ease-in-out;
+            pointer-events: none; /* Para que no interfiera con el ratón */
+        }
+        
+        /* 3. Definimos la animación que moverá el brillo */
+        @keyframes foil-shimmer {
+            0% {
+                background-position: 150% 150%;
+            }
+            100% {
+                background-position: -50% -50%;
+            }
+        }
+        
+        /* 4. Activamos el efecto y la animación cuando pasamos el ratón por encima */
+        .card.card--major-arcana:hover::after {
+            opacity: 1; /* Hacemos visible la capa de brillo */
+            animation: foil-shimmer 3s ease-in-out infinite; /* Aplicamos la animación */
+        }
+        
     </style>
 </head>
 <body>
@@ -1181,6 +1234,14 @@
         function createCardElement(card, position, index, isRevealed = false) {
             const cardEl = document.createElement('div');
             cardEl.className = 'card';
+
+            // --- LÍNEAS AÑADIDAS ---
+            // Si la carta es un Arcano Mayor, le añadimos una clase especial
+            if (card.type === 'major') {
+                cardEl.classList.add('card--major-arcana');
+            }
+            // --- FIN DE LAS LÍNEAS AÑADIDAS ---
+
             cardEl.style.animationDelay = (index * 0.2) + 's';
             const isInverted = Math.random() < 0.5;
             card.inverted = isInverted;
@@ -1201,18 +1262,12 @@
             }
             cardEl.addEventListener('click', () => {
                 if (cardEl.classList.contains('revealed')) {
-                    // Si la carta ya está revelada, hacemos el nuevo efecto de giro
                     cardEl.classList.add('spinning');
-                    playClickSound(); // O puedes crear un sonido diferente para este efecto
-                    
-                    // Eliminamos la clase 'spinning' después de que la animación termine
-                    // para que pueda ser activada de nuevo en un futuro clic.
+                    playClickSound(); 
                     setTimeout(() => {
                         cardEl.classList.remove('spinning');
-                    }, 1000); // El tiempo (1000ms) debe coincidir con la duración de la animación CSS.
-            
+                    }, 1000); 
                 } else {
-                    // Si no está revelada, la revelamos
                     revealCard(cardEl, card);
                 }
             });
