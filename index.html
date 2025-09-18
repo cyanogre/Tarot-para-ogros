@@ -464,18 +464,16 @@
             .spread-container { gap: 25px; }
             .card-symbol { font-size: 2rem; }
             .ogre-area { flex-direction: column; }
-            .speech-bubble:after {
+            .speech-bubble::after {
                 content: '';
                 position: absolute;
-                left: 50%; /* Centra el triángulo horizontalmente */
-                top: -18px; /* Mueve el triángulo por encima del borde */
+                bottom: 100%; /* Mueve el triángulo a la parte superior de la burbuja */
+                left: 50%;
                 width: 0;
                 height: 0;
                 border: 20px solid transparent;
-                border-bottom-color: rgba(255, 215, 0, 0.5); /* Cambia el color del borde inferior para crear la flecha */
+                border-bottom-color: rgba(255, 215, 0, 0.5); /* Crea el triángulo que apunta hacia arriba */
                 border-top: 0;
-                border-right: 0;
-                border-left: 0;
                 margin-left: -20px;
             }
         }
