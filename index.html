@@ -347,7 +347,7 @@
         }
 
         .card-name {
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* MODIFICADO */
             margin-bottom: 10px;
             color: #8b4513;
         }
@@ -1353,21 +1353,38 @@
         function playOgreAnimation() {
             const ogreArea = document.querySelector('.ogre-area');
             const ogreImage = document.getElementById('ogre-image');
-            
-            fadeAmbientVolume(0.2, 1.0);
+            if (!ogreImage) return;
 
-            const ogreGif = document.createElement('img');
-            ogreGif.src = 'https://i.ibb.co/68v0tW8/ogro-tarot.gif';
-            ogreGif.alt = 'Grum el ogro leyendo las cartas';
-            ogreGif.classList.add('ogre-gif');
+            // BAJAMOS EL VOLUMEN DE LA MÚSICA AMBIENTAL
+            fadeAmbientVolume(0.2, 1.0); // Baja al 20% del volumen en 1 segundo
 
-            ogreGif.addEventListener('load', () => {
-                ogreArea.replaceChild(ogreGif, ogreImage);
-                fadeAmbientVolume(1.0, 1.5);
-                setTimeout(() => {
-                    ogreArea.replaceChild(ogreImage, ogreGif);
-                }, 2500);
+            const ogreVideo = document.createElement('video');
+            ogreVideo.src = 'Ogro.webm'; // RUTA AL VÍDEO
+            ogreVideo.id = 'ogre-video';
+            ogreVideo.autoplay = true;
+            ogreVideo.muted = false; // REPRODUCIR CON SONIDO
+            ogreVideo.playsInline = true;
+            ogreVideo.style.maxWidth = '150px';
+            ogreVideo.style.height = 'auto';
+
+            ogreVideo.addEventListener('ended', () => {
+                // SUBIMOS EL VOLUMEN DE LA MÚSICA AMBIENTAL
+                fadeAmbientVolume(1.0, 1.5); // Sube al 100% del volumen en 1.5 segundos
+
+                if (ogreVideo.parentNode) {
+                    ogreArea.replaceChild(ogreImage, ogreVideo);
+                }
             }, { once: true });
+            
+            ogreArea.replaceChild(ogreVideo, ogreImage);
+            
+            // Intentamos reproducir explícitamente y capturamos errores
+            ogreVideo.play().catch(error => {
+                 console.error("Error al reproducir el video del ogro:", error);
+                 // Si falla, volvemos a poner la imagen y subimos la música
+                 ogreArea.replaceChild(ogreImage, ogreVideo);
+                 fadeAmbientVolume(1.0, 0.5);
+            });
         }
 
         async function getOgreInterpretation(reading) {
