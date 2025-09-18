@@ -458,12 +458,10 @@
         }
 
         .footer {
-            text-align: center;
-            padding: 20px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            z-index: 20;
+            position: fixed; /* Lo fija en la pantalla */
+            bottom: 15px;    /* Lo posiciona 15px desde abajo */
+            right: 20px;     /* Lo posiciona 20px desde la derecha */
+            z-index: 999;    /* Se asegura que esté por encima de casi todo */
         }
 
         .footer a {
