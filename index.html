@@ -463,16 +463,20 @@
             .card { width: 100px; height: 150px; }
             .spread-container { gap: 25px; }
             .card-symbol { font-size: 2rem; }
-            .ogre-area { flex-direction: column-reverse; }
+            .ogre-area { flex-direction: column; }
             .speech-bubble:after {
-                left: 50%;
-                top: 100%;
+                content: '';
+                position: absolute;
+                left: 50%; /* Centra el triángulo horizontalmente */
+                top: -18px; /* Mueve el triángulo por encima del borde */
+                width: 0;
+                height: 0;
                 border: 20px solid transparent;
-                border-top-color: rgba(255, 215, 0, 0.5);
-                border-bottom: 0;
+                border-bottom-color: rgba(255, 215, 0, 0.5); /* Cambia el color del borde inferior para crear la flecha */
+                border-top: 0;
                 border-right: 0;
-                margin-left: -10px;
-                margin-top: 0;
+                border-left: 0;
+                margin-left: -20px;
             }
         }
         @keyframes spin-and-return {
