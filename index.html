@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF--8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔮 Tarot de Grum el Ogro azul 🔮</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -13,8 +16,8 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #1e0c3a, #2d1b69, #1a0b2e);
+            font-family: 'Cormorant Garamond', serif;
+            background: radial-gradient(circle, #0a011a 0%, #000000 100%);
             color: #f0f0f0;
             min-height: 100vh;
             overflow-x: hidden;
@@ -32,9 +35,10 @@
 
         .star {
             position: absolute;
-            background: white;
+            background: linear-gradient(to bottom, #f0e6d2, #a09070);
             border-radius: 50%;
-            animation: twinkle 2s infinite alternate;
+            box-shadow: 0 0 5px #f0e6d2;
+            animation: twinkle 3s infinite alternate;
         }
 
         @keyframes twinkle {
@@ -58,16 +62,18 @@
         }
 
         .header h1 {
-            font-size: 3rem;
-            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 3s ease-in-out infinite;
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: #c0a87a;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
             margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
         
+        .header p {
+            font-size: 1.2rem;
+            color: #b8b8b8;
+        }
+
         .ogre-area {
             display: flex;
             justify-content: center;
@@ -78,14 +84,15 @@
 
         .speech-bubble {
             position: relative;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
-            border-radius: .4em;
+            background: rgba(16, 8, 32, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 1em;
             padding: 20px;
             max-width: 400px;
             text-align: left;
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            display: none; /* Oculto por defecto */
+            border: 2px solid #c0a87a;
+            box-shadow: 0 0 15px rgba(192, 168, 122, 0.3);
+            display: none;
         }
 
         .speech-bubble:after {
@@ -96,17 +103,11 @@
             width: 0;
             height: 0;
             border: 20px solid transparent;
-            border-right-color: rgba(255, 215, 0, 0.5);
+            border-right-color: #c0a87a;
             border-left: 0;
             border-bottom: 0;
             margin-top: -10px;
             margin-left: -20px;
-        }
-
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
         }
 
         @keyframes fadeInDown {
@@ -129,45 +130,51 @@
         }
 
         .control-group {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(16, 8, 32, 0.4);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
+            border: 2px solid #c0a87a;
+            box-shadow: 0 0 10px rgba(192, 168, 122, 0.2);
             transition: all 0.3s ease;
         }
 
         .control-group:hover {
-            border-color: rgba(255, 215, 0, 0.6);
+            border-color: #e6c88e;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(192, 168, 122, 0.4);
         }
 
         .control-group h3 {
-            color: #ffd700;
+            color: #e6c88e;
             margin-bottom: 10px;
             font-size: 1.2rem;
+            text-transform: uppercase;
+            font-family: 'Cinzel', serif;
         }
 
         select, button {
             background: rgba(0, 0, 0, 0.5);
             color: #f0f0f0;
-            border: 2px solid #ffd700;
+            border: 2px solid #c0a87a;
             border-radius: 8px;
             padding: 10px 15px;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
         }
 
         button {
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            background: linear-gradient(45deg, #c0a87a, #e6c88e);
             color: #1e0c3a;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
             position: relative;
             overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 15px rgba(192, 168, 122, 0.4);
         }
 
         button:before {
@@ -187,25 +194,51 @@
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 5px 20px rgba(192, 168, 122, 0.6);
         }
 
         button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            box-shadow: none;
         }
 
         .deck-area {
             text-align: center;
             margin: 40px 0;
             position: relative;
+            height: 250px; /* Asegura espacio para la animación */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+        }
+
+        .shuffling-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .shuffling-card {
+            position: absolute;
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #1e0c3a, #2d1b69);
+            border-radius: 12px;
+            border: 3px solid #c0a87a;
+            transition: transform 1s, opacity 1s;
+            backface-visibility: hidden;
         }
 
         .deck {
-            display: inline-block;
             position: relative;
-            width: 100px;
-            height: 150px;
+            width: 120px;
+            height: 180px;
             margin: 20px;
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -217,33 +250,29 @@
 
         .card-back {
             position: absolute;
-            width: 100px;
-            height: 150px;
-            background: linear-gradient(135deg, #2c1810, #8b4513, #2c1810);
-            border-radius: 10px;
-            border: 3px solid #ffd700;
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #1e0c3a, #2d1b69);
+            border-radius: 12px;
+            border: 3px solid #c0a87a;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
             transition: all 0.5s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-back::after {
+            content: '🔮';
+            font-size: 3rem;
+            opacity: 0.8;
+            text-shadow: 0 0 10px #e6c88e;
         }
 
         .deck .card-back:nth-child(1) { transform: rotate(-2deg) translate(2px, -2px); }
         .deck .card-back:nth-child(2) { transform: rotate(1deg) translate(-1px, 1px); }
         .deck .card-back:nth-child(3) { transform: rotate(-1deg) translate(1px, -1px); }
-
-        .shuffle-animation {
-            animation: shuffle 2s ease-in-out;
-        }
-
-        @keyframes shuffle {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(5deg) scale(1.1); }
-            50% { transform: rotate(-3deg) scale(1.05); }
-            75% { transform: rotate(2deg) scale(1.1); }
-        }
 
         .reading-area {
             min-height: 220px; 
@@ -269,12 +298,12 @@
             height: 180px;
             background: linear-gradient(135deg, #f8f8f8, #e8e8e8);
             border-radius: 12px;
-            border: 3px solid #ffd700;
+            border: 3px solid #c0a87a;
             position: relative;
             cursor: pointer;
             transition: all 0.5s ease;
             transform-style: preserve-3d;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
 
         .card.flipping {
@@ -300,7 +329,7 @@
 
         .card:hover {
             transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(192, 168, 122, 0.5);
         }
 
         .card-content {
@@ -314,6 +343,7 @@
             font-weight: bold;
             background: linear-gradient(135deg, #fff, #f0f0f0);
             border-radius: 9px;
+            position: relative;
         }
 
         .card-name {
@@ -338,7 +368,7 @@
             top: -30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255, 215, 0, 0.9);
+            background: #c0a87a;
             color: #1e0c3a;
             padding: 5px 12px;
             border-radius: 15px;
@@ -348,12 +378,13 @@
         }
 
         .results {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(16, 8, 32, 0.4);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
             margin: 40px 0;
-            border: 2px solid rgba(255, 215, 0, 0.3);
+            border: 2px solid #c0a87a;
+            box-shadow: 0 0 20px rgba(192, 168, 122, 0.2);
             animation: slideInUp 0.8s ease-out;
         }
 
@@ -363,7 +394,8 @@
         }
 
         .results h2 {
-            color: #ffd700;
+            font-family: 'Cinzel', serif;
+            color: #e6c88e;
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.8rem;
@@ -374,11 +406,11 @@
             padding: 15px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            border-left: 4px solid #ffd700;
+            border-left: 4px solid #e6c88e;
         }
 
         .result-item h3 {
-            color: #ffd700;
+            color: #e6c88e;
             margin-bottom: 5px;
         }
 
@@ -393,8 +425,8 @@
         }
 
         .export-btn {
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
-            margin: 10px;
+            background: linear-gradient(45deg, #6c4675, #9c6c94);
+            color: #fff;
         }
 
         .loading {
@@ -423,15 +455,16 @@
             position: absolute;
             width: 4px;
             height: 4px;
-            background: #ffd700;
+            background: radial-gradient(circle, #e6c88e, #c0a87a);
             border-radius: 50%;
-            animation: float 3s infinite ease-in-out;
+            box-shadow: 0 0 5px #e6c88e;
+            animation: float 5s infinite ease-in-out;
             opacity: 0.7;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-50px) rotate(180deg); opacity: 0.9; }
         }
 
         .music-controls {
@@ -442,7 +475,7 @@
         }
 
         .music-controls button {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             color: #fff;
@@ -454,28 +487,26 @@
         }
 
         .music-controls button:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .footer {
-            position: fixed; /* Lo fija en la pantalla */
-            bottom: 15px;    /* Lo posiciona 15px desde abajo */
-            right: 20px;     /* Lo posiciona 20px desde la derecha */
-            z-index: 999;    /* Se asegura que esté por encima de casi todo */
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            z-index: 999;
         }
 
         .footer a {
-            color: #ffd700; /* Este es el color amarillo dorado */
+            color: #e6c88e;
             text-decoration: none;
             transition: color 0.3s ease;
         }
-
 
         .footer a:hover {
             color: #fff;
         }
 
-        /* --- Estilos para el Banner de Cookies --- */
         .cookie-banner {
             position: fixed;
             bottom: 0;
@@ -490,7 +521,7 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
-            border-top: 1px solid rgba(255, 215, 0, 0.5);
+            border-top: 1px solid rgba(192, 168, 122, 0.5);
             transform: translateY(100%);
             animation: slideUpBanner 0.5s ease-out forwards;
         }
@@ -503,9 +534,10 @@
             margin: 0;
             flex-grow: 1;
             text-align: center;
+            color: #e0e0e0;
         }
         .cookie-banner p a {
-            color: #ffd700;
+            color: #e6c88e;
             text-decoration: underline;
         }
         .cookie-banner .cookie-buttons {
@@ -518,9 +550,9 @@
             border-radius: 5px;
         }
         #cookie-accept {
-            background: #ffd700;
+            background: #c0a87a;
             color: #1e0c3a;
-            border-color: #ffd700;
+            border-color: #c0a87a;
         }
         #cookie-decline {
             background: transparent;
@@ -528,7 +560,6 @@
             border-color: #f0f0f0;
         }
 
-        /* --- Estilos para el Modal de Política de Privacidad --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -547,7 +578,7 @@
             background: #1e0c3a;
             padding: 30px;
             border-radius: 15px;
-            border: 2px solid #ffd700;
+            border: 2px solid #c0a87a;
             max-width: 600px;
             width: 90%;
             max-height: 80vh;
@@ -555,7 +586,7 @@
             position: relative;
         }
 
-        .modal-content h2 { color: #ffd700; margin-bottom: 15px; }
+        .modal-content h2 { color: #e6c88e; margin-bottom: 15px; }
         .modal-content p, .modal-content ul { margin-bottom: 15px; line-height: 1.6; }
         .modal-content ul { padding-left: 20px; }
         .modal-close {
@@ -570,10 +601,10 @@
         }
 
         @media (max-width: 768px) {
-            .header h1 { font-size: 2rem; }
+            .header h1 { font-size: 2.5rem; }
             .controls { flex-direction: column; align-items: center; }
             .card { width: 100px; height: 150px; }
-            .spread-container { gap: 25px; }
+            .spread-container { gap: 15px; }
             .card-symbol { font-size: 2rem; }
             .ogre-area { flex-direction: column; }
             .speech-bubble::after {
@@ -586,12 +617,13 @@
                 width: 0;
                 height: 0;
                 border: 20px solid transparent;
-                border-bottom-color: rgba(255, 215, 0, 0.5);
+                border-bottom-color: #c0a87a;
             }
             .cookie-banner {
                 flex-direction: column;
             }
         }
+
         @keyframes spin-and-return {
             0% { transform: rotateY(0deg) scale(1); }
             50% { transform: rotateY(360deg) scale(1.05); }
@@ -601,34 +633,33 @@
         .card.spinning {
             animation: spin-and-return 1s ease-in-out;
         }
-        /* --- ESTILOS PARA ARCANOS MAYORES Y EFECTO FOIL (VERSIÓN CORREGIDA) --- */
-        
-        /* 1. Estilo base con el NUEVO FONDO AZUL NOCHE */
+
+        /* ESTILOS PARA ARCANOS MAYORES Y EFECTO FOIL */
         .card.card--major-arcana .card-content {
-            /* RECOMENDACIÓN: Un fondo azul noche profundo y místico */
             background: radial-gradient(circle, #001d57 0%, #000814 100%);
             color: #f0f0f0;
-            
             position: relative;
             overflow: hidden; 
         }
         
-        /* Hacemos que el nombre de la carta también resalte */
         .card.card--major-arcana .card-name {
-            color: #ffd700;
+            color: #e6c88e;
+            font-family: 'Cinzel', serif;
         }
         
-        /* ¡NUEVO! Cambiamos el color del texto de orientación para que sea legible */
+        .card.card--major-arcana .card-symbol {
+            color: #e6c88e;
+            text-shadow: 0 0 10px #e6c88e, 0 0 20px #e6c88e, 0 0 30px #e6c88e;
+        }
+
         .card.card--major-arcana .card-orientation {
-            color: #f0e6d2; /* Un color crema/hueso muy legible */
+            color: #f0e6d2;
         }
         
-        /* 2. Capa para el efecto holográfico */
         .card.card--major-arcana .card-content::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            
             background: linear-gradient(
                 115deg,
                 transparent 20%,
@@ -637,28 +668,28 @@
                 rgba(215, 255, 201, 0.4) 54%,
                 transparent 80%
             );
-        
             background-repeat: no-repeat;
             background-size: 250% 250%;
-            
             opacity: 0.5; 
             transition: opacity 0.4s ease-in-out;
             pointer-events: none;
-            
-            animation: foil-shimmer 2.5s ease-in-out infinite; /* He ajustado la velocidad a 2.5s como ejemplo */
+            animation: foil-shimmer 2.5s ease-in-out infinite;
         }
         
-        /* 3. Definimos la animación que moverá el brillo */
         @keyframes foil-shimmer {
             0% { background-position: 150% 150%; }
             100% { background-position: -50% -50%; }
         }
         
-        /* 4. Al pasar el ratón, intensificamos el brillo */
         .card.card--major-arcana:hover .card-content::after {
             opacity: 0.8; 
         }
         
+        .ogre-gif {
+            max-width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -724,11 +755,12 @@
             </div>
         </div>
 
-        <div class="deck-area">
+        <div class="deck-area" id="deck-area">
+            <div id="shuffling-container" style="display: none;"></div>
             <div class="deck" id="deck" onclick="startReading()">
-                <div class="card-back">🌟</div>
-                <div class="card-back">🔮</div>
-                <div class="card-back">✨</div>
+                <div class="card-back"></div>
+                <div class="card-back"></div>
+                <div class="card-back"></div>
             </div>
             <p id="deckStatus">Haz clic para comenzar tu lectura...</p>
         </div>
@@ -765,9 +797,7 @@
         </div>
     </div>
 
-
     <script>
-        // --- GESTIÓN DE COOKIES ---
         const COOKIE_CONSENT_KEY = 'cookie_consent_ogre_tarot';
 
         function checkCookieConsent() {
@@ -790,7 +820,6 @@
         document.getElementById('cookie-accept').addEventListener('click', () => handleCookieConsent('granted'));
         document.getElementById('cookie-decline').addEventListener('click', () => handleCookieConsent('denied'));
 
-        // --- LÓGICA DEL MODAL DE PRIVACIDAD ---
         const privacyModal = document.getElementById('privacy-modal');
         const openModalLink = document.getElementById('privacy-policy-link');
         const openModalLinkBanner = document.getElementById('privacy-link-banner');
@@ -810,12 +839,9 @@
             }
         });
 
-        // --- CÓDIGO DE LA APLICACIÓN ---
-        // (El resto de tu código JavaScript va aquí sin cambios)
+        // Gemini API Configuration
+        const PROXY_URL = '/.netlify/functions/api-proxy';
 
-        // --- Gemini API Configuration ---
-        // La configuración de la API ahora se maneja en el servidor a través de la función proxy de Netlify.
-        
         // Base de datos de cartas
         const MAJOR_ARCANA = [
             { name: "El Loco", symbol: "🃏", type: "major" },
@@ -853,120 +879,30 @@
         
         // Base de datos de interpretaciones
         const INTERPRETATIONS = {
-            // Arcanos Mayores
-            "El Loco": {
-                keyword: "Inicio",
-                upright: "Nuevos comienzos, espontaneidad, aventura, fe en el futuro. Es momento de dar un salto de fe.",
-                reversed: "Imprudencia, falta de dirección, decisiones precipitadas. Necesitas más planificación."
-            },
-            "El Mago": {
-                keyword: "Acción",
-                upright: "Poder personal, manifestación, recursos disponibles. Tienes todo lo que necesitas para triunfar.",
-                reversed: "Manipulación, falta de energía, recursos desperdiciados. Revisa tus intenciones."
-            },
-            "La Sacerdotisa": {
-                keyword: "Intuición",
-                upright: "Sabiduría interior, misterios, intuición, conocimiento oculto. Confía en tu voz interior.",
-                reversed: "Secretos revelados, falta de intuición, conocimiento superficial. Necesitas profundizar más."
-            },
-            "La Emperatriz": {
-                keyword: "Creación",
-                upright: "Fertilidad, creatividad, abundancia, naturaleza maternal. Es tiempo de crear y nutrir.",
-                reversed: "Dependencia, creatividad bloqueada, falta de crecimiento. Reconecta con tu poder creativo."
-            },
-            "El Emperador": {
-                keyword: "Orden",
-                upright: "Autoridad, estructura, control, liderazgo. Toma las riendas de tu situación.",
-                reversed: "Tiranía, falta de disciplina, abuso de poder. Necesitas equilibrar control y flexibilidad."
-            },
-            "El Hierofante": {
-                keyword: "Tradición",
-                upright: "Enseñanzas tradicionales, conformidad, instituciones. Busca guidance en la sabiduría establecida.",
-                reversed: "Rebeldía, nuevas formas, cuestionamiento de normas. Es hora de forjar tu propio camino."
-            },
-            "Los Enamorados": {
-                keyword: "Elección",
-                upright: "Amor, relaciones, decisiones importantes, valores personales. Una elección crucial te espera.",
-                reversed: "Desamor, malas decisiones, valores en conflicto. Reflexiona antes de elegir."
-            },
-            "El Carro": {
-                keyword: "Voluntad",
-                upright: "Triunfo, determinación, control, avance. Tu fuerza de voluntad te llevará al éxito.",
-                reversed: "Falta de dirección, pérdida de control, agresividad. Necesitas enfocar tu energía."
-            },
-            "La Justicia": {
-                keyword: "Equilibrio",
-                upright: "Justicia, equilibrio, verdad, responsabilidad. Las consecuencias de tus actos se manifiestan.",
-                reversed: "Injusticia, desequilibrio, falta de responsabilidad. Busca la equidad en tus decisiones."
-            },
-            "El Ermitaño": {
-                keyword: "Búsqueda",
-                upright: "Búsqueda interior, soledad constructiva, guía espiritual. Es tiempo de introspección.",
-                reversed: "Aislamiento, terquedad, rechazo de consejos. No te cierres a la ayuda externa."
-            },
-            "Fortuna": {
-                keyword: "Cambio",
-                upright: "Cambios, ciclos, destino, buena suerte. Los vientos del cambio soplan a tu favor.",
-                reversed: "Mala suerte, resistencia al cambio, ciclos negativos. Acepta que todo es temporal."
-            },
-            "La Fuerza": {
-                keyword: "Dominio",
-                upright: "Fuerza interior, valor, paciencia, autocontrol. Tu verdadera fuerza viene de dentro.",
-                reversed: "Debilidad, falta de autocontrol, miedo. Reconecta con tu poder interior."
-            },
-            "El Colgado": {
-                keyword: "Rendición",
-                upright: "Sacrificio, nueva perspectiva, pausa, rendición. A veces hay que ceder para avanzar.",
-                reversed: "Martirio, resistencia inútil, retrasos. Deja de luchar contra lo inevitable."
-            },
-            "La Muerte": {
-                keyword: "Transformación",
-                upright: "Final de ciclos, transformación, renacimiento. Un capítulo termina, otro comienza.",
-                reversed: "Resistencia al cambio, estancamiento, miedo a la transformación. Abraza el cambio necesario."
-            },
-            "La Templanza": {
-                keyword: "Armonía",
-                upright: "Moderación, equilibrio, paciencia, curación. Encuentra el punto medio en todo.",
-                reversed: "Impaciencia, extremos, falta de equilibrio. Necesitas más moderación."
-            },
-            "El Diablo": {
-                keyword: "Atadura",
-                upright: "Tentación, ataduras, materialismo, adicciones. Examina qué te tiene prisionero.",
-                reversed: "Liberación, ruptura de cadenas, superación de adicciones. Te estás liberando."
-            },
-            "La Torre": {
-                keyword: "Ruptura",
-                upright: "Cambio súbito, revelación, destrucción necesaria. Las falsas estructuras se derrumban.",
-                reversed: "Evitar el cambio, catástrofe personal, resistencia. El cambio es inevitable."
-            },
-            "La Estrella": {
-                keyword: "Esperanza",
-                upright: "Esperanza, inspiración, curación, guía espiritual. La luz brilla al final del túnel.",
-                reversed: "Desesperanza, falta de fe, desconexión espiritual. Recupera tu fe interior."
-            },
-            "La Luna": {
-                keyword: "Inconsciente",
-                upright: "Ilusiones, subconsciente, miedos, intuición. No todo es lo que parece ser.",
-                reversed: "Claridad, superación de miedos, verdad revelada. La confusión se disipa."
-            },
-            "El Sol": {
-                keyword: "Vitalidad",
-                upright: "Éxito, vitalidad, positividad, claridad. Todo se ilumina en tu vida.",
-                reversed: "Falta de energía, optimismo forzado, retrasos en el éxito. Recupera tu vitalidad."
-            },
-            "El Juicio": {
-                keyword: "Despertar",
-                upright: "Despertar, llamada superior, renovación, perdón. Es hora de un nuevo amanecer.",
-                reversed: "Falta de perdón, juicio severo, llamada ignorada. Escucha tu voz interior."
-            },
-            "El Mundo": {
-                keyword: "Culminación",
-                upright: "Logro, culminación, viaje completado, integración. Has alcançado tu meta.",
-                reversed: "Falta de cierre, objetivos incompletos, retrasos. Te falta poco para completar el ciclo."
-            }
+            "El Loco": { keyword: "Inicio", upright: "Nuevos comienzos, espontaneidad, aventura, fe en el futuro. Es momento de dar un salto de fe.", reversed: "Imprudencia, falta de dirección, decisiones precipitadas. Necesitas más planificación." },
+            "El Mago": { keyword: "Acción", upright: "Poder personal, manifestación, recursos disponibles. Tienes todo lo que necesitas para triunfar.", reversed: "Manipulación, falta de energía, recursos desperdiciados. Revisa tus intenciones." },
+            "La Sacerdotisa": { keyword: "Intuición", upright: "Sabiduría interior, misterios, intuición, conocimiento oculto. Confía en tu voz interior.", reversed: "Secretos revelados, falta de intuición, conocimiento superficial. Necesitas profundizar más." },
+            "La Emperatriz": { keyword: "Creación", upright: "Fertilidad, creatividad, abundancia, naturaleza maternal. Es tiempo de crear y nutrir.", reversed: "Dependencia, creatividad bloqueada, falta de crecimiento. Reconecta con tu poder creativo." },
+            "El Emperador": { keyword: "Orden", upright: "Autoridad, estructura, control, liderazgo. Toma las riendas de tu situación.", reversed: "Tiranía, falta de disciplina, abuso de poder. Necesitas equilibrar control y flexibilidad." },
+            "El Hierofante": { keyword: "Tradición", upright: "Enseñanzas tradicionales, conformidad, instituciones. Busca guidance en la sabiduría establecida.", reversed: "Rebeldía, nuevas formas, cuestionamiento de normas. Es hora de forjar tu propio camino." },
+            "Los Enamorados": { keyword: "Elección", upright: "Amor, relaciones, decisiones importantes, valores personales. Una elección crucial te espera.", reversed: "Desamor, malas decisiones, valores en conflicto. Reflexiona antes de elegir." },
+            "El Carro": { keyword: "Voluntad", upright: "Triunfo, determinación, control, avance. Tu fuerza de voluntad te llevará al éxito.", reversed: "Falta de dirección, pérdida de control, agresividad. Necesitas enfocar tu energía." },
+            "La Justicia": { keyword: "Equilibrio", upright: "Justicia, equilibrio, verdad, responsabilidad. Las consecuencias de tus actos se manifiestan.", reversed: "Injusticia, desequilibrio, falta de responsabilidad. Busca la equidad en tus decisiones." },
+            "El Ermitaño": { keyword: "Búsqueda", upright: "Búsqueda interior, soledad constructiva, guía espiritual. Es tiempo de introspección.", reversed: "Aislamiento, terquedad, rechazo de consejos. No te cierres a la ayuda externa." },
+            "Fortuna": { keyword: "Cambio", upright: "Cambios, ciclos, destino, buena suerte. Los vientos del cambio soplan a tu favor.", reversed: "Mala suerte, resistencia al cambio, ciclos negativos. Acepta que todo es temporal." },
+            "La Fuerza": { keyword: "Dominio", upright: "Fuerza interior, valor, paciencia, autocontrol. Tu verdadera fuerza viene de dentro.", reversed: "Debilidad, falta de autocontrol, miedo. Reconecta con tu poder interior." },
+            "El Colgado": { keyword: "Rendición", upright: "Sacrificio, nueva perspectiva, pausa, rendición. A veces hay que ceder para avanzar.", reversed: "Martirio, resistencia inútil, retrasos. Deja de luchar contra lo inevitable." },
+            "La Muerte": { keyword: "Transformación", upright: "Final de ciclos, transformación, renacimiento. Un capítulo termina, otro comienza.", reversed: "Resistencia al cambio, estancamiento, miedo a la transformación. Abraza el cambio necesario." },
+            "La Templanza": { keyword: "Armonía", upright: "Moderación, equilibrio, paciencia, curación. Encuentra el punto medio en todo.", reversed: "Impaciencia, extremos, falta de equilibrio. Necesitas más moderación." },
+            "El Diablo": { keyword: "Atadura", upright: "Tentación, ataduras, materialismo, adicciones. Examina qué te tiene prisionero.", reversed: "Liberación, ruptura de cadenas, superación de adicciones. Te estás liberando." },
+            "La Torre": { keyword: "Ruptura", upright: "Cambio súbito, revelación, destrucción necesaria. Las falsas estructuras se derrumban.", reversed: "Evitar el cambio, catástrofe personal, resistencia. El cambio es inevitable." },
+            "La Estrella": { keyword: "Esperanza", upright: "Esperanza, inspiración, curación, guía espiritual. La luz brilla al final del túnel.", reversed: "Desesperanza, falta de fe, desconexión espiritual. Recupera tu fe interior." },
+            "La Luna": { keyword: "Inconsciente", upright: "Ilusiones, subconsciente, miedos, intuición. No todo es lo que parece ser.", reversed: "Claridad, superación de miedos, verdad revelada. La confusión se disipa." },
+            "El Sol": { keyword: "Vitalidad", upright: "Éxito, vitalidad, positividad, claridad. Todo se ilumina en tu vida.", reversed: "Falta de energía, optimismo forzado, retrasos en el éxito. Recupera tu vitalidad." },
+            "El Juicio": { keyword: "Despertar", upright: "Despertar, llamada superior, renovación, perdón. Es hora de un nuevo amanecer.", reversed: "Falta de perdón, juicio severo, llamada ignorada. Escucha tu voz interior." },
+            "El Mundo": { keyword: "Culminación", upright: "Logro, culminación, viaje completado, integración. Has alcançado tu meta.", reversed: "Falta de cierre, objetivos incompletos, retrasos. Te falta poco para completar el ciclo." }
         };
 
-        // Interpretaciones para arcanos menores
         const MINOR_INTERPRETATIONS = {
             "Bastos": {
                 "As": { keyword: "Impulso", upright: "Nuevo proyecto, inspiración creativa, potencial energético.", reversed: "Falta de dirección, energía desperdiciada, proyectos fallidos." },
@@ -1038,17 +974,15 @@
         let currentReading = [];
         let isReading = false;
         
-        // --- CAMBIOS PARA EL CONTROL DE AUDIO ---
+        // Audio
         let audioCtx;
         let intervalId;
-        let ambientMasterGain; // Nodo de volumen maestro para la música de fondo
-        let audioUnlocked = false; // Flag para saber si el usuario ya ha interactuado
-        // --- FIN DE CAMBIOS ---
+        let ambientMasterGain;
+        let audioUnlocked = false;
         
         const notas = [261.63, 293.66, 311.13, 349.23, 392.00, 440.00, 466.16, 523.25];
         let isMuted = false;
         
-        // --- Sonidos temáticos ---
         function playClickSound() {
             if (isMuted) return;
             setupAudio();
@@ -1095,13 +1029,11 @@
             source.start(audioCtx.currentTime);
         }
 
-        // --- FUNCIÓN MODIFICADA ---
         function setupAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                // Creamos el nodo de ganancia maestro para la música ambiental la primera vez
                 ambientMasterGain = audioCtx.createGain();
-                ambientMasterGain.gain.setValueAtTime(1.0, audioCtx.currentTime); // Volumen inicial al 100%
+                ambientMasterGain.gain.setValueAtTime(1.0, audioCtx.currentTime);
                 ambientMasterGain.connect(audioCtx.destination);
             }
             if (audioCtx.state === 'suspended') {
@@ -1127,9 +1059,8 @@
             }
         }
         
-        // --- FUNCIÓN MODIFICADA ---
         function tocarNota(frecuencia, duracion) {
-            if (!audioCtx || isMuted || !ambientMasterGain) return; // Verificamos que el nodo maestro exista
+            if (!audioCtx || isMuted || !ambientMasterGain) return;
             let oscillator = audioCtx.createOscillator();
             let gainNode = audioCtx.createGain();
             oscillator.type = 'triangle';
@@ -1139,7 +1070,6 @@
             oscillator.connect(reverb);
             reverb.connect(gainNode);
             
-            // CONECTAMOS AL NODO MAESTRO en lugar del destino final
             gainNode.connect(ambientMasterGain); 
             
             gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
@@ -1147,11 +1077,8 @@
             oscillator.stop(audioCtx.currentTime + duracion);
         }
 
-        // --- NUEVA FUNCIÓN PARA ATENUAR EL VOLUMEN ---
         function fadeAmbientVolume(targetVolume, duration) {
             if (ambientMasterGain && audioCtx) {
-                // Usamos una rampa exponencial para una transición suave
-                // El valor mínimo debe ser mayor que 0 para la rampa exponencial
                 const effectiveVolume = Math.max(0.001, targetVolume);
                 ambientMasterGain.gain.exponentialRampToValueAtTime(effectiveVolume, audioCtx.currentTime + duration);
             }
@@ -1240,12 +1167,9 @@
             const cardEl = document.createElement('div');
             cardEl.className = 'card';
 
-            // --- LÍNEAS AÑADIDAS ---
-            // Si la carta es un Arcano Mayor, le añadimos una clase especial
             if (card.type === 'major') {
                 cardEl.classList.add('card--major-arcana');
             }
-            // --- FIN DE LAS LÍNEAS AÑADIDAS ---
 
             cardEl.style.animationDelay = (index * 0.2) + 's';
             const isInverted = Math.random() < 0.5;
@@ -1289,51 +1213,78 @@
             }, 500);
         }
 
-        // --- FUNCIÓN MODIFICADA ---
         async function startReading() {
-            // --- NUEVO! Bloque para desbloquear el audio con el primer clic ---
-            if (!audioUnlocked) {
-                try {
-                    // Crea un audio silencioso, lo reproduce y lo descarta.
-                    // Esto es suficiente para "desbloquear" el permiso del navegador.
-                    const unlockSound = new Audio("data:audio/mp3;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKn");
-                    await unlockSound.play();
-                    audioUnlocked = true;
-                    console.log("Permiso de audio desbloqueado.");
-                } catch (err) {
-                    console.error("No se pudo desbloquear el audio automáticamente:", err);
-                }
-            }
-            // --- FIN DEL NUEVO BLOQUE ---
-
             if (isReading) return;
             isReading = true;
             setupAudio();
             playShuffleSound();
+            
             const shuffleBtn = document.getElementById('shuffleBtn');
+            const deckArea = document.getElementById('deck-area');
             const deck = document.getElementById('deck');
+            const shufflingContainer = document.getElementById('shuffling-container');
             const deckStatus = document.getElementById('deckStatus');
             const resultsDiv = document.getElementById('results');
             const exportBtn = document.getElementById('exportBtn');
             const ogreBubble = document.getElementById('ogre-interpretation');
+
             shuffleBtn.disabled = true;
             shuffleBtn.innerHTML = '<span class="loading"></span> Barajando...';
             deckStatus.textContent = 'Barajando las cartas...';
             resultsDiv.style.display = 'none';
             exportBtn.style.display = 'none';
             ogreBubble.style.display = 'none';
-            deck.classList.add('shuffle-animation');
+            
+            // Oculta el mazo principal
+            deck.style.display = 'none';
+            shufflingContainer.style.display = 'flex';
+
+            const numShufflingCards = 20;
+            const shuffledCards = [];
+            for(let i = 0; i < numShufflingCards; i++) {
+                const card = document.createElement('div');
+                card.className = 'shuffling-card';
+                card.style.top = `${Math.random() * 50 - 25}px`;
+                card.style.left = `${Math.random() * 50 - 25}px`;
+                card.style.transform = `translate3d(0, 0, 0) rotateY(${Math.random() * 360}deg) rotateZ(${Math.random() * 360}deg)`;
+                card.style.opacity = '0';
+                shufflingContainer.appendChild(card);
+                shuffledCards.push(card);
+            }
+
+            // Inicia la animación de dispersión
+            setTimeout(() => {
+                shuffledCards.forEach(card => {
+                    card.style.transform = `translate3d(${Math.random() * 300 - 150}px, ${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotateY(${Math.random() * 720 + 360}deg) rotateZ(${Math.random() * 720 + 360}deg)`;
+                    card.style.opacity = '1';
+                });
+            }, 50);
+
+            // Espera a que termine la animación de dispersión y empieza la de retorno
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            shuffledCards.forEach(card => {
+                card.style.transform = `translate3d(0, 0, 0) rotateY(0deg) rotateZ(0deg)`;
+                card.style.opacity = '0';
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            shuffledCards.forEach(card => card.remove());
+            shufflingContainer.style.display = 'none';
+            deck.style.display = 'block';
+
+            deckStatus.textContent = 'Cortando el mazo...';
+
             const deckType = document.getElementById('deckType').value;
             const spreadType = parseInt(document.getElementById('spreadType').value);
             currentDeck = createDeck(deckType === 'major');
             currentDeck = shuffleDeck(currentDeck);
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            deck.classList.remove('shuffle-animation');
-            deckStatus.textContent = 'Cortando el mazo...';
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            deckStatus.textContent = 'Extrayendo cartas...';
             const cutPoint = Math.floor(Math.random() * currentDeck.length);
             currentDeck = [...currentDeck.slice(cutPoint), ...currentDeck.slice(0, cutPoint)];
             await new Promise(resolve => setTimeout(resolve, 1000));
-            deckStatus.textContent = 'Extrayendo cartas...';
+            
             const positions = getSpreadPositions(spreadType);
             currentReading = [];
             for (let i = 0; i < positions.length; i++) {
@@ -1399,42 +1350,24 @@
             }, cards.length * 300 + 1000);
         }
         
-        // --- FUNCIÓN MODIFICADA ---
         function playOgreAnimation() {
             const ogreArea = document.querySelector('.ogre-area');
             const ogreImage = document.getElementById('ogre-image');
-            if (!ogreImage) return;
+            
+            fadeAmbientVolume(0.2, 1.0);
 
-            // BAJAMOS EL VOLUMEN DE LA MÚSICA AMBIENTAL
-            fadeAmbientVolume(0.2, 1.0); // Baja al 20% del volumen en 1 segundo
+            const ogreGif = document.createElement('img');
+            ogreGif.src = 'https://i.ibb.co/68v0tW8/ogro-tarot.gif';
+            ogreGif.alt = 'Grum el ogro leyendo las cartas';
+            ogreGif.classList.add('ogre-gif');
 
-            const ogreVideo = document.createElement('video');
-            ogreVideo.src = 'Ogro.webm';
-            ogreVideo.id = 'ogre-video';
-            ogreVideo.autoplay = true;
-            ogreVideo.muted = false; // REPRODUCIR CON SONIDO
-            ogreVideo.playsInline = true;
-            ogreVideo.style.maxWidth = '150px';
-            ogreVideo.style.height = 'auto';
-
-            ogreVideo.addEventListener('ended', () => {
-                // SUBIMOS EL VOLUMEN DE LA MÚSICA AMBIENTAL
-                fadeAmbientVolume(1.0, 1.5); // Sube al 100% del volumen en 1.5 segundos
-
-                if (ogreVideo.parentNode) {
-                    ogreArea.replaceChild(ogreImage, ogreVideo);
-                }
+            ogreGif.addEventListener('load', () => {
+                ogreArea.replaceChild(ogreGif, ogreImage);
+                fadeAmbientVolume(1.0, 1.5);
+                setTimeout(() => {
+                    ogreArea.replaceChild(ogreImage, ogreGif);
+                }, 2500);
             }, { once: true });
-            
-            ogreArea.replaceChild(ogreVideo, ogreImage);
-            
-            // Intentamos reproducir explícitamente y capturamos errores
-            ogreVideo.play().catch(error => {
-                 console.error("Error al reproducir el video del ogro:", error);
-                 // Si falla, volvemos a poner la imagen y subimos la música
-                 ogreArea.replaceChild(ogreImage, ogreVideo);
-                 fadeAmbientVolume(1.0, 0.5);
-            });
         }
 
         async function getOgreInterpretation(reading) {
@@ -1443,8 +1376,6 @@
             ogreBubble.innerHTML = '<span class="loading"></span> El Ogro está consultando el cosmos...';
             
             playOgreAnimation();
-
-            const PROXY_URL = '/.netlify/functions/api-proxy';
 
             const readingSummary = reading.map(item => 
                 `${item.position}: ${item.card.name} (${item.card.inverted ? 'Invertida' : 'Derecha'})`
@@ -1533,14 +1464,12 @@
             }
         }
 
-        // Inicializar aplicación
         document.addEventListener('DOMContentLoaded', () => {
             generateStars();
             generateParticles();
             document.querySelectorAll('button, .deck').forEach(el => {
                 el.addEventListener('click', playClickSound);
             });
-            // Comprobar consentimiento de cookies al cargar la página
             checkCookieConsent();
         });
     </script>
@@ -1564,6 +1493,5 @@
             }
         }
     </script>
-
 </body>
 </html>
