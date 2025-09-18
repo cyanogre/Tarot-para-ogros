@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF--8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔮 Tarot del Ogro azul 🔮</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -48,6 +48,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            padding-bottom: 80px; /* Espacio para el footer */
         }
 
         .header {
@@ -457,6 +458,119 @@
             background: rgba(255, 255, 255, 0.4);
         }
 
+        .footer {
+            text-align: center;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            z-index: 20;
+        }
+
+        .footer a {
+            color: #ffd700;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        /* --- Estilos para el Banner de Cookies --- */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 5, 25, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-top: 1px solid rgba(255, 215, 0, 0.5);
+            transform: translateY(100%);
+            animation: slideUpBanner 0.5s ease-out forwards;
+        }
+
+        @keyframes slideUpBanner {
+            to { transform: translateY(0); }
+        }
+
+        .cookie-banner p {
+            margin: 0;
+            flex-grow: 1;
+            text-align: center;
+        }
+        .cookie-banner p a {
+            color: #ffd700;
+            text-decoration: underline;
+        }
+        .cookie-banner .cookie-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .cookie-banner button {
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+        #cookie-accept {
+            background: #ffd700;
+            color: #1e0c3a;
+            border-color: #ffd700;
+        }
+        #cookie-decline {
+            background: transparent;
+            color: #f0f0f0;
+            border-color: #f0f0f0;
+        }
+
+        /* --- Estilos para el Modal de Política de Privacidad --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1001;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1e0c3a;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-content h2 { color: #ffd700; margin-bottom: 15px; }
+        .modal-content p, .modal-content ul { margin-bottom: 15px; line-height: 1.6; }
+        .modal-content ul { padding-left: 20px; }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .controls { flex-direction: column; align-items: center; }
@@ -468,13 +582,16 @@
                 top: auto; 
                 content: '';
                 position: absolute;
-                bottom: 100%; /* Sube el triángulo hasta el borde superior */
+                bottom: 100%;
                 left: 50%;
-                margin-left: -20px; /* Centra el triángulo horizontalmente */
+                margin-left: -20px;
                 width: 0;
                 height: 0;
                 border: 20px solid transparent;
-                border-bottom-color: rgba(255, 215, 0, 0.5); /* Crea el triángulo que apunta hacia arriba */
+                border-bottom-color: rgba(255, 215, 0, 0.5);
+            }
+            .cookie-banner {
+                flex-direction: column;
             }
         }
         @keyframes spin-and-return {
@@ -561,7 +678,85 @@
         </div>
     </div>
 
+    <footer class="footer">
+        <a href="#" id="privacy-policy-link">Política de Privacidad y Cookies</a>
+    </footer>
+
+    <div id="cookie-banner" class="cookie-banner" style="display: none;">
+        <p>Este sitio web utiliza cookies de análisis para mejorar tu experiencia. ¿Aceptas su uso? Puedes consultar nuestra <a href="#" id="privacy-link-banner">política de privacidad</a>.</p>
+        <div class="cookie-buttons">
+            <button id="cookie-accept">Aceptar</button>
+            <button id="cookie-decline">Rechazar</button>
+        </div>
+    </div>
+
+    <div id="privacy-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close">&times;</button>
+            <h2>Política de Privacidad y Cookies</h2>
+            <p><strong>Última actualización:</strong> 18 de septiembre de 2025</p>
+            <p>En Tarot del Ogro Azul, tu privacidad es importante. Esta política explica qué información recopilamos y cómo la usamos.</p>
+            <h3>Cookies</h3>
+            <p>Una cookie es un pequeño fichero que se almacena en tu ordenador. Usamos cookies para las siguientes finalidades:</p>
+            <ul>
+                <li><strong>Cookies de Análisis (Google Analytics):</strong> Utilizamos estas cookies para entender cómo interactúas con nuestra web (qué tiradas son más populares, cuánto tiempo pasas aquí, etc.). Esta información es anónima y nos ayuda a mejorar la aplicación. Estas cookies solo se activarán si nos das tu consentimiento explícito.</li>
+                <li><strong>Cookies de Preferencia:</strong> Usamos el almacenamiento local (LocalStorage) para guardar tu decisión sobre las cookies y evitar preguntarte de nuevo. Esto es una cookie técnica y esencial.</li>
+            </ul>
+            <h3>Información enviada a Terceros</h3>
+            <p>Para la interpretación del Ogro, la información de tu tirada (los nombres de las cartas y sus posiciones) se envía de forma anónima a la API de Google Gemini para generar el texto. No se envía ninguna información personal tuya.</p>
+            <h3>Tu Consentimiento</h3>
+            <p>Al hacer clic en "Aceptar" en el banner de cookies, nos das permiso para usar las cookies de análisis. Si haces clic en "Rechazar", estas cookies no se usarán. Puedes cambiar de opinión en cualquier momento borrando las cookies de tu navegador.</p>
+        </div>
+    </div>
+
+
     <script>
+        // --- GESTIÓN DE COOKIES ---
+        const COOKIE_CONSENT_KEY = 'cookie_consent_ogre_tarot';
+
+        function checkCookieConsent() {
+            const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
+            if (consent === 'granted') {
+                loadGoogleAnalytics();
+            } else if (consent !== 'denied') {
+                document.getElementById('cookie-banner').style.display = 'flex';
+            }
+        }
+
+        function handleCookieConsent(consent) {
+            localStorage.setItem(COOKIE_CONSENT_KEY, consent);
+            document.getElementById('cookie-banner').style.display = 'none';
+            if (consent === 'granted') {
+                loadGoogleAnalytics();
+            }
+        }
+
+        document.getElementById('cookie-accept').addEventListener('click', () => handleCookieConsent('granted'));
+        document.getElementById('cookie-decline').addEventListener('click', () => handleCookieConsent('denied'));
+
+        // --- LÓGICA DEL MODAL DE PRIVACIDAD ---
+        const privacyModal = document.getElementById('privacy-modal');
+        const openModalLink = document.getElementById('privacy-policy-link');
+        const openModalLinkBanner = document.getElementById('privacy-link-banner');
+        const closeModalBtn = document.getElementById('modal-close');
+
+        function openPrivacyModal(e) {
+            e.preventDefault();
+            privacyModal.style.display = 'flex';
+        }
+        
+        openModalLink.addEventListener('click', openPrivacyModal);
+        openModalLinkBanner.addEventListener('click', openPrivacyModal);
+        closeModalBtn.addEventListener('click', () => privacyModal.style.display = 'none');
+        privacyModal.addEventListener('click', (e) => {
+            if (e.target === privacyModal) {
+                privacyModal.style.display = 'none';
+            }
+        });
+
+        // --- CÓDIGO DE LA APLICACIÓN ---
+        // (El resto de tu código JavaScript va aquí sin cambios)
+
         // --- Gemini API Configuration ---
         // La configuración de la API ahora se maneja en el servidor a través de la función proxy de Netlify.
         
@@ -1287,19 +1482,30 @@
             document.querySelectorAll('button, .deck').forEach(el => {
                 el.addEventListener('click', playClickSound);
             });
+            // Comprobar consentimiento de cookies al cargar la página
+            checkCookieConsent();
         });
     </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFDC8MXKCV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    
+    <script>
+        function loadGoogleAnalytics() {
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZFDC8MXKCV';
+            document.head.appendChild(script);
 
-  gtag('config', 'G-ZFDC8MXKCV', {
-    'page_title' : 'Tarot del Ogro azul',
-    'page_path': '/'
-  });
-</script>
+            script.onload = () => {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-ZFDC8MXKCV', {
+                    'page_title' : 'Tarot del Ogro azul',
+                    'page_path': '/'
+                });
+                console.log('Google Analytics cargado.');
+            }
+        }
+    </script>
 
 </body>
 </html>
