@@ -48,7 +48,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 80px; /* Espacio para el footer */
         }
 
         .header {
@@ -468,9 +467,10 @@
         }
 
         .footer a {
-            color: #ffd700;
-            text-decoration: none;
-            transition: color 0.3s;
+            position: fixed; /* Lo fija en la pantalla */
+            bottom: 15px;    /* Lo posiciona 15px desde abajo */
+            right: 20px;     /* Lo posiciona 20px desde la derecha */
+            z-index: 999;    /* Se asegura que esté por encima de casi todo */
         }
 
         .footer a:hover {
