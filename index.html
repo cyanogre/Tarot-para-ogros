@@ -80,7 +80,7 @@
             align-items: center;
             gap: 20px;
             flex-wrap: wrap;
-            min-height: 170px; /* Para evitar saltos de layout */
+            min-height: 170px;
         }
 
         .speech-bubble {
@@ -208,29 +208,39 @@
             text-align: center;
             margin: 40px 0;
             position: relative;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .shuffling-container {
+            position: absolute;
+            width: 120px;
+            height: 180px;
+            transform-style: preserve-3d;
+        }
+
+        .shuffling-card {
+            position: absolute;
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #1e0c3a, #2d1b69);
+            border-radius: 12px;
+            border: 3px solid #c0a87a;
+            transition: transform 1s, opacity 1s;
+            backface-visibility: hidden;
         }
 
         .deck {
-            display: inline-block;
             position: relative;
             width: 120px;
             height: 180px;
-            margin: 20px;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
         
-        .shuffle-animation {
-            animation: shuffle 2s ease-in-out;
-        }
-
-        @keyframes shuffle {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(5deg) scale(1.1); }
-            50% { transform: rotate(-3deg) scale(1.05); }
-            75% { transform: rotate(2deg) scale(1.1); }
-        }
-
         .deck:hover {
             transform: scale(1.05);
         }
@@ -737,6 +747,7 @@
         </div>
 
         <div class="deck-area" id="deck-area">
+            <div id="shuffling-container" style="display: none;"></div>
             <div class="deck" id="deck" onclick="startReading()">
                 <div class="card-back"></div>
                 <div class="card-back"></div>
@@ -819,10 +830,8 @@
             }
         });
 
-        // Gemini API Configuration
         const PROXY_URL = '/.netlify/functions/api-proxy';
 
-        // Base de datos de cartas
         const MAJOR_ARCANA = [
             { name: "El Loco", symbol: "🃏", type: "major" },
             { name: "El Mago", symbol: "🎩", type: "major" },
@@ -992,7 +1001,7 @@
         
         function playShuffleSound() {
             if (isMuted) return;
-            setupAudio(); // Ensure audio context is ready
+            setupAudio();
             const shuffleBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
             const shuffleData = shuffleBuffer.getChannelData(0);
             for (let i = 0; i < shuffleData.length; i++) {
@@ -1196,10 +1205,10 @@
             if (isReading) return;
             isReading = true;
             setupAudio();
-            playShuffleSound();
             
             const shuffleBtn = document.getElementById('shuffleBtn');
             const deck = document.getElementById('deck');
+            const shufflingContainer = document.getElementById('shuffling-container');
             const deckStatus = document.getElementById('deckStatus');
             const resultsDiv = document.getElementById('results');
             const exportBtn = document.getElementById('exportBtn');
@@ -1211,14 +1220,44 @@
             resultsDiv.style.display = 'none';
             exportBtn.style.display = 'none';
             ogreBubble.style.display = 'none';
+
+            playShuffleSound();
+
+            deck.style.display = 'none';
+            shufflingContainer.style.display = 'block';
+
+            const numShufflingCards = 20;
+            const shuffledCards = [];
+            for(let i = 0; i < numShufflingCards; i++) {
+                const card = document.createElement('div');
+                card.className = 'shuffling-card';
+                card.style.transform = `translate3d(0, 0, 0) rotateY(${Math.random() * 360}deg) rotateZ(${Math.random() * 360}deg)`;
+                card.style.opacity = '0';
+                shufflingContainer.appendChild(card);
+                shuffledCards.push(card);
+            }
+
+            setTimeout(() => {
+                shuffledCards.forEach(card => {
+                    card.style.transform = `translate3d(${Math.random() * 300 - 150}px, ${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotateY(${Math.random() * 720 + 360}deg) rotateZ(${Math.random() * 720 + 360}deg)`;
+                    card.style.opacity = '1';
+                });
+            }, 50);
+
+            await new Promise(resolve => setTimeout(resolve, 1500));
             
-            deck.classList.add('shuffle-animation');
-            
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            deck.classList.remove('shuffle-animation');
-            
+            shuffledCards.forEach(card => {
+                card.style.transform = `translate3d(0, 0, 0) rotateY(0deg) rotateZ(0deg)`;
+                card.style.opacity = '0';
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            shuffledCards.forEach(card => card.remove());
+            shufflingContainer.style.display = 'none';
+            deck.style.display = 'block';
+
             deckStatus.textContent = 'Cortando el mazo...';
+            
             const deckType = document.getElementById('deckType').value;
             const spreadType = parseInt(document.getElementById('spreadType').value);
             currentDeck = createDeck(deckType === 'major');
