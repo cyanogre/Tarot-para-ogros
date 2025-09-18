@@ -467,14 +467,13 @@
             .speech-bubble::after {
                 content: '';
                 position: absolute;
-                bottom: 100%; /* Mueve el triángulo a la parte superior de la burbuja */
+                bottom: 100%; /* Sube el triángulo hasta el borde superior */
                 left: 50%;
+                margin-left: -20px; /* Centra el triángulo horizontalmente */
                 width: 0;
                 height: 0;
                 border: 20px solid transparent;
                 border-bottom-color: rgba(255, 215, 0, 0.5); /* Crea el triángulo que apunta hacia arriba */
-                border-top: 0;
-                margin-left: -20px;
             }
         }
         @keyframes spin-and-return {
