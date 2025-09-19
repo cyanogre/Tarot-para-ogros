@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔮 Tarot de Grum el Ogro azul 🔮</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap');
@@ -653,6 +655,57 @@
             font-size: 1.5rem;
             cursor: pointer;
         }
+        
+        /* Modal Específico para la carta */
+        #card-modal {
+            display: none;
+            z-index: 1002;
+        }
+
+        .card-modal-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+        }
+
+        .card-modal-content h2 {
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .card-details-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        #card-3d-container {
+            width: 100%;
+            max-width: 350px;
+            aspect-ratio: 5/7;
+            background: transparent; /* Fondo transparente para el canvas */
+        }
+        
+        #card-description {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #c0a87a;
+            text-align: left;
+        }
+        
+        #card-description h3 {
+            color: #e6c88e;
+            font-family: 'Cinzel', serif;
+            margin-bottom: 10px;
+        }
 
         @media (max-width: 768px) {
             .header h1 { font-size: 2.5rem; }
@@ -674,6 +727,9 @@
                 border-bottom-color: #c0a87a;
             }
             .cookie-banner {
+                flex-direction: column;
+            }
+            .card-details-container {
                 flex-direction: column;
             }
         }
@@ -844,6 +900,20 @@
             <p>Al hacer clic en "Aceptar" en el banner de cookies, nos das permiso para usar las cookies de análisis. Si haces clic en "Rechazar", estas cookies no se usarán. Puedes cambiar de opinión en cualquier momento borrando las cookies de tu navegador.</p>
         </div>
     </div>
+    
+    <div id="card-modal" class="modal-overlay">
+        <div class="modal-content card-modal-content">
+            <button id="card-modal-close" class="modal-close">&times;</button>
+            <h2 id="modal-card-name">Nombre de la Carta</h2>
+            <div class="card-details-container">
+                <div id="card-3d-container"></div>
+                <div id="card-description">
+                    <h3>Descripción</h3>
+                    <p id="modal-card-interpretation"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         const COOKIE_CONSENT_KEY = 'cookie_consent_ogre_tarot';
@@ -884,6 +954,24 @@
         privacyModal.addEventListener('click', (e) => {
             if (e.target === privacyModal) {
                 privacyModal.style.display = 'none';
+            }
+        });
+        
+        const cardModal = document.getElementById('card-modal');
+        const cardModalCloseBtn = document.getElementById('card-modal-close');
+        
+        cardModalCloseBtn.addEventListener('click', () => {
+            cardModal.style.display = 'none';
+            if (window.card3D) {
+                window.card3D.stopAnimation();
+            }
+        });
+        cardModal.addEventListener('click', (e) => {
+            if (e.target === cardModal) {
+                cardModal.style.display = 'none';
+                if (window.card3D) {
+                    window.card3D.stopAnimation();
+                }
             }
         });
 
@@ -995,7 +1083,7 @@
                 "Sota": { keyword: "Aprendizaje mental", upright: "Vigilancia, nuevas ideas, curiosidad, mensaje.", reversed: "Chismorreo, imprudencia, mal uso de información." },
                 "Caballero": { keyword: "Movimiento mental", upright: "Acción impulsiva, valor, cambios bruscos.", reversed: "Imprudencia, falta de dirección, caos." },
                 "Reina": { keyword: "Madurez mental", upright: "Independencia, perspicacia, experiencia, claridad.", reversed: "Crueldad, venganza, amargura." },
-                "Rey": { keyword: "Dominio mental", upright: "Autoridad intelectual, verdad, juicio claro.", reversed: "Tiranía, crueldad, abuso de poder." }
+                "Rey": { keyword: "Dominio mental", upright: "Autoridad intelectual, verdad, juicio claro.", reversed: "Avaricia, crueldad, abuso de poder." }
             },
             "Oros": {
                 "As": { keyword: "Oportunidad", upright: "Nueva oportunidad financiera, prosperidad, manifestación.", reversed: "Oportunidad perdida, codicia, materialismo." },
@@ -1223,6 +1311,7 @@
         function createCardElement(card, position, index, isRevealed = false) {
             const cardEl = document.createElement('div');
             cardEl.className = 'card';
+            cardEl.dataset.index = index;
 
             if (card.type === 'major') {
                 cardEl.classList.add('card--major-arcana');
@@ -1248,16 +1337,31 @@
             }
             cardEl.addEventListener('click', () => {
                 if (cardEl.classList.contains('revealed')) {
-                    cardEl.classList.add('spinning');
-                    playClickSound(); 
-                    setTimeout(() => {
-                        cardEl.classList.remove('spinning');
-                    }, 1000); 
+                    // Si ya está revelada, mostramos el modal 3D
+                    showCardModal(card, position);
                 } else {
                     revealCard(cardEl, card);
                 }
             });
             return cardEl;
+        }
+        
+        function showCardModal(cardData, position) {
+            const modalCardName = document.getElementById('modal-card-name');
+            const modalCardInterpretation = document.getElementById('modal-card-interpretation');
+            const card3DContainer = document.getElementById('card-3d-container');
+
+            // Limpiar el contenedor 3D antes de crear uno nuevo
+            card3DContainer.innerHTML = '';
+
+            modalCardName.textContent = `${cardData.name} (${cardData.inverted ? 'Invertida' : 'Derecha'})`;
+            modalCardInterpretation.textContent = getInterpretation(cardData, cardData.inverted);
+
+            // Iniciar la animación 3D
+            window.card3D = new Card3D(card3DContainer);
+            window.card3D.loadTextures('frente.png', 'trasero.png', cardData.inverted);
+
+            cardModal.style.display = 'flex';
         }
 
         function revealCard(cardEl, card) {
@@ -1530,6 +1634,244 @@
                  exportBtn.innerHTML = '📸 Exportar PNG';
             }
         }
+        
+        // --- CÓDIGO 3D DE THREE.JS REFACTURADO EN UNA CLASE ---
+        class Card3D {
+            constructor(container) {
+                this.container = container;
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.card = null;
+                this.controls = null;
+                this.clock = new THREE.Clock();
+                this.animationFrameId = null;
+                this.frontMaterial = null;
+                this.backMaterial = null;
+                this.init();
+            }
+
+            init() {
+                // Configuración de la escena
+                this.scene = new THREE.Scene();
+                this.scene.background = null;
+
+                // Configuración del renderizador
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                this.renderer.setPixelRatio(window.devicePixelRatio);
+                const { width, height } = this.container.getBoundingClientRect();
+                this.renderer.setSize(width, height);
+                this.container.appendChild(this.renderer.domElement);
+
+                // Configuración de la cámara
+                this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+                this.camera.position.set(0, 0, 12);
+                
+                // Controles de órbita
+                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enableDamping = true;
+                this.controls.autoRotate = true;
+                this.controls.autoRotateSpeed = 2.0;
+                this.controls.minDistance = 8;
+                this.controls.maxDistance = 20;
+
+                // Iluminación
+                this.scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+                const pointLight = new THREE.PointLight(0xffffff, 0.7, 100);
+                pointLight.position.set(8, 5, 10);
+                this.scene.add(pointLight);
+
+                // Geometría de la carta
+                const cardGeometry = new THREE.BoxGeometry(5, 7, 0.05);
+                const sideMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8 });
+                
+                // Shaders para el efecto foil
+                const vertexShader = `
+                    varying vec2 vUv;
+                    varying vec3 vNormal;
+                    varying vec3 vViewPosition;
+                    void main() {
+                        vUv = uv;
+                        vNormal = normalize(normalMatrix * normal);
+                        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                        vViewPosition = -mvPosition.xyz;
+                        gl_Position = projectionMatrix * mvPosition;
+                    }
+                `;
+                const fragmentShader = `
+                    uniform sampler2D uTexture;
+                    uniform sampler2D uMaskTexture;
+                    uniform float uTime;
+                    uniform float uIntensity;
+                    uniform float uDiamondScale;
+                    
+                    varying vec2 vUv;
+                    varying vec3 vNormal;
+                    varying vec3 vViewPosition;
+                    
+                    float diamondPattern(vec2 uv) {
+                        float scale = uDiamondScale;
+                        uv *= scale;
+                        vec2 p = floor(uv);
+                        vec2 f = fract(uv);
+                        float d = abs(f.x - 0.5) + abs(f.y - 0.5);
+                        return smoothstep(0.35, 0.65, d);
+                    }
+
+                    vec3 getProceduralNormal(vec2 uv) {
+                        float epsilon = 0.001;
+                        float hx = diamondPattern(uv + vec2(epsilon, 0.0)) - diamondPattern(uv - vec2(epsilon, 0.0));
+                        float hy = diamondPattern(uv + vec2(0.0, epsilon)) - diamondPattern(uv - vec2(0.0, epsilon));
+                        return normalize(vec3(-hx, -hy, 0.2));
+                    }
+
+                    vec3 diamondRainbowEffect(vec3 viewDir, vec3 normalDir) {
+                        float angle = dot(viewDir, normalDir);
+                        float rainbow = fract(angle * 6.0 + uTime * 0.5);
+                        
+                        vec3 colorA = vec3(1.0, 0.2, 0.2);
+                        vec3 colorB = vec3(0.2, 1.0, 0.2);
+                        vec3 colorC = vec3(0.2, 0.2, 1.0);
+                        
+                        vec3 finalColor = mix(colorA, colorB, smoothstep(0.0, 0.5, rainbow));
+                        finalColor = mix(finalColor, colorC, smoothstep(0.5, 1.0, rainbow));
+                        
+                        return finalColor * pow(1.0 - angle, 2.5);
+                    }
+
+                    vec3 generalRainbowEffect(vec3 viewDir, vec3 normalDir) {
+                        float angle = dot(viewDir, normalDir);
+                        float rainbow = fract(angle * 2.0 - uTime * 0.2); 
+                        
+                        vec3 color1 = vec3(0.8, 0.4, 0.7);
+                        vec3 color2 = vec3(0.4, 0.8, 0.8);
+                        
+                        vec3 finalColor = mix(color1, color2, rainbow);
+                        return finalColor * pow(1.0 - angle, 3.0) * 1.2;
+                    }
+                    
+                    void main() {
+                        vec4 baseColor = texture2D(uTexture, vUv);
+                        float mask = texture2D(uMaskTexture, vUv).r;
+                        
+                        if (mask < 0.1) {
+                            gl_FragColor = baseColor;
+                            return;
+                        }
+
+                        vec3 viewDir = normalize(vViewPosition);
+
+                        vec3 proceduralNormal = getProceduralNormal(vUv);
+                        vec3 diamondNormal = normalize(vNormal + proceduralNormal);
+                        vec3 diamondFoilColor = diamondRainbowEffect(viewDir, diamondNormal);
+
+                        vec3 generalFoilColor = generalRainbowEffect(viewDir, vNormal);
+
+                        vec3 combinedFoilColor = generalFoilColor + diamondFoilColor;
+                        
+                        vec3 finalColor = baseColor.rgb + combinedFoilColor * mask * uIntensity;
+                        
+                        gl_FragColor = vec4(finalColor, baseColor.a);
+                    }
+                `;
+                
+                // Materiales con shaders
+                const uniforms = {
+                    uTexture: { value: null },
+                    uMaskTexture: { value: null },
+                    uTime: { value: 0.0 },
+                    uIntensity: { value: 2.0 },
+                    uDiamondScale: { value: 30.0 }
+                };
+
+                this.frontMaterial = new THREE.ShaderMaterial({
+                    vertexShader,
+                    fragmentShader,
+                    uniforms: THREE.UniformsUtils.clone(uniforms),
+                });
+
+                this.backMaterial = new THREE.ShaderMaterial({
+                    vertexShader,
+                    fragmentShader,
+                    uniforms: THREE.UniformsUtils.clone(uniforms),
+                });
+
+                this.card = new THREE.Mesh(cardGeometry, [
+                    sideMaterial, sideMaterial, sideMaterial, sideMaterial, this.frontMaterial, this.backMaterial
+                ]);
+                this.scene.add(this.card);
+                
+                this.animate();
+                window.addEventListener('resize', () => this.onWindowResize());
+            }
+
+            loadTextures(frontUrl, backUrl, isInverted) {
+                const textureLoader = new THREE.TextureLoader();
+                
+                textureLoader.load(frontUrl, (frontTexture) => {
+                    this.frontMaterial.uniforms.uTexture.value = frontTexture;
+                    this.processImageForFoil(frontTexture, 'front');
+                });
+
+                textureLoader.load(backUrl, (backTexture) => {
+                    this.backMaterial.uniforms.uTexture.value = backTexture;
+                    this.processImageForFoil(backTexture, 'back');
+                });
+                
+                // Ajustar la rotación inicial si la carta está invertida
+                this.card.rotation.x = isInverted ? Math.PI : 0;
+            }
+
+            processImageForFoil(texture, side) {
+                if (!texture || !texture.image) return;
+
+                const img = texture.image;
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, img.width, img.height);
+                const data = imageData.data;
+                const thresholdValue = 128; // Valor fijo para la máscara
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const brightness = (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+                    const maskValue = brightness > thresholdValue ? 255 : 0;
+                    data[i] = data[i + 1] = data[i + 2] = maskValue;
+                }
+                ctx.putImageData(imageData, 0, 0);
+
+                const maskTexture = new THREE.CanvasTexture(canvas);
+                const material = side === 'front' ? this.frontMaterial : this.backMaterial;
+                material.uniforms.uMaskTexture.value = maskTexture;
+                material.needsUpdate = true;
+            }
+            
+            animate() {
+                this.animationFrameId = requestAnimationFrame(() => this.animate());
+                const delta = this.clock.getDelta();
+                this.frontMaterial.uniforms.uTime.value += delta;
+                this.backMaterial.uniforms.uTime.value += delta;
+                this.controls.update();
+                this.renderer.render(this.scene, this.camera);
+            }
+            
+            stopAnimation() {
+                cancelAnimationFrame(this.animationFrameId);
+                this.animationFrameId = null;
+            }
+            
+            onWindowResize() {
+                const { width, height } = this.container.getBoundingClientRect();
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+            }
+        }
+        
+        // --- FIN DEL CÓDIGO 3D ---
 
         document.addEventListener('DOMContentLoaded', () => {
             generateStars();
