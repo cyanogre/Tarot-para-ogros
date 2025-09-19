@@ -20,7 +20,7 @@
             background: radial-gradient(circle, #0a011a 0%, #000000 100%);
             color: #f0f0f0;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden; /* Evita el scroll por las estrellas fugaces */
         }
 
         .stars {
@@ -45,6 +45,27 @@
             0% { opacity: 0.3; transform: scale(0.8); }
             100% { opacity: 1; transform: scale(1.2); }
         }
+        
+        /* --- ESTILOS ESTRELLA FUGAZ --- */
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(-45deg, #e6c88e, rgba(0, 0, 255, 0));
+            border-radius: 999px;
+            filter: drop-shadow(0 0 6px #e6c88e);
+            animation: tail 3s ease-in-out infinite, shooting 3s ease-in-out infinite;
+        }
+
+        @keyframes tail {
+            0% { width: 0; }
+            30% { width: 100px; }
+            100% { width: 0; }
+        }
+
+        @keyframes shooting {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100vw); }
+        }
 
         .container {
             position: relative;
@@ -52,6 +73,8 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
         }
 
         .header {
@@ -330,7 +353,7 @@
         }
 
         .card-content {
-            padding: 15px;
+            padding: 10px; /* Reducido para más espacio */
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -344,18 +367,19 @@
         }
 
         .card-name {
-            font-size: 0.85rem;
-            margin-bottom: 10px;
+            font-size: 0.8rem; /* --- FUENTE AJUSTADA --- */
+            margin-bottom: 5px;
             color: #8b4513;
+            line-height: 1.1;
         }
 
         .card-symbol {
-            font-size: 3rem;
-            margin: 10px 0;
+            font-size: 2.8rem;
+            margin: 5px 0;
         }
 
         .card-orientation {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #666;
             font-style: italic;
         }
@@ -486,23 +510,33 @@
         .music-controls button:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-
-        .footer {
+        
+        /* --- ESTILOS MEJORADOS PARA EL BOTÓN DE COOKIES --- */
+        .privacy-button {
             position: fixed;
-            bottom: 15px;
-            right: 20px;
+            bottom: 20px;
+            left: 20px;
             z-index: 999;
-        }
-
-        .footer a {
+            background: rgba(16, 8, 32, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid #c0a87a;
             color: #e6c88e;
-            text-decoration: none;
-            transition: color 0.3s ease;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
         }
 
-        .footer a:hover {
-            color: #fff;
+        .privacy-button:hover {
+            background: rgba(30, 12, 58, 0.8);
+            transform: scale(1.1);
         }
+
 
         .cookie-banner {
             position: fixed;
@@ -757,9 +791,7 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <a href="#" id="privacy-policy-link">Política de Privacidad y Cookies</a>
-    </footer>
+    <div id="privacy-policy-link" class="privacy-button">🍪</div>
 
     <div id="cookie-banner" class="cookie-banner" style="display: none;">
         <p>Este sitio web utiliza cookies de análisis para mejorar tu experiencia. ¿Aceptas su uso? Puedes consultar nuestra <a href="#" id="privacy-link-banner">política de privacidad</a>.</p>
@@ -1075,6 +1107,18 @@
         function generarMelodia() {
             let nota = notas[Math.floor(Math.random() * notas.length)];
             tocarNota(nota, 0.6);
+        }
+
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = '-100px'; // Start off-screen
+            star.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(star);
+            setTimeout(() => {
+                star.remove();
+            }, 5000);
         }
 
         function generateStars() {
@@ -1465,6 +1509,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             generateStars();
             generateParticles();
+            setInterval(createShootingStar, 7000); // Lanza una estrella fugaz cada 7 segundos
             document.querySelectorAll('button, .deck').forEach(el => {
                 el.addEventListener('click', playClickSound);
             });
