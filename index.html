@@ -20,7 +20,23 @@
             background: radial-gradient(circle, #0a011a 0%, #000000 100%);
             color: #f0f0f0;
             min-height: 100vh;
-            overflow: hidden; /* Evita el scroll por las estrellas fugaces */
+            overflow: hidden; 
+        }
+
+        /* --- ESTILOS PARA SCROLLBAR (CHROME/SAFARI) --- */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a011a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c0a87a;
+            border-radius: 20px;
+            border: 2px solid #0a011a;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #e6c88e;
         }
 
         .stars {
@@ -46,7 +62,6 @@
             100% { opacity: 1; transform: scale(1.2); }
         }
         
-        /* --- ESTILOS ESTRELLA FUGAZ --- */
         .shooting-star {
             position: absolute;
             height: 2px;
@@ -227,15 +242,21 @@
             box-shadow: none;
         }
 
+        /* --- ESTILOS CORREGIDOS PARA EL ÁREA DE LA BARAJA --- */
         .deck-area {
             text-align: center;
             margin: 40px 0;
             position: relative;
             height: 250px;
             display: flex;
+            flex-direction: column; /* Apila los elementos verticalmente */
             justify-content: center;
             align-items: center;
             perspective: 1000px;
+        }
+
+        #deckStatus {
+            margin-top: 15px; /* Añade espacio entre la baraja y el texto */
         }
 
         .shuffling-container {
@@ -353,7 +374,7 @@
         }
 
         .card-content {
-            padding: 10px; /* Reducido para más espacio */
+            padding: 10px;
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -367,7 +388,7 @@
         }
 
         .card-name {
-            font-size: 0.8rem; /* --- FUENTE AJUSTADA --- */
+            font-size: 0.8rem;
             margin-bottom: 5px;
             color: #8b4513;
             line-height: 1.1;
@@ -511,7 +532,6 @@
             background: rgba(255, 255, 255, 0.2);
         }
         
-        /* --- ESTILOS MEJORADOS PARA EL BOTÓN DE COOKIES --- */
         .privacy-button {
             position: fixed;
             bottom: 20px;
@@ -805,7 +825,7 @@
         <div class="modal-content">
             <button id="modal-close" class="modal-close">&times;</button>
             <h2>Política de Privacidad y Cookies</h2>
-            <p><strong>Última actualización:</strong> 18 de septiembre de 2025</p>
+            <p><strong>Última actualización:</strong> 19 de septiembre de 2025</p>
             <p>En Tarot del Ogro Azul, tu privacidad es importante. Esta política explica qué información recopilamos y cómo la usamos.</p>
             <h3>Cookies</h3>
             <p>Una cookie es un pequeño fichero que se almacena en tu ordenador. Usamos cookies para las siguientes finalidades:</p>
@@ -1113,7 +1133,7 @@
             const star = document.createElement('div');
             star.className = 'shooting-star';
             star.style.top = Math.random() * 100 + '%';
-            star.style.left = '-100px'; // Start off-screen
+            star.style.left = '-100px';
             star.style.animationDuration = (Math.random() * 2 + 3) + 's';
             document.body.appendChild(star);
             setTimeout(() => {
@@ -1509,7 +1529,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             generateStars();
             generateParticles();
-            setInterval(createShootingStar, 7000); // Lanza una estrella fugaz cada 7 segundos
+            setInterval(createShootingStar, 7000);
             document.querySelectorAll('button, .deck').forEach(el => {
                 el.addEventListener('click', playClickSound);
             });
