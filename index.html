@@ -23,7 +23,6 @@
             overflow: hidden; 
         }
 
-        /* --- ESTILOS PARA SCROLLBAR (CHROME/SAFARI) --- */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -242,27 +241,34 @@
             box-shadow: none;
         }
 
-        /* --- ESTILOS CORREGIDOS PARA EL ÁREA DE LA BARAJA --- */
         .deck-area {
             text-align: center;
             margin: 40px 0;
-            position: relative;
-            height: 250px;
             display: flex;
-            flex-direction: column; /* Apila los elementos verticalmente */
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding-bottom: 30px; /* Espacio para el texto de abajo */
+        }
+        
+        /* --- EL "ESCENARIO" FIJO PARA LA ANIMACIÓN --- */
+        .deck-wrapper {
+            position: relative;
+            width: 120px;
+            height: 180px;
             perspective: 1000px;
+            margin-bottom: 15px;
         }
 
-        #deckStatus {
-            margin-top: 15px; /* Añade espacio entre la baraja y el texto */
+        #shuffling-container, .deck {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .shuffling-container {
-            position: absolute;
-            width: 120px;
-            height: 180px;
             transform-style: preserve-3d;
         }
 
@@ -278,9 +284,6 @@
         }
 
         .deck {
-            position: relative;
-            width: 120px;
-            height: 180px;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
@@ -801,11 +804,13 @@
         </div>
 
         <div class="deck-area" id="deck-area">
-            <div id="shuffling-container" style="display: none;"></div>
-            <div class="deck" id="deck" onclick="startReading()">
-                <div class="card-back"></div>
-                <div class="card-back"></div>
-                <div class="card-back"></div>
+            <div class="deck-wrapper">
+                <div id="shuffling-container" class="shuffling-container" style="display: none;"></div>
+                <div class="deck" id="deck" onclick="startReading()">
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                </div>
             </div>
             <p id="deckStatus">Haz clic para comenzar tu lectura...</p>
         </div>
