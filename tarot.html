@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9443552615965258"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-adsense-account" content="ca-pub-9443552615965258">
+    <title>¿Qué es el Tarot? - Tarot del Ogro Azul</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos específicos para páginas de contenido */
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        .content-page {
+            background: rgba(16, 8, 32, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid #c0a87a;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-out;
+        }
+        .content-page h1 {
+            font-family: 'Cinzel', serif;
+            color: #e6c88e;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content-page p, .content-page ul li {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            color: #e0e0e0;
+        }
+        .content-page ul {
+            list-style: '✨';
+            padding-left: 30px;
+        }
+        .nav-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .nav-link a {
+            font-family: 'Cinzel', serif;
+            color: #e6c88e;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border: 1px solid #e6c88e;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .nav-link a:hover {
+            background: #e6c88e;
+            color: #1e0c3a;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="container">
+        <div class="content-page">
+            <h1>¿Qué es el Tarot?</h1>
+            <p>Para Grum, el Tarot no es un simple juego de adivinación. Es un espejo del alma y un mapa del viaje de la vida. Es una colección de 78 cartas llenas de símbolos e historias que representan las experiencias, desafíos y lecciones que todos enfrentamos.</p>
+            <p>Las cartas se dividen en dos grupos principales:</p>
+            <ul>
+                <li><strong>Arcanos Mayores:</strong> Son 22 cartas que representan las grandes lecciones y los puntos de inflexión de la vida, como "El Mago", "La Emperatriz" o "La Muerte". Marcan momentos importantes de transformación.</li>
+                <li><strong>Arcanos Menores:</strong> Son 56 cartas que hablan de las situaciones y emociones del día a día. Se dividen en cuatro palos (Bastos, Copas, Espadas y Oros), reflejando diferentes áreas de nuestra vida.</li>
+            </ul>
+            <p>Una lectura de Tarot no te dice un futuro escrito en piedra. Al contrario, te ofrece una perspectiva, un consejo o una advertencia basada en la energía del momento presente. Es una herramienta para la introspección y el autoconocimiento, que te ayuda a entender mejor tu situación y a tomar decisiones más conscientes. Grum simplemente te traduce lo que las cartas susurran.</p>
+            <div class="nav-link">
+                <a href="index.html">Volver a la Tirada</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function generateStars() {
+            const starsContainer = document.getElementById('stars');
+            if (!starsContainer) return;
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.position = 'absolute';
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = star.style.height = Math.random() * 2 + 1 + 'px';
+                star.style.animation = `twinkle ${Math.random() * 5 + 2}s infinite alternate`;
+                starsContainer.appendChild(star);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', generateStars);
+    </script>
+    <style>@keyframes twinkle { 0% { opacity: 0.5; } 100% { opacity: 1; } }</style>
+</body>
+</html>
