@@ -12,12 +12,8 @@
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Cormorant Garamond', serif;
             background: radial-gradient(circle, #0a011a 0%, #000000 100%);
@@ -771,23 +767,124 @@
                 font-size: 0.8rem;
             }
         }
+
+        /* --- NUEVOS ESTILOS PARA EL MENÚ RESPONSIVE --- */
+        .main-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101; /* Por encima del botón de música */
+        }
+
+        #hamburger-btn {
+            background: rgba(16, 8, 32, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid #c0a87a;
+            color: #e6c88e;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex; /* Centrar el icono */
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        #hamburger-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        #nav-links {
+            display: none; /* Oculto por defecto */
+            position: absolute;
+            top: 60px; /* Debajo del botón */
+            left: 0;
+            background: rgba(16, 8, 32, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid #c0a87a;
+            flex-direction: column;
+            padding: 15px;
+            gap: 10px;
+            animation: fadeInDown 0.3s ease-out;
+        }
+
+        #nav-links.open {
+            display: flex; /* Se muestra al hacer clic */
+        }
+        
+        #nav-links a {
+            color: #e6c88e;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            padding: 8px;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        #nav-links a:hover {
+            background-color: rgba(192, 168, 122, 0.2);
+        }
+
+        /* En pantallas grandes, mostramos el menú horizontal */
+        @media (min-width: 821px) {
+            #hamburger-btn {
+                display: none; /* Ocultamos el botón hamburguesa */
+            }
+            .main-nav {
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(16, 8, 32, 0.6);
+                backdrop-filter: blur(10px);
+                padding: 10px 20px;
+                border-radius: 50px;
+                border: 1px solid #c0a87a;
+            }
+            #nav-links {
+                display: flex;
+                position: static;
+                flex-direction: row;
+                background: none;
+                border: none;
+                padding: 0;
+                gap: 20px;
+                animation: none;
+            }
+        }
+        
+        @media (max-width: 820px) {
+            .music-controls {
+                /* Ajustamos el botón de sonido para que no choque */
+                top: 20px;
+                right: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="stars" id="stars"></div>
     <div class="mystical-particles" id="particles"></div>
     
+    <div class="main-nav">
+        <button id="hamburger-btn">☰</button>
+        <div id="nav-links">
+            <a href="index.html">Tirada</a>
+            <a href="sobre.html">Sobre Grum</a>
+            <a href="tarot.html">¿Qué es el Tarot?</a>
+            <a href="contacto.html">Contacto</a>
+        </div>
+    </div>
+
     <div class="music-controls">
         <button id="muteBtn" onclick="toggleMute()">
             🔊 Sonido
         </button>
     </div>
-    <div class="main-nav">
-        <a href="index.html">Tirada</a>
-        <a href="sobre.html">Sobre Grum</a>
-        <a href="tarot.html">¿Qué es el Tarot?</a>
-        <a href="contacto.html">Contacto</a>
-    </div>
+
+    <div class="container">
+       </div>
     <div class="container">
         <div id="reading-snapshot">
             <div class="header">
@@ -1598,6 +1695,25 @@
                 console.log('Google Analytics cargado.');
             }
         }
+        // --- NUEVO SCRIPT PARA EL MENÚ HAMBURGUESA ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // ... (Tu código DOMContentLoaded existente) ...
+            
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const navLinks = document.getElementById('nav-links');
+
+            hamburgerBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); // Evita que el clic se propague al body
+                navLinks.classList.toggle('open');
+            });
+
+            // Cierra el menú si se hace clic fuera de él
+            document.body.addEventListener('click', () => {
+                if (navLinks.classList.contains('open')) {
+                    navLinks.classList.remove('open');
+                }
+            });
+        });
     </script>
 </body>
 </html>
