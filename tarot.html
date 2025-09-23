@@ -103,11 +103,49 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* CAMBIO: Media query para móvil */
         @media (max-width: 768px) {
             .content-page { padding: 20px; }
-            .tarot-table th, .tarot-table td { padding: 10px; }
-            .tarot-table .symbol { font-size: 1.5rem; }
-            .tarot-table .arcana-name { font-size: 1rem; }
+            .tarot-table {
+                border: none;
+            }
+            .tarot-table thead {
+                display: none; /* Oculta los encabezados de la tabla en móvil */
+            }
+            .tarot-table tr {
+                display: block;
+                margin-bottom: 20px; /* Separación entre cada arcano */
+                border: 1px solid #c0a87a;
+                border-radius: 10px;
+                padding-bottom: 15px;
+            }
+            .tarot-table td {
+                display: block;
+                width: 100%;
+                border: none; /* Elimina los bordes de celda individuales */
+                padding: 10px 15px;
+            }
+            .tarot-table td:first-child {
+                background-color: rgba(192, 168, 122, 0.2);
+                border-bottom: 1px solid #c0a87a;
+                border-radius: 9px 9px 0 0;
+                padding-bottom: 20px;
+            }
+            .tarot-table .symbol {
+                display: inline-block;
+                font-size: 2rem;
+                text-align: left;
+                margin-right: 10px;
+                vertical-align: middle;
+            }
+            .tarot-table .arcana-name {
+                display: inline-block;
+                font-size: 1.2rem;
+                vertical-align: middle;
+            }
+            .tarot-table td:nth-of-type(3) {
+                padding-top: 20px;
+            }
         }
     </style>
 </head>
@@ -180,10 +218,8 @@
                 const star = document.createElement('div');
                 star.className = 'star';
                 const size = Math.random() * 3 + 1;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.left = `${Math.random() * 100}%`;
+                star.style.width = `${size}px`; star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 100}%`; star.style.left = `${Math.random() * 100}%`;
                 star.style.opacity = Math.random() * 0.5 + 0.5;
                 star.dataset.speed = Math.random() * 0.1 + 0.01;
                 starBackground.appendChild(star);
