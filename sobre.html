@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-9443552615965258">
     <title>Sobre Grum - Tarot del Ogro Azul</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -15,10 +15,8 @@
             background: radial-gradient(circle, #0a011a 0%, #000000 100%);
             color: #f0f0f0;
             min-height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            /* CAMBIO: Permitimos el scroll vertical */
+            overflow-x: hidden;
         }
         #star-background {
             position: fixed;
@@ -33,7 +31,7 @@
             position: absolute;
             background: white;
             border-radius: 50%;
-            transition: transform 0.2s ease-out; /* Movimiento suave */
+            transition: transform 0.2s ease-out;
         }
         .container {
             position: relative;
@@ -41,6 +39,7 @@
             padding: 20px;
             max-width: 800px;
             width: 100%;
+            margin: 40px auto; /* CAMBIO: Centrado y con margen */
         }
         .content-page {
             background: rgba(16, 8, 32, 0.6);
@@ -66,6 +65,7 @@
             max-width: 200px;
             float: left;
             margin-right: 20px;
+            margin-bottom: 10px; /* Espacio extra en móvil */
             border-radius: 15px;
             border: 3px solid #c0a87a;
         }
@@ -92,11 +92,22 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* CAMBIO: Media query para móvil */
+        @media (max-width: 600px) {
+            .content-page img {
+                float: none;
+                display: block;
+                margin: 0 auto 20px;
+                max-width: 150px;
+            }
+            .content-page {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="star-background"></div>
-
     <div class="container">
         <div class="content-page">
             <h1>¿Quién es Grum?</h1>
@@ -109,32 +120,25 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const starBackground = document.getElementById('star-background');
             const starCount = 150;
-
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 const size = Math.random() * 3 + 1;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.left = `${Math.random() * 100}%`;
+                star.style.width = `${size}px`; star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 100}%`; star.style.left = `${Math.random() * 100}%`;
                 star.style.opacity = Math.random() * 0.5 + 0.5;
-                // 'data-speed' controla cuánto se moverá la estrella (efecto de profundidad)
                 star.dataset.speed = Math.random() * 0.1 + 0.01;
                 starBackground.appendChild(star);
             }
-
             document.body.addEventListener('mousemove', (e) => {
                 const centerX = window.innerWidth / 2;
                 const centerY = window.innerHeight / 2;
                 const mouseX = e.clientX - centerX;
                 const mouseY = e.clientY - centerY;
-
                 const stars = document.querySelectorAll('.star');
                 stars.forEach(star => {
                     const speed = parseFloat(star.dataset.speed);
