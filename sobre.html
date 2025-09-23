@@ -12,12 +12,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Cormorant Garamond', serif;
-            background: radial-gradient(circle, #0a011a 0%, #000000 100%);
+            background: radial-gradient(circle at 20% 30%, #1a0326 0%, #0f0120 40%, #000000 100%);
             color: #f0f0f0;
             min-height: 100vh;
-            /* CAMBIO: Permitimos el scroll vertical */
             overflow-x: hidden;
+            position: relative;
         }
+
+        /* Fondo de estrellas mejorado */
         #star-background {
             position: fixed;
             top: 0;
@@ -31,87 +33,305 @@
             position: absolute;
             background: white;
             border-radius: 50%;
-            transition: transform 0.2s ease-out;
+            transition: transform 0.3s ease-out;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
         }
+        .star.twinkle {
+            animation: twinkle 3s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Niebla mística */
+        .mystic-fog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            background: 
+                radial-gradient(circle at 10% 80%, rgba(92, 51, 145, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(160, 112, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(200, 150, 255, 0.05) 0%, transparent 50%);
+            animation: drift 20s infinite linear;
+        }
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -10px) rotate(1deg); }
+            50% { transform: translate(-5px, 5px) rotate(-0.5deg); }
+            75% { transform: translate(-10px, -5px) rotate(1.5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
         .container {
             position: relative;
             z-index: 10;
             padding: 20px;
             max-width: 800px;
             width: 100%;
-            margin: 40px auto; /* CAMBIO: Centrado y con margen */
+            margin: 40px auto;
         }
+
         .content-page {
-            background: rgba(16, 8, 32, 0.6);
-            backdrop-filter: blur(10px);
+            background: rgba(16, 8, 32, 0.85);
+            backdrop-filter: blur(15px);
             border: 2px solid #c0a87a;
             border-radius: 20px;
             padding: 40px;
-            animation: fadeIn 1s ease-out;
+            animation: fadeIn 1.5s ease-out;
+            position: relative;
+            box-shadow: 
+                0 0 30px rgba(192, 168, 122, 0.3),
+                inset 0 0 30px rgba(192, 168, 122, 0.1);
         }
+
+        /* Bordes brillantes animados */
+        .content-page::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(192, 168, 122, 0.4), 
+                transparent, 
+                rgba(230, 200, 142, 0.4),
+                transparent);
+            z-index: -1;
+            animation: borderGlow 4s linear infinite;
+        }
+        @keyframes borderGlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 400% 400%; }
+        }
+
         .content-page h1 {
             font-family: 'Cinzel', serif;
             color: #e6c88e;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(230, 200, 142, 0.5);
         }
+
         .content-page p {
-            font-size: 1.1rem;
-            line-height: 1.7;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #e8e8e8;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            animation: textReveal 0.8s ease-out forwards;
+        }
+        .content-page p:nth-child(3) { animation-delay: 0.5s; }
+        .content-page p:nth-child(4) { animation-delay: 1s; }
+        .content-page p:nth-child(5) { animation-delay: 1.5s; }
+
+        @keyframes textReveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Imagen mejorada */
+        .image-container {
+            float: left;
+            margin-right: 25px;
             margin-bottom: 15px;
-            color: #e0e0e0;
+            position: relative;
         }
         .content-page img {
-            max-width: 200px;
-            float: left;
-            margin-right: 20px;
-            margin-bottom: 10px; /* Espacio extra en móvil */
+            max-width: 220px;
             border-radius: 15px;
             border: 3px solid #c0a87a;
+            box-shadow: 
+                0 0 20px rgba(192, 168, 122, 0.4),
+                0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
+        .content-page img:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 30px rgba(192, 168, 122, 0.6),
+                0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Aura mística alrededor de la imagen */
+        .image-container::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 25px;
+            background: radial-gradient(circle, 
+                rgba(192, 168, 122, 0.2) 0%, 
+                transparent 70%);
+            animation: auraGlow 3s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+        @keyframes auraGlow {
+            0% { opacity: 0.3; transform: scale(0.9); }
+            100% { opacity: 0.7; transform: scale(1.1); }
+        }
+
         .nav-link {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
             clear: both;
         }
         .nav-link a {
             font-family: 'Cinzel', serif;
             color: #e6c88e;
             text-decoration: none;
-            font-size: 1.2rem;
-            border: 1px solid #e6c88e;
-            padding: 10px 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            border: 2px solid #e6c88e;
+            padding: 12px 25px;
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 0 10px rgba(230, 200, 142, 0.3);
+        }
+        .nav-link a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(230, 200, 142, 0.4), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+        .nav-link a:hover::before {
+            left: 100%;
         }
         .nav-link a:hover {
-            background: #e6c88e;
-            color: #1e0c3a;
+            background: rgba(230, 200, 142, 0.1);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(230, 200, 142, 0.4);
+            transform: translateY(-3px);
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
         }
-        /* CAMBIO: Media query para móvil */
+
+        /* Texto brillante mejorado */
+        .sparkle-text {
+            background: linear-gradient(90deg, 
+                #e6c88e, #ffffff, #c0a87a, #e6c88e, #ffffff, #c0a87a, #e6c88e);
+            background-size: 400% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+            font-weight: 700;
+        }
+        @keyframes shine {
+            to { background-position: 400% center; }
+        }
+
+        .sparkle-container {
+            position: relative;
+            display: inline-block;
+        }
+        .sparkle {
+            position: absolute;
+            background: radial-gradient(circle, #fff 0%, rgba(230, 200, 142, 0.8) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 8px #fff, 0 0 16px #e6c88e, 0 0 24px #e6c88e;
+            animation: sparkle-fade 2s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes sparkle-fade {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2) translate(var(--x), var(--y)) rotate(180deg);
+                opacity: 0;
+            }
+        }
+
+        /* Partículas flotantes */
+        .floating-particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(192, 168, 122, 0.8), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            animation: float 6s infinite linear;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(var(--drift)) scale(0);
+                opacity: 0;
+            }
+        }
+
         @media (max-width: 600px) {
-            .content-page img {
+            .image-container {
                 float: none;
                 display: block;
-                margin: 0 auto 20px;
-                max-width: 150px;
+                text-align: center;
+                margin: 0 auto 25px;
+            }
+            .content-page img {
+                max-width: 180px;
             }
             .content-page {
-                padding: 20px;
+                padding: 25px;
+            }
+            .content-page h1 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
+    <div class="mystic-fog"></div>
     <div id="star-background"></div>
     <div class="container">
         <div class="content-page">
-            <h1>¿Quién es Grum?</h1>
-            <img src="Ogro.png" alt="Ogro Grum">
+            <h1 id="ogre-title" class="sparkle-container">
+                <span class="sparkle-text">¿Quién es Grum?</span>
+            </h1>
+            <div class="image-container">
+                <img src="Ogro.png" alt="Ogro Grum">
+            </div>
             <p>En lo profundo de un bosque susurrante, donde la luz de la luna se filtra a través de hojas ancestrales, vive un ogro llamado Grum. No es como los ogros de los cuentos que asustan a los viajeros. Grum es un guardián del conocimiento antiguo, un alma solitaria cuya única compañía son las estrellas y el lenguaje secreto de las cartas del Tarot.</p>
             <p>Desde joven, Grum mostró una extraña conexión con el mundo místico. Mientras otros ogros medían su fuerza levantando rocas, Grum encontraba patrones en el vuelo de las luciérnagas y mensajes en el murmullo del viento. Un día, encontró una baraja de tarot abandonada en las ruinas de una vieja torre. Las cartas, lejos de asustarle, le hablaron en un idioma que su corazón entendía.</p>
             <p>Con el tiempo, Grum se convirtió en un maestro lector, no por estudiar libros, sino por escuchar. Escucha lo que las cartas quieren decir, sin adornos ni complicaciones. Su lectura es directa, a veces un poco gruñona, pero siempre honesta. Él cree que el futuro no es una sentencia, sino un camino lleno de posibilidades, y las cartas son solo un mapa para que criaturas como tú no se pierdan en el bosque de la vida.</p>
@@ -120,25 +340,40 @@
             </div>
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Crear estrellas mejoradas
             const starBackground = document.getElementById('star-background');
-            const starCount = 150;
+            const starCount = 200;
+            
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                const size = Math.random() * 3 + 1;
-                star.style.width = `${size}px`; star.style.height = `${size}px`;
-                star.style.top = `${Math.random() * 100}%`; star.style.left = `${Math.random() * 100}%`;
-                star.style.opacity = Math.random() * 0.5 + 0.5;
-                star.dataset.speed = Math.random() * 0.1 + 0.01;
+                const size = Math.random() * 4 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.opacity = Math.random() * 0.6 + 0.4;
+                star.dataset.speed = Math.random() * 0.15 + 0.02;
+                
+                // Algunas estrellas parpadean
+                if (Math.random() > 0.7) {
+                    star.classList.add('twinkle');
+                    star.style.animationDelay = `${Math.random() * 3}s`;
+                }
+                
                 starBackground.appendChild(star);
             }
+
+            // Efecto parallax mejorado
             document.body.addEventListener('mousemove', (e) => {
                 const centerX = window.innerWidth / 2;
                 const centerY = window.innerHeight / 2;
                 const mouseX = e.clientX - centerX;
                 const mouseY = e.clientY - centerY;
+                
                 const stars = document.querySelectorAll('.star');
                 stars.forEach(star => {
                     const speed = parseFloat(star.dataset.speed);
@@ -147,6 +382,57 @@
                     star.style.transform = `translate(${x}px, ${y}px)`;
                 });
             });
+            
+            // Chispas mejoradas en el texto
+            const sparkleText = document.querySelector('.sparkle-text');
+            const sparkleContainer = document.querySelector('.sparkle-container');
+            
+            sparkleText.addEventListener('mousemove', (e) => {
+                const rect = sparkleText.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Crear múltiples chispas
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const sparkle = document.createElement('span');
+                        sparkle.className = 'sparkle';
+                        sparkle.style.left = `${x + (Math.random() - 0.5) * 20}px`;
+                        sparkle.style.top = `${y + (Math.random() - 0.5) * 20}px`;
+                        sparkle.style.width = sparkle.style.height = `${Math.random() * 6 + 2}px`;
+                        sparkle.style.setProperty('--x', `${(Math.random() - 0.5) * 80}px`);
+                        sparkle.style.setProperty('--y', `${(Math.random() - 0.5) * 80}px`);
+
+                        sparkleContainer.appendChild(sparkle);
+
+                        setTimeout(() => {
+                            sparkle.remove();
+                        }, 2000);
+                    }, i * 100);
+                }
+            });
+
+            // Partículas flotantes
+            function createFloatingParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'floating-particle';
+                particle.style.left = Math.random() * window.innerWidth + 'px';
+                particle.style.setProperty('--drift', `${(Math.random() - 0.5) * 100}px`);
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                document.body.appendChild(particle);
+
+                setTimeout(() => {
+                    particle.remove();
+                }, 8000);
+            }
+
+            // Crear partículas cada cierto tiempo
+            setInterval(createFloatingParticle, 800);
+            
+            // Crear algunas partículas iniciales
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createFloatingParticle, i * 200);
+            }
         });
     </script>
 </body>
