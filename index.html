@@ -740,7 +740,37 @@
         .card.card--major-arcana:hover .card-content::after {
             opacity: 0.8; 
         }
-        
+        .main-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(16, 8, 32, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid #c0a87a;
+            display: flex;
+            gap: 20px;
+        }
+        .main-nav a {
+            color: #e6c88e;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            transition: all 0.3s ease;
+        }
+        .main-nav a:hover {
+            color: #fff;
+            text-shadow: 0 0 5px #fff;
+        }
+        @media (max-width: 768px) {
+            .main-nav {
+                gap: 10px;
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -752,7 +782,12 @@
             🔊 Sonido
         </button>
     </div>
-
+    <div class="main-nav">
+        <a href="index.html">Tirada</a>
+        <a href="sobre.html">Sobre Grum</a>
+        <a href="tarot.html">¿Qué es el Tarot?</a>
+        <a href="contacto.html">Contacto</a>
+    </div>
     <div class="container">
         <div id="reading-snapshot">
             <div class="header">
