@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-9443552615965258">
     <title>Contacto - Tarot del Ogro Azul</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -15,10 +15,7 @@
             background: radial-gradient(circle, #0a011a 0%, #000000 100%);
             color: #f0f0f0;
             min-height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow-x: hidden; /* Permite scroll vertical */
         }
         #star-background {
             position: fixed;
@@ -41,6 +38,7 @@
             padding: 20px;
             max-width: 800px;
             width: 100%;
+            margin: 40px auto; /* Centrado y con margen */
         }
         .content-page {
             background: rgba(16, 8, 32, 0.6);
@@ -85,6 +83,11 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 600px) {
+            .content-page {
+                padding: 20px;
+            }
         }
     </style>
 </head>
