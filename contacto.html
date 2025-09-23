@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-9443552615965258">
-    <title>Guía de Tarot Profesional - Tarot del Ogro Azul</title>
+    <title>Contacto - Tarot del Ogro Azul</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,99 +15,79 @@
             background: radial-gradient(circle, #0a011a 0%, #000000 100%);
             color: #f0f0f0;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Permite scroll vertical */
         }
         #star-background {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; z-index: 1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
         .star {
-            position: absolute; background: white;
-            border-radius: 50%; transition: transform 0.2s ease-out;
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease-out;
         }
         .container {
-            position: relative; z-index: 10; padding: 20px;
-            max-width: 900px; width: 100%;
-            margin: 40px auto;
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+            margin: 40px auto; /* Centrado y con margen */
         }
         .content-page {
-            background: rgba(16, 8, 32, 0.6); backdrop-filter: blur(10px);
-            border: 2px solid #c0a87a; border-radius: 20px;
-            padding: 40px; animation: fadeIn 1s ease-out;
+            background: rgba(16, 8, 32, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid #c0a87a;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
         }
-        .content-page h1, .content-page h2 {
-            font-family: 'Cinzel', serif; color: #e6c88e;
-            text-align: center; margin-bottom: 20px;
-        }
-        .content-page p, .content-page ul li {
-            font-size: 1.1rem; line-height: 1.7;
-            margin-bottom: 15px; color: #e0e0e0;
-        }
-        .content-page ul { list-style: '✨'; padding-left: 30px; }
-        .nav-link { text-align: center; margin-top: 30px; }
-        .nav-link a {
-            font-family: 'Cinzel', serif; color: #e6c88e;
-            text-decoration: none; font-size: 1.2rem;
-            border: 1px solid #e6c88e; padding: 10px 20px;
-            border-radius: 10px; transition: all 0.3s ease;
-        }
-        .nav-link a:hover { background: #e6c88e; color: #1e0c3a; }
-
-        /* Estilos para la nueva tabla */
-        .tarot-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
-            background: rgba(0, 0, 0, 0.2);
-        }
-        .tarot-table th, .tarot-table td {
-            border: 1px solid #c0a87a;
-            padding: 15px;
-            text-align: left;
-        }
-        .tarot-table th {
+        .content-page h1 {
             font-family: 'Cinzel', serif;
-            background-color: rgba(192, 168, 122, 0.2);
+            color: #e6c88e;
+            margin-bottom: 20px;
+        }
+        .content-page p {
             font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            color: #e0e0e0;
+        }
+        .content-page a {
             color: #e6c88e;
         }
-        .tarot-table .symbol {
-            font-size: 2rem;
-            text-align: center;
+        .nav-link {
+            margin-top: 30px;
         }
-        .tarot-table .arcana-name {
-            font-weight: bold;
+        .nav-link a {
+            font-family: 'Cinzel', serif;
+            color: #e6c88e;
+            text-decoration: none;
             font-size: 1.2rem;
-            color: #f0e6d2;
+            border: 1px solid #e6c88e;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
-        .tarot-table .arcana-meaning {
-            font-style: italic;
-            color: #d8d8d8;
+        .nav-link a:hover {
+            background: #e6c88e;
+            color: #1e0c3a;
         }
-        
-        /* Descargo de responsabilidad */
-        .disclaimer {
-            margin-top: 40px;
-            padding: 20px;
-            background: rgba(0,0,0,0.3);
-            border-top: 1px solid #c0a87a;
-            border-bottom: 1px solid #c0a87a;
-            text-align: center;
-            font-size: 0.9rem;
-            font-style: italic;
-            color: #aaa;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @media (max-width: 768px) {
-            .content-page { padding: 20px; }
-            .tarot-table th, .tarot-table td { padding: 10px; }
-            .tarot-table .symbol { font-size: 1.5rem; }
-            .tarot-table .arcana-name { font-size: 1rem; }
+        @media (max-width: 600px) {
+            .content-page {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -116,56 +96,11 @@
 
     <div class="container">
         <div class="content-page">
-            <h1>¿Qué es el Tarot?</h1>
-            <p>Para Grum, el Tarot no es un simple juego de adivinación. Es un espejo del alma y un mapa del viaje de la vida. Es una colección de 78 cartas llenas de símbolos e historias que representan las experiencias, desafíos y lecciones que todos enfrentamos.</p>
-            <p>Las cartas se dividen en dos grupos principales:</p>
-            <ul>
-                <li><strong>Arcanos Mayores:</strong> Son 22 cartas que representan las grandes lecciones y los puntos de inflexión de la vida, como "El Mago", "La Emperatriz" o "La Muerte". Marcan momentos importantes de transformación.</li>
-                <li><strong>Arcanos Menores:</strong> Son 56 cartas que hablan de las situaciones y emociones del día a día. Se dividen en cuatro palos (Bastos, Copas, Espadas y Oros), reflejando diferentes áreas de nuestra vida.</li>
-            </ul>
-            <p>Una lectura de Tarot no te dice un futuro escrito en piedra. Al contrario, te ofrece una perspectiva, un consejo o una advertencia basada en la energía del momento presente. Es una herramienta para la introspección y el autoconocimiento, que te ayuda a entender mejor tu situación y a tomar decisiones más conscientes. Grum simplemente te traduce lo que las cartas susurran.</p>
-
-            <h2 style="margin-top: 50px;">Guía Profesional de los Arcanos Mayores</h2>
-            <p>Más allá de la visión de Grum, cada Arcano Mayor representa un arquetipo fundamental en el viaje del ser humano, conocido como "El Viaje del Héroe". Desde la inocencia pura de El Loco hasta la culminación en El Mundo, estas cartas simbolizan las etapas universales de la conciencia y la madurez espiritual.</p>
-            
-            <table class="tarot-table">
-                <thead>
-                    <tr>
-                        <th>Símbolo</th>
-                        <th>Arcano</th>
-                        <th>Significado Arquetípico</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td class="symbol">🃏</td><td class="arcana-name">El Loco</td><td class="arcana-meaning">Representa el potencial puro, el inicio de un viaje, la fe ciega y la espontaneidad. Es el alma antes de encarnar, libre de las ataduras del ego y la experiencia.</td></tr>
-                    <tr><td class="symbol">🎩</td><td class="arcana-name">El Mago</td><td class="arcana-meaning">Simboliza la manifestación, la voluntad y el poder personal. Tiene a su disposición los cuatro elementos, representando el dominio consciente de los planos material, emocional, mental y espiritual.</td></tr>
-                    <tr><td class="symbol">👑</td><td class="arcana-name">La Sacerdotisa</td><td class="arcana-meaning">Es la guardiana del subconsciente, la intuición y el conocimiento oculto. Representa la dualidad y el equilibrio entre los mundos visible e invisible, animando a mirar más allá de la superficie.</td></tr>
-                    <tr><td class="symbol">👸</td><td class="arcana-name">La Emperatriz</td><td class="arcana-meaning">Arquetipo de la Madre Tierra, la fertilidad, la creatividad y la abundancia. Es la nutrición, la sensualidad y la conexión con el mundo natural y los ciclos de creación.</td></tr>
-                    <tr><td class="symbol">👑</td><td class="arcana-name">El Emperador</td><td class="arcana-meaning">Representa la estructura, la autoridad, el orden y el control. Es la figura paterna que establece límites y cimientos sólidos para la civilización y el pensamiento lógico.</td></tr>
-                    <tr><td class="symbol">⛪</td><td class="arcana-name">El Hierofante</td><td class="arcana-meaning">Simboliza la tradición, las instituciones y la educación formal. Actúa como un puente entre lo divino y lo humano, representando la búsqueda de conocimiento a través de sistemas establecidos.</td></tr>
-                    <tr><td class="symbol">💕</td><td class="arcana-name">Los Enamorados</td><td class="arcana-meaning">Más allá del amor romántico, representa la elección, la alineación de valores y la unión de opuestos. Es una encrucijada que exige una decisión basada en el corazón y la conciencia.</td></tr>
-                    <tr><td class="symbol">🏇</td><td class="arcana-name">El Carro</td><td class="arcana-meaning">Simboliza la victoria a través de la fuerza de voluntad, la autodisciplina y el control. Es la conquista del ego, dirigiendo fuerzas opuestas hacia un objetivo común con determinación.</td></tr>
-                    <tr><td class="symbol">⚖️</td><td class="arcana-name">La Justicia</td><td class="arcana-meaning">Representa la verdad objetiva, la causa y efecto (karma) y la responsabilidad. Exige equilibrio, imparcialidad y la aceptación de las consecuencias de nuestras acciones.</td></tr>
-                    <tr><td class="symbol">🕯️</td><td class="arcana-name">El Ermitaño</td><td class="arcana-meaning">Es la búsqueda de la sabiduría interior a través de la introspección y el aislamiento voluntario. Su luz es la guía interna que ilumina el camino en la oscuridad del autoconocimiento.</td></tr>
-                    <tr><td class="symbol">🎡</td><td class="arcana-name">La Rueda de la Fortuna</td><td class="arcana-meaning">Simboliza los ciclos, el destino y los cambios inevitables. Nos recuerda que la vida es un flujo constante de altibajos y que el único punto de calma está en el centro de la rueda.</td></tr>
-                    <tr><td class="symbol">🦁</td><td class="arcana-name">La Fuerza</td><td class="arcana-meaning">Representa la fuerza interior, el coraje, la compasión y la paciencia. No es la fuerza bruta, sino el dominio suave de nuestros instintos y pasiones a través del autocontrol.</td></tr>
-                    <tr><td class="symbol">🙃</td><td class="arcana-name">El Colgado</td><td class="arcana-meaning">Simboliza la rendición, el sacrificio y la obtención de una nueva perspectiva. Es una pausa voluntaria para ver el mundo desde un ángulo diferente, soltando el control para alcanzar la iluminación.</td></tr>
-                    <tr><td class="symbol">💀</td><td class="arcana-name">La Muerte</td><td class="arcana-meaning">Representa la transformación, el fin de un ciclo y el renacimiento. No es una muerte física, sino la eliminación necesaria de lo viejo para dar paso a lo nuevo.</td></tr>
-                    <tr><td class="symbol">🍷</td><td class="arcana-name">La Templanza</td><td class="arcana-meaning">Es la alquimia, la moderación y la síntesis de opuestos. Representa la búsqueda del equilibrio y la armonía, mezclando diferentes aspectos de la vida para crear algo nuevo y unificado.</td></tr>
-                    <tr><td class="symbol">😈</td><td class="arcana-name">El Diablo</td><td class="arcana-meaning">Simboliza las ataduras, el materialismo, la adicción y la ignorancia voluntaria. Representa las cadenas que nosotros mismos creamos y nos recuerda que tenemos la llave para liberarnos.</td></tr>
-                    <tr><td class="symbol">🏰</td><td class="arcana-name">La Torre</td><td class="arcana-meaning">Representa la destrucción súbita de estructuras falsas, una revelación impactante o una crisis que libera. Es el colapso del ego y las creencias limitantes para reconstruir sobre una base de verdad.</td></tr>
-                    <tr><td class="symbol">⭐</td><td class="arcana-name">La Estrella</td><td class="arcana-meaning">Simboliza la esperanza, la inspiración, la sanación y la guía espiritual. Es la luz que aparece después de la oscuridad, renovando la fe y la conexión con el universo.</td></tr>
-                    <tr><td class="symbol">🌙</td><td class="arcana-name">La Luna</td><td class="arcana-meaning">Representa el subconsciente, las ilusiones, los miedos y los ciclos naturales. Es un viaje a través de la incertidumbre, donde la intuición es la única guía fiable.</td></tr>
-                    <tr><td class="symbol">☀️</td><td class="arcana-name">El Sol</td><td class="arcana-meaning">Simboliza la vitalidad, la claridad, la alegría y el éxito. Es la conciencia iluminada, la verdad revelada y la celebración de la vida en su máxima expresión.</td></tr>
-                    <tr><td class="symbol">📯</td><td class="arcana-name">El Juicio</td><td class="arcana-meaning">Representa el despertar, la evaluación y la redención. Es una llamada a un nivel superior de conciencia, pidiendo que perdonemos el pasado y abracemos nuestro verdadero propósito.</td></tr>
-                    <tr><td class="symbol">🌍</td><td class="arcana-name">El Mundo</td><td class="arcana-meaning">Simboliza la culminación, la integración y la realización. Es el final exitoso de un ciclo, la unión de todos los aspectos del ser y la celebración de haber completado el viaje.</td></tr>
-                </tbody>
-            </table>
-
-            <div class="disclaimer">
-                <p>Las lecturas de tarot proporcionadas en este sitio tienen fines de entretenimiento y autoconocimiento. No deben ser consideradas como un sustituto del consejo profesional en materias legales, financieras, médicas o de salud mental. Las decisiones que tomes basadas en estas lecturas son de tu exclusiva responsabilidad.</p>
-            </div>
-
+            <h1>Contacto</h1>
+            <p>Grum valora su soledad, por lo que no revisa el correo muy a menudo. Sin embargo, si tienes algún problema técnico con el oráculo o alguna sugerencia, puedes enviar un mensaje al guardián humano de esta cueva digital.</p>
+            <p>Para asuntos importantes, por favor, escribe a:</p>
+            <p><a href="mailto:grum.tarot.ogro@gmail.com">grum.tarot.ogro@gmail.com</a></p>
+            <p>(Recuerda cambiar "tuemail@example.com" por tu dirección real).</p>
             <div class="nav-link">
                 <a href="index.html">Volver a la Tirada</a>
             </div>
@@ -176,6 +111,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const starBackground = document.getElementById('star-background');
             const starCount = 150;
+
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
@@ -188,11 +124,13 @@
                 star.dataset.speed = Math.random() * 0.1 + 0.01;
                 starBackground.appendChild(star);
             }
+
             document.body.addEventListener('mousemove', (e) => {
                 const centerX = window.innerWidth / 2;
                 const centerY = window.innerHeight / 2;
                 const mouseX = e.clientX - centerX;
                 const mouseY = e.clientY - centerY;
+
                 const stars = document.querySelectorAll('.star');
                 stars.forEach(star => {
                     const speed = parseFloat(star.dataset.speed);
