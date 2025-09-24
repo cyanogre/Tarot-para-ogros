@@ -415,3 +415,37 @@ button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
         gap: 20px; animation: none;
     }
 }
+
+/* --- Estilos para el contenido estático de AdSense --- */
+.static-content {
+    background: rgba(16, 8, 32, 0.2);
+    border-top: 1px solid #c0a87a;
+    padding: 25px;
+    margin: 40px auto;
+    border-radius: 15px;
+    max-width: 90%;
+}
+
+.static-content h2, .static-content h3 {
+    font-family: 'Cinzel', serif;
+    color: #e6c88e;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.static-content p, .static-content li {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    color: #e0e0e0;
+}
+
+.static-content ol {
+    list-style-position: inside;
+    padding-left: 20px;
+}
+
+.static-content ol li::marker {
+    font-weight: bold;
+    color: #e6c88e;
+}
