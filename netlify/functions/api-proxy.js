@@ -17,7 +17,7 @@ exports.handler = async function(event) {
         return { statusCode: 500, body: JSON.stringify({ error: 'La API Key del servidor no está configurada.' }) };
     }
 
-    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
     try {
         // 3. Mostramos lo que recibimos del cliente
