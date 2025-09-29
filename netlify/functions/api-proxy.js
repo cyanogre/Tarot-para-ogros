@@ -1,5 +1,4 @@
 exports.handler = async function(event) {
-    // 1. Registro de invocación
     console.log("[FUNCIÓN]: Invocada.");
 
     if (event.httpMethod !== 'POST') {
@@ -9,7 +8,6 @@ exports.handler = async function(event) {
 
     const API_KEY = process.env.API_KEY;
 
-    // 2. Verificamos si la API_KEY existe
     if (API_KEY) {
         console.log(`[FUNCIÓN]: Clave API encontrada. Terminando en: ...${API_KEY.slice(-4)}`);
     } else {
@@ -17,12 +15,11 @@ exports.handler = async function(event) {
         return { statusCode: 500, body: JSON.stringify({ error: 'La API Key del servidor no está configurada.' }) };
     }
 
-    // --- CAMBIO IMPORTANTE AQUÍ ---
-    // Hemos cambiado "v1beta" por "v1"
-    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+    // --- SOLUCIÓN FINAL: Usamos el modelo y la API que han funcionado en la prueba ---
+    const modelName = 'gemini-2.5-flash-preview-05-20';
+    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
     try {
-        // 3. Mostramos lo que recibimos del cliente
         console.log("[FUNCIÓN]: Cuerpo de la petición recibida del cliente:", event.body);
         
         const response = await fetch(GEMINI_API_URL, {
@@ -33,12 +30,10 @@ exports.handler = async function(event) {
             body: event.body,
         });
 
-        // 4. Registramos la respuesta de Gemini ANTES de comprobar si es válida
         console.log(`[FUNCIÓN]: Respuesta recibida de la API de Gemini. Status: ${response.status}`);
 
         if (!response.ok) {
             const errorBody = await response.text();
-            // 5. ¡Este es el registro más importante! Muestra el error exacto de Google.
             console.error(`[FUNCIÓN]: Error de la API de Gemini. Status: ${response.status}. Cuerpo del error:`, errorBody);
             
             return {
