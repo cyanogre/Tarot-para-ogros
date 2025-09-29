@@ -235,13 +235,13 @@ async function getOgreInterpretation(reading) {
     const userQuery = `Grum, mi tirada es: ${readingSummary}. ¿Qué ves tú, grandullón?`;
 
     try {
+        // --- SOLUCIÓN FINAL: Unimos la instrucción y la pregunta en un solo texto ---
+        const fullPrompt = `${systemPrompt}\n\n${userQuery}`;
+
         const payload = {
-            contents: [{
-                parts: [
-                    { text: systemPrompt },
-                    { text: userQuery }
-                ]
-            }]
+            contents: [{ 
+                parts: [{ text: fullPrompt }] 
+            }],
         };
 
         const response = await fetch(PROXY_URL, {
@@ -261,7 +261,8 @@ async function getOgreInterpretation(reading) {
         if (text) {
             ogreBubble.innerHTML = text.replace(/\n/g, '<br>');
         } else {
-            ogreBubble.textContent = "Vaya, el cosmos está tímido hoy. No logro ver nada claro.";
+            console.error("Respuesta de la API recibida pero sin texto:", result);
+            ogreBubble.textContent = "Vaya, el cosmos está tímido hoy. No logro ver nada claro (o mi magia ha sido bloqueada).";
         }
 
     } catch (error) {
