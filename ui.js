@@ -115,6 +115,7 @@ function showAllCards() {
     }, cards.length * 300 + 1000);
 }
 
+// --- CÓDIGO MODIFICADO ---
 function playOgreAnimation() {
     const ogreArea = document.querySelector('.ogre-area');
     const ogreImage = document.getElementById('ogre-image');
@@ -123,37 +124,38 @@ function playOgreAnimation() {
     fadeAmbientVolume(0.2, 1.0);
 
     const ogreVideo = document.createElement('video');
-    ogreVideo.src = 'Ogro.webm'; // Asegúrate que este archivo de video exista
+    ogreVideo.src = 'Ogro.webm';
     ogreVideo.id = 'ogre-video';
     ogreVideo.autoplay = true;
-    ogreVideo.muted = false;
+    ogreVideo.muted = false; // El video tiene sonido
     ogreVideo.playsInline = true;
     ogreVideo.style.maxWidth = '150px';
     ogreVideo.style.height = 'auto';
-    ogreVideo.style.position = 'absolute';
-    ogreVideo.style.opacity = '0';
-    ogreVideo.style.transition = 'opacity 0.2s ease-in-out';
+    ogreVideo.style.opacity = '0'; // Comienza transparente
 
-    ogreImage.style.transition = 'opacity 0.2s ease-in-out';
+    // El CSS Grid se encarga de la posición
+    ogreArea.appendChild(ogreVideo);
 
-    ogreArea.insertBefore(ogreVideo, ogreImage);
-
-    setTimeout(() => {
-        ogreImage.style.opacity = '0';
-        ogreVideo.style.opacity = '1';
-    }, 50);
+    // Pequeña espera para que el navegador procese el nuevo elemento
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            ogreImage.style.opacity = '0';
+            ogreVideo.style.opacity = '1';
+        });
+    });
 
     ogreVideo.addEventListener('ended', () => {
         fadeAmbientVolume(1.0, 1.5);
         ogreVideo.style.opacity = '0';
         ogreImage.style.opacity = '1';
+        // Elimina el video del DOM después de que la transición termine
         setTimeout(() => {
             if (ogreVideo.parentNode) {
                 ogreArea.removeChild(ogreVideo);
             }
-        }, 200);
+        }, 300); // Coincide con la duración de la transición en CSS
     }, { once: true });
-    
+
     ogreVideo.play().catch(error => {
          console.error("Error al reproducir el video del ogro:", error);
          if (ogreVideo.parentNode) {
@@ -163,6 +165,7 @@ function playOgreAnimation() {
          fadeAmbientVolume(1.0, 0.5);
     });
 }
+// --- FIN DEL CÓDIGO MODIFICADO ---
 
 function showResults() {
     const resultsDiv = document.getElementById('results');
