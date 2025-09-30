@@ -269,16 +269,20 @@ async function getOgreInterpretation(reading) {
         let fallbackHTML = "¡Argh! Mis visiones se han nublado. Pero un ogro siempre tiene un plan B. Esto es lo que veo, sin rodeos:<br><br>";
         
         reading.forEach(item => {
-            let cardName = item.card.name;
-            let fallbackKey = cardName;
+            const card = item.card;
+            
+            // La clave de búsqueda es siempre el nombre para los Arcanos Mayores.
+            // Para los Menores, usamos la clave genérica (ej. "As de Copas") que creamos en el objeto.
+            const fallbackKey = card.type === 'major' ? card.name : (OGRE_FALLBACKS[card.name] ? card.name : "Carta Desconocida");
+            const cardInterpretations = OGRE_FALLBACKS[fallbackKey];
+            
+            let fallbackText = "Esta carta es un misterio hasta para mí.";
 
-            if (item.card.type === 'minor') {
-                const numberOrCourt = item.card.number ? (item.card.number === 1 ? 'As' : item.card.number.toString()) : item.card.court;
-                fallbackKey = `${numberOrCourt} de ${item.card.suit}`;
+            if (cardInterpretations) {
+                fallbackText = card.inverted ? cardInterpretations.reversed : cardInterpretations.upright;
             }
 
-            const fallbackText = OGRE_FALLBACKS[fallbackKey] || "Esta carta es un misterio hasta para mí.";
-            fallbackHTML += `<b>${item.position} (${cardName}):</b> ${fallbackText}<br><br>`;
+            fallbackHTML += `<b>${item.position} (${card.name}${card.inverted ? ', Invertida' : ''}):</b> ${fallbackText}<br><br>`;
         });
 
         ogreBubble.innerHTML = fallbackHTML;
