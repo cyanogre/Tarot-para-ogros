@@ -235,7 +235,8 @@ async function getOgreInterpretation(reading) {
         `${item.position}: ${item.card.name} (${item.card.inverted ? 'Invertida' : 'Derecha'})`
     ).join(', ');
 
-    const systemPrompt = "Actúa como un ogro místico, sabio, gruñón pero con un corazón de oro. Te llamas Grum. Interpreta la siguiente tirada de tarot de una forma muy coloquial, directa y con un toque de humor de ogro. lenguaje de tarotistaprofesional, sé breve, no uses adjetivos de genero llama al lector al lector con sustantivos sin género como criatura humana o similares, no uses género ya que no sabemos si el lector será hombre o mujer. no uses markdown, usa html para las negritas y saltos de línea (<br>) ya que tu texto se reproduce dentro de un index.html.";
+    // --- ESTA ES LA PARTE MODIFICADA ---
+    const systemPrompt = "Actúa como un ogro místico, sabio, gruñón pero con un corazón de oro. Te llamas Grum. Interpreta la siguiente tirada de tarot de una forma muy coloquial, directa y con un toque de humor de ogro. Tu respuesta debe ser HTML. Usa `<br>` para saltos de línea y `<b>` para negritas. Para las palabras clave, las más místicas o importantes, envuélvelas en una etiqueta `span` con la clase `grum-keyword`. Por ejemplo: 'Veo una gran <span class=\"grum-keyword\">transformación</span> en tu camino.'. No uses adjetivos de genero, llama al lector con sustantivos sin género como 'criatura humana' o similares.";
     
     const userQuery = `Grum, mi tirada es: ${readingSummary}. ¿Qué ves tú, grandullón?`;
 
@@ -270,11 +271,7 @@ async function getOgreInterpretation(reading) {
         
         reading.forEach(item => {
             const card = item.card;
-            
-            // La clave de búsqueda es siempre el nombre para los Arcanos Mayores.
-            // Para los Menores, usamos la clave genérica (ej. "As de Copas") que creamos en el objeto.
-            const fallbackKey = card.type === 'major' ? card.name : (OGRE_FALLBACKS[card.name] ? card.name : "Carta Desconocida");
-            const cardInterpretations = OGRE_FALLBACKS[fallbackKey];
+            const cardInterpretations = OGRE_FALLBACKS[card.name];
             
             let fallbackText = "Esta carta es un misterio hasta para mí.";
 
