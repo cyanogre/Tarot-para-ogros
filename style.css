@@ -67,6 +67,7 @@ body {
 .ogre-area {
     display: flex; justify-content: center; align-items: center;
     gap: 20px; flex-wrap: wrap; min-height: 170px;
+    position: relative; /* Añadido para la transición */
 }
 .speech-bubble {
     position: relative; background: rgba(16, 8, 32, 0.6);
@@ -449,4 +450,3 @@ button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
     font-weight: bold;
     color: #e6c88e;
 }
-
