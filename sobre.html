@@ -148,7 +148,13 @@
             perspective: 1000px;
             width: 180px;
             height: 280px;
+            opacity: 0; /* Oculta inicialmente */
+            transition: opacity 1s ease-in-out; /* Transición de aparición */
         }
+        .card-container.visible {
+            opacity: 1; /* Clase para hacerla visible */
+        }
+
 
         .holographic-card {
             width: 100%;
@@ -574,6 +580,30 @@
                     }
                 });
             }
+            
+            // --- CÓDIGO AÑADIDO PARA LA CARTA ---
+            const cardContainer = document.querySelector('.card-container');
+            const frontImage = new Image();
+            const backImage = new Image();
+            let frontLoaded = false;
+            let backLoaded = false;
+
+            function showCard() {
+                if (frontLoaded && backLoaded) {
+                    cardContainer.classList.add('visible');
+                }
+            }
+
+            frontImage.onload = () => { frontLoaded = true; showCard(); };
+            backImage.onload = () => { backLoaded = true; showCard(); };
+
+            frontImage.src = 'carta-frente.png';
+            backImage.src = 'carta-atras.png';
+            
+            // Temporizador de seguridad por si las imágenes no cargan
+            setTimeout(() => {
+                cardContainer.classList.add('visible');
+            }, 1500);
 
             // Verificar si las imágenes existen y cargar fallback si no
             function checkAndSetFallback() {
