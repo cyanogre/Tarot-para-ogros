@@ -115,11 +115,11 @@ function showAllCards() {
     }, cards.length * 300 + 1000);
 }
 
-// --- CÓDIGO MODIFICADO ---
+// --- CÓDIGO CORREGIDO ---
 function playOgreAnimation() {
-    const ogreArea = document.querySelector('.ogre-area');
+    const ogreContainer = document.getElementById('ogre-container');
     const ogreImage = document.getElementById('ogre-image');
-    if (!ogreImage) return;
+    if (!ogreContainer || !ogreImage) return;
 
     fadeAmbientVolume(0.2, 1.0);
 
@@ -127,16 +127,12 @@ function playOgreAnimation() {
     ogreVideo.src = 'Ogro.webm';
     ogreVideo.id = 'ogre-video';
     ogreVideo.autoplay = true;
-    ogreVideo.muted = false; // El video tiene sonido
+    ogreVideo.muted = false;
     ogreVideo.playsInline = true;
-    ogreVideo.style.maxWidth = '150px';
-    ogreVideo.style.height = 'auto';
     ogreVideo.style.opacity = '0'; // Comienza transparente
 
-    // El CSS Grid se encarga de la posición
-    ogreArea.appendChild(ogreVideo);
+    ogreContainer.appendChild(ogreVideo);
 
-    // Pequeña espera para que el navegador procese el nuevo elemento
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             ogreImage.style.opacity = '0';
@@ -148,10 +144,9 @@ function playOgreAnimation() {
         fadeAmbientVolume(1.0, 1.5);
         ogreVideo.style.opacity = '0';
         ogreImage.style.opacity = '1';
-        // Elimina el video del DOM después de que la transición termine
         setTimeout(() => {
             if (ogreVideo.parentNode) {
-                ogreArea.removeChild(ogreVideo);
+                ogreContainer.removeChild(ogreVideo);
             }
         }, 300); // Coincide con la duración de la transición en CSS
     }, { once: true });
@@ -159,13 +154,13 @@ function playOgreAnimation() {
     ogreVideo.play().catch(error => {
          console.error("Error al reproducir el video del ogro:", error);
          if (ogreVideo.parentNode) {
-            ogreArea.removeChild(ogreVideo);
+            ogreContainer.removeChild(ogreVideo);
          }
          ogreImage.style.opacity = '1';
          fadeAmbientVolume(1.0, 0.5);
     });
 }
-// --- FIN DEL CÓDIGO MODIFICADO ---
+// --- FIN DEL CÓDIGO CORREGIDO ---
 
 function showResults() {
     const resultsDiv = document.getElementById('results');
