@@ -123,26 +123,43 @@ function playOgreAnimation() {
     fadeAmbientVolume(0.2, 1.0);
 
     const ogreVideo = document.createElement('video');
-    ogreVideo.src = 'Ogro.webm';
+    ogreVideo.src = 'Ogro.webm'; // Asegúrate que este archivo de video exista
     ogreVideo.id = 'ogre-video';
     ogreVideo.autoplay = true;
     ogreVideo.muted = false;
     ogreVideo.playsInline = true;
     ogreVideo.style.maxWidth = '150px';
     ogreVideo.style.height = 'auto';
+    ogreVideo.style.position = 'absolute';
+    ogreVideo.style.opacity = '0';
+    ogreVideo.style.transition = 'opacity 0.2s ease-in-out';
+
+    ogreImage.style.transition = 'opacity 0.2s ease-in-out';
+
+    ogreArea.insertBefore(ogreVideo, ogreImage);
+
+    setTimeout(() => {
+        ogreImage.style.opacity = '0';
+        ogreVideo.style.opacity = '1';
+    }, 50);
 
     ogreVideo.addEventListener('ended', () => {
         fadeAmbientVolume(1.0, 1.5);
-        if (ogreVideo.parentNode) {
-            ogreArea.replaceChild(ogreImage, ogreVideo);
-        }
+        ogreVideo.style.opacity = '0';
+        ogreImage.style.opacity = '1';
+        setTimeout(() => {
+            if (ogreVideo.parentNode) {
+                ogreArea.removeChild(ogreVideo);
+            }
+        }, 200);
     }, { once: true });
-    
-    ogreArea.replaceChild(ogreVideo, ogreImage);
     
     ogreVideo.play().catch(error => {
          console.error("Error al reproducir el video del ogro:", error);
-         ogreArea.replaceChild(ogreImage, ogreVideo);
+         if (ogreVideo.parentNode) {
+            ogreArea.removeChild(ogreVideo);
+         }
+         ogreImage.style.opacity = '1';
          fadeAmbientVolume(1.0, 0.5);
     });
 }
