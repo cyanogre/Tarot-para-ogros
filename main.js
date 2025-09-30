@@ -235,14 +235,8 @@ async function getOgreInterpretation(reading) {
     const userQuery = `Grum, mi tirada es: ${readingSummary}. ¿Qué ves tú, grandullón?`;
 
     try {
-        // --- SOLUCIÓN FINAL: Unimos la instrucción y la pregunta en un solo texto ---
         const fullPrompt = `${systemPrompt}\n\n${userQuery}`;
-
-        const payload = {
-            contents: [{ 
-                parts: [{ text: fullPrompt }] 
-            }],
-        };
+        const payload = { contents: [{ parts: [{ text: fullPrompt }] }] };
 
         const response = await fetch(PROXY_URL, {
             method: 'POST',
@@ -261,13 +255,26 @@ async function getOgreInterpretation(reading) {
         if (text) {
             ogreBubble.innerHTML = text.replace(/\n/g, '<br>');
         } else {
-            console.error("Respuesta de la API recibida pero sin texto:", result);
-            ogreBubble.textContent = "Vaya, el cosmos está tímido hoy. No logro ver nada claro (o mi magia ha sido bloqueada).";
+            throw new Error("Respuesta de la API recibida pero sin texto.");
         }
 
     } catch (error) {
-        console.error("Error al contactar con el Ogro:", error);
-        ogreBubble.textContent = "¡Argh! Mis visiones se han nublado. He realizado demasiadas predicciones seguidas, tendrás que conformarte con las indicaciones de abajo o probar más tarde.";
+        console.error("Error al contactar con el Ogro, usando fallback:", error);
+        
+        let fallbackHTML = "¡Argh! Mis visiones se han nublado. Pero un ogro siempre tiene un plan B. Esto es lo que veo, sin rodeos:<br><br>";
+        
+        reading.forEach(item => {
+            let cardName = item.card.name;
+            // Para las cartas de la corte, necesitamos un nombre genérico.
+            if (item.card.court) {
+                cardName = `${item.card.court} de ${item.card.suit}`;
+            }
+
+            const fallbackText = OGRE_FALLBACKS[cardName] || "Esta carta es un misterio hasta para mí.";
+            fallbackHTML += `<b>${item.position} (${cardName}):</b> ${fallbackText}<br><br>`;
+        });
+
+        ogreBubble.innerHTML = fallbackHTML;
     }
 }
 
