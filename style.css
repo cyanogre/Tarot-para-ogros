@@ -71,7 +71,7 @@ body {
 .speech-bubble {
     position: relative; background: rgba(16, 8, 32, 0.6);
     backdrop-filter: blur(10px); border-radius: 1em; padding: 20px;
-    max-width: 400px; text-align: left; border: 2px solid #c0a87a;
+    max-width: 500px; text-align: left; border: 2px solid #c0a87a;
     box-shadow: 0 0 15px rgba(192, 168, 122, 0.3); display: none;
 }
 .speech-bubble:after {
@@ -449,3 +449,4 @@ button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
     font-weight: bold;
     color: #e6c88e;
 }
+
