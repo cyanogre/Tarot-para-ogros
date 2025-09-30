@@ -55,7 +55,7 @@ body {
     overflow-y: auto;
 }
 .header {
-    text-align: center; margin-top: 80px; /* Más espacio para el menú en escritorio */
+    text-align: center; margin-top: 80px;
     margin-bottom: 20px; animation: fadeInDown 1s ease-out;
 }
 .header h1 {
@@ -65,19 +65,28 @@ body {
 }
 .header p { font-size: 1.2rem; color: #b8b8b8; }
 
-/* --- CÓDIGO MODIFICADO --- */
+/* --- CÓDIGO CORREGIDO --- */
 .ogre-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    min-height: 170px;
+}
+
+#ogre-container {
     display: grid;
     place-items: center;
-    min-height: 170px;
-    gap: 20px;
 }
-.ogre-area > * {
+#ogre-container > * {
     grid-column: 1;
     grid-row: 1;
     transition: opacity 0.3s ease-in-out;
+    max-width: 150px;
+    height: auto;
 }
-/* --- FIN DEL CÓDIGO MODIFICADO --- */
+/* --- FIN DEL CÓDIGO CORREGIDO --- */
 
 .speech-bubble {
     position: relative; background: rgba(16, 8, 32, 0.6);
