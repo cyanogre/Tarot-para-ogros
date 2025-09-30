@@ -6,6 +6,11 @@ let currentReading = [];
 let isReading = false;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Lanza el hechizo de Grum para asegurar que los estilos de las palabras clave estén listos.
+    if (typeof injectGrumStyles === 'function') {
+        injectGrumStyles();
+    }
+
     generateStars();
     generateParticles();
     setInterval(createShootingStar, 7000);
@@ -230,7 +235,7 @@ async function getOgreInterpretation(reading) {
         `${item.position}: ${item.card.name} (${item.card.inverted ? 'Invertida' : 'Derecha'})`
     ).join(', ');
 
-    const systemPrompt = "Actúa como un ogro místico, sabio, gruñón pero con un corazón de oro. Te llamas Grum. Interpreta la siguiente tirada de tarot de una forma muy coloquial, directa y con un toque de humor de ogro. lenguaje de tarotistaprofesional, sé breve, no uses adjetivos de genero llama al lector al lector con sustantivos sin género como criatura humana o similares, no uses género ya que no sabemos si el lector será hombre o mujer. no uses markdown, usa html para las negritas ya que tu texto se reproduce dentro de un index.html.";
+    const systemPrompt = "Actúa como un ogro místico, sabio, gruñón pero con un corazón de oro. Te llamas Grum. Interpreta la siguiente tirada de tarot de una forma muy coloquial, directa y con un toque de humor de ogro. lenguaje de tarotistaprofesional, sé breve, no uses adjetivos de genero llama al lector al lector con sustantivos sin género como criatura humana o similares, no uses género ya que no sabemos si el lector será hombre o mujer. no uses markdown, usa html para las negritas y saltos de línea (<br>) ya que tu texto se reproduce dentro de un index.html.";
     
     const userQuery = `Grum, mi tirada es: ${readingSummary}. ¿Qué ves tú, grandullón?`;
 
@@ -253,7 +258,7 @@ async function getOgreInterpretation(reading) {
         const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
         if (text) {
-            ogreBubble.innerHTML = text.replace(/\n/g, '<br>');
+            ogreBubble.innerHTML = text;
         } else {
             throw new Error("Respuesta de la API recibida pero sin texto.");
         }
@@ -265,18 +270,21 @@ async function getOgreInterpretation(reading) {
         
         reading.forEach(item => {
             let cardName = item.card.name;
-            // Para las cartas de la corte, necesitamos un nombre genérico.
-            if (item.card.court) {
-                cardName = `${item.card.court} de ${item.card.suit}`;
+            let fallbackKey = cardName;
+
+            if (item.card.type === 'minor') {
+                const numberOrCourt = item.card.number ? (item.card.number === 1 ? 'As' : item.card.number.toString()) : item.card.court;
+                fallbackKey = `${numberOrCourt} de ${item.card.suit}`;
             }
 
-            const fallbackText = OGRE_FALLBACKS[cardName] || "Esta carta es un misterio hasta para mí.";
+            const fallbackText = OGRE_FALLBACKS[fallbackKey] || "Esta carta es un misterio hasta para mí.";
             fallbackHTML += `<b>${item.position} (${cardName}):</b> ${fallbackText}<br><br>`;
         });
 
         ogreBubble.innerHTML = fallbackHTML;
     }
 }
+
 
 function loadGoogleAnalytics() {
     const script = document.createElement('script');
