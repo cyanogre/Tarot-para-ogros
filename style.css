@@ -469,3 +469,112 @@ button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
     font-weight: bold;
     color: #e6c88e;
 }
+/* Estilos para compartir en redes sociales */
+.share-btn {
+    background: linear-gradient(45deg, #4a90e2, #64b5f6);
+    color: #fff;
+}
+
+.share-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.share-modal-content {
+    background: rgba(16, 8, 32, 0.95);
+    border: 2px solid #c0a87a;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.share-modal-content h2 {
+    font-family: 'Cinzel', serif;
+    color: #e6c88e;
+    margin-bottom: 20px;
+}
+
+.share-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: white;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.social-btn.twitter {
+    background: linear-gradient(45deg, #1DA1F2, #0d8bd9);
+}
+
+.social-btn.facebook {
+    background: linear-gradient(45deg, #1877f2, #145dbf);
+}
+
+.social-btn.whatsapp {
+    background: linear-gradient(45deg, #25D366, #1da851);
+}
+
+.social-btn.telegram {
+    background: linear-gradient(45deg, #0088cc, #006699);
+}
+
+.social-btn.copy {
+    background: linear-gradient(45deg, #6c4675, #9c6c94);
+}
+
+.close-share-modal {
+    margin-top: 20px;
+    background: transparent;
+    border: 1px solid #c0a87a;
+    color: #e6c88e;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-share-modal:hover {
+    background: rgba(192, 168, 122, 0.2);
+}
+
+@media (max-width: 600px) {
+    .share-modal-content {
+        padding: 20px;
+    }
+    
+    .social-btn {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+}
