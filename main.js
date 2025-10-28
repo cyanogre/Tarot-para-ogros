@@ -320,3 +320,83 @@ function setupHamburgerMenu() {
         }
     });
 }
+// Función para generar el texto de la tirada
+function generateReadingText() {
+    const cards = currentReading.map(r => 
+        `${r.position}: ${r.card.name} (${r.card.inverted ? 'Invertida' : 'Derecha'})`
+    ).join(', ');
+    
+    return `Acabo de consultar el Tarot del Ogro Azul 🔮\nMi tirada: ${cards}`;
+}
+
+// Función para mostrar el modal de compartir
+function showShareModal() {
+    const modal = document.getElementById('share-modal');
+    modal.style.display = 'flex';
+    
+    const shareUrl = window.location.href;
+    const shareText = generateReadingText();
+    
+    // Twitter/X
+    document.getElementById('share-twitter').href = 
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    
+    // Facebook
+    document.getElementById('share-facebook').href = 
+        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+    
+    // WhatsApp
+    document.getElementById('share-whatsapp').href = 
+        `https://wa.me/?text=${encodeURIComponent(shareText + '\n' + shareUrl)}`;
+    
+    // Telegram
+    document.getElementById('share-telegram').href = 
+        `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+    
+    // Copiar enlace
+    document.getElementById('copy-link').onclick = async () => {
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+            const btn = document.getElementById('copy-link');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span>✅</span> ¡Copiado!';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        } catch (err) {
+            alert('No se pudo copiar el enlace. Por favor, cópialo manualmente: ' + shareUrl);
+        }
+    };
+}
+
+// Event listeners para el modal de compartir
+document.addEventListener('DOMContentLoaded', () => {
+    // ... tu código existente ...
+    
+    // Añadir event listener para el botón de compartir
+    const shareBtn = document.getElementById('shareBtn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            playClickSound();
+            showShareModal();
+        });
+    }
+    
+    // Cerrar modal
+    const closeShareModal = document.getElementById('close-share-modal');
+    if (closeShareModal) {
+        closeShareModal.addEventListener('click', () => {
+            document.getElementById('share-modal').style.display = 'none';
+        });
+    }
+    
+    // Cerrar modal al hacer clic fuera
+    const shareModal = document.getElementById('share-modal');
+    if (shareModal) {
+        shareModal.addEventListener('click', (e) => {
+            if (e.target === shareModal) {
+                shareModal.style.display = 'none';
+            }
+        });
+    }
+});
