@@ -166,6 +166,8 @@ function showResults() {
     const resultsDiv = document.getElementById('results');
     const resultsContent = document.getElementById('resultsContent');
     const exportBtn = document.getElementById('exportBtn');
+    const shareBtn = document.getElementById('shareBtn'); // AÑADIR ESTA LÍNEA
+    
     let resultsHTML = '';
     currentReading.forEach((reading, index) => {
         const cardData = reading.card;
@@ -182,6 +184,8 @@ function showResults() {
     resultsContent.innerHTML = resultsHTML;
     resultsDiv.style.display = 'block';
     exportBtn.style.display = 'inline-block';
+    shareBtn.style.display = 'inline-block'; // AÑADIR ESTA LÍNEA
+    
     getOgreInterpretation(currentReading);
 }
 
@@ -208,3 +212,4 @@ async function exportReading() {
          exportBtn.innerHTML = '📸 Exportar PNG';
     }
 }
+
