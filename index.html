@@ -174,20 +174,28 @@
     <div id="share-modal" class="share-modal">
         <div class="share-modal-content">
             <h2>🌟 Compartir mi Tirada</h2>
-            <p style="color: #e0e0e0; margin-bottom: 15px;">Comparte tu lectura de tarot con el mundo</p>
+            <p style="color: #e0e0e0; margin-bottom: 15px;">La imagen se descargará automáticamente para que puedas subirla</p>
             <div class="share-buttons">
+                <!-- Compartir nativo (solo móviles compatibles) -->
+                <button class="social-btn native" id="share-native" style="display: none;">
+                    <span>📱</span> Compartir (con imagen)
+                </button>
+                
                 <a href="#" class="social-btn twitter" id="share-twitter">
-                    <span>🐦</span> Twitter / X
+                    <span>🐦</span> Descargar y abrir Twitter/X
                 </a>
                 <a href="#" class="social-btn facebook" id="share-facebook">
-                    <span>📘</span> Facebook
+                    <span>📘</span> Descargar y abrir Facebook
                 </a>
                 <a href="#" class="social-btn whatsapp" id="share-whatsapp">
-                    <span>💬</span> WhatsApp
+                    <span>💬</span> Descargar y abrir WhatsApp
                 </a>
                 <a href="#" class="social-btn telegram" id="share-telegram">
-                    <span>✈️</span> Telegram
+                    <span>✈️</span> Descargar y abrir Telegram
                 </a>
+                <button class="social-btn download" id="download-only">
+                    <span>💾</span> Solo descargar imagen
+                </button>
                 <button class="social-btn copy" id="copy-link">
                     <span>📋</span> Copiar enlace
                 </button>
@@ -197,5 +205,6 @@
     </div>
 </body>
 </html>
+
 
 
