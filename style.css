@@ -578,3 +578,32 @@ button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
         padding: 10px 15px;
     }
 }
+
+.social-btn.native {
+    background: linear-gradient(45deg, #7c3aed, #a855f7);
+}
+
+.social-btn.download {
+    background: linear-gradient(45deg, #10b981, #059669);
+}
+
+.download-message {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid #10b981;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.download-message p {
+    color: #10b981;
+    margin: 0;
+    font-weight: bold;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
