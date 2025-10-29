@@ -305,53 +305,228 @@ function loadGoogleAnalytics() {
     }
 }
 
-function setupHamburgerMenu() {
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navLinks = document.getElementById('nav-links');
-
-    hamburgerBtn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        navLinks.classList.toggle('open');
-    });
-
-    document.body.addEventListener('click', () => {
-        if (navLinks.classList.contains('open')) {
-            navLinks.classList.remove('open');
-        }
-    });
+// Función para generar imagen de la tirada
+async function generateShareImage() {
+    const elementToCapture = document.getElementById('reading-snapshot');
+    try {
+        const canvas = await html2canvas(elementToCapture, {
+            backgroundColor: '#1e0c3a',
+            useCORS: true,
+            scale: 2
+        });
+        
+        // Convertir canvas a blob
+        return new Promise((resolve) => {
+            canvas.toBlob((blob) => {
+                resolve(blob);
+            }, 'image/png');
+        });
+    } catch (error) {
+        console.error('Error al generar imagen:', error);
+        return null;
+    }
 }
+
 // Función para generar el texto de la tirada
 function generateReadingText() {
     const cards = currentReading.map(r => 
         `${r.position}: ${r.card.name} (${r.card.inverted ? 'Invertida' : 'Derecha'})`
     ).join(', ');
     
-    return `Acabo de consultar el Tarot del Ogro Azul 🔮\nMi tirada: ${cards}`;
+    return `Acabo de consultar el Tarot del Ogro Azul 🔮\n\nMi tirada: ${cards}\n\n¿Quieres saber qué te depara el destino?`;
+}
+
+// Función para compartir con Web Share API (móviles)
+async function shareWithWebAPI() {
+    const shareText = generateReadingText();
+    const shareUrl = window.location.href;
+    
+    try {
+        // Generar la imagen
+        const imageBlob = await generateShareImage();
+        
+        if (imageBlob && navigator.share && navigator.canShare) {
+            const file = new File([imageBlob], 'mi-tirada-tarot-ogro.png', { type: 'image/png' });
+            
+            const shareData = {
+                title: '🔮 Mi Tirada de Tarot',
+                text: shareText,
+                url: shareUrl,
+                files: [file]
+            };
+            
+            // Verificar si se pueden compartir archivos
+            if (navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+                return true;
+            } else {
+                // Si no se pueden compartir archivos, compartir solo texto
+                await navigator.share({
+                    title: '🔮 Mi Tirada de Tarot',
+                    text: shareText,
+                    url: shareUrl
+                });
+                return true;
+            }
+        }
+        return false;
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            console.log('Error al compartir:', err);
+        }
+        return false;
+    }
+}
+
+// Función para descargar la imagen y compartir en redes
+async function downloadAndShareToSocial(platform) {
+    const imageBlob = await generateShareImage();
+    
+    if (imageBlob) {
+        // Crear URL temporal para la imagen
+        const imageUrl = URL.createObjectURL(imageBlob);
+        
+        // Crear enlace de descarga
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = 'mi-tirada-tarot-ogro.png';
+        link.click();
+        
+        // Mostrar mensaje al usuario
+        showDownloadMessage(platform);
+        
+        // Limpiar URL temporal después de un momento
+        setTimeout(() => {
+            URL.revokeObjectURL(imageUrl);
+        }, 1000);
+    }
+    
+    // Abrir la red social correspondiente
+    const shareUrl = window.location.href;
+    const shareText = generateReadingText();
+    
+    let socialUrl = '';
+    switch(platform) {
+        case 'twitter':
+            socialUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+            break;
+        case 'facebook':
+            socialUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+            break;
+        case 'whatsapp':
+            socialUrl = `https://wa.me/?text=${encodeURIComponent(shareText + '\n' + shareUrl)}`;
+            break;
+        case 'telegram':
+            socialUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+            break;
+    }
+    
+    if (socialUrl) {
+        window.open(socialUrl, '_blank');
+    }
+}
+
+// Función para mostrar mensaje de descarga
+function showDownloadMessage(platform) {
+    const modal = document.getElementById('share-modal');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'download-message';
+    messageDiv.innerHTML = `
+        <p>✅ Imagen descargada</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">Ahora puedes subirla manualmente a ${platform === 'twitter' ? 'Twitter/X' : platform === 'facebook' ? 'Facebook' : platform === 'whatsapp' ? 'WhatsApp' : 'Telegram'}</p>
+    `;
+    
+    const modalContent = modal.querySelector('.share-modal-content');
+    
+    // Eliminar mensaje anterior si existe
+    const oldMessage = modalContent.querySelector('.download-message');
+    if (oldMessage) {
+        oldMessage.remove();
+    }
+    
+    modalContent.insertBefore(messageDiv, modalContent.querySelector('.share-buttons'));
+    
+    setTimeout(() => {
+        messageDiv.style.animation = 'fadeOut 0.5s ease-out';
+        setTimeout(() => messageDiv.remove(), 500);
+    }, 4000);
 }
 
 // Función para mostrar el modal de compartir
-function showShareModal() {
+async function showShareModal() {
     const modal = document.getElementById('share-modal');
     modal.style.display = 'flex';
     
     const shareUrl = window.location.href;
-    const shareText = generateReadingText();
+    
+    // Botón de compartir nativo (móviles principalmente)
+    const nativeShareBtn = document.getElementById('share-native');
+    if (nativeShareBtn) {
+        // Verificar si el dispositivo soporta Web Share API
+        if (navigator.share) {
+            nativeShareBtn.style.display = 'flex';
+            nativeShareBtn.onclick = async () => {
+                const shared = await shareWithWebAPI();
+                if (shared) {
+                    modal.style.display = 'none';
+                }
+            };
+        } else {
+            nativeShareBtn.style.display = 'none';
+        }
+    }
     
     // Twitter/X
-    document.getElementById('share-twitter').href = 
-        `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    document.getElementById('share-twitter').onclick = (e) => {
+        e.preventDefault();
+        downloadAndShareToSocial('twitter');
+    };
     
     // Facebook
-    document.getElementById('share-facebook').href = 
-        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+    document.getElementById('share-facebook').onclick = (e) => {
+        e.preventDefault();
+        downloadAndShareToSocial('facebook');
+    };
     
     // WhatsApp
-    document.getElementById('share-whatsapp').href = 
-        `https://wa.me/?text=${encodeURIComponent(shareText + '\n' + shareUrl)}`;
+    document.getElementById('share-whatsapp').onclick = (e) => {
+        e.preventDefault();
+        downloadAndShareToSocial('whatsapp');
+    };
     
     // Telegram
-    document.getElementById('share-telegram').href = 
-        `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+    document.getElementById('share-telegram').onclick = (e) => {
+        e.preventDefault();
+        downloadAndShareToSocial('telegram');
+    };
+    
+    // Solo descargar imagen
+    document.getElementById('download-only').onclick = async (e) => {
+        e.preventDefault();
+        const btn = e.currentTarget;
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<span class="loading"></span> Descargando...';
+        btn.disabled = true;
+        
+        const imageBlob = await generateShareImage();
+        if (imageBlob) {
+            const imageUrl = URL.createObjectURL(imageBlob);
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = 'mi-tirada-tarot-ogro.png';
+            link.click();
+            URL.revokeObjectURL(imageUrl);
+            
+            btn.innerHTML = '<span>✅</span> Descargada';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }, 2000);
+        } else {
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        }
+    };
     
     // Copiar enlace
     document.getElementById('copy-link').onclick = async () => {
