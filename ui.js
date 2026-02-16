@@ -212,4 +212,33 @@ async function exportReading() {
          exportBtn.innerHTML = '📸 Exportar PNG';
     }
 }
+// --- CORRECCIÓN MENÚ HAMBURGUESA ---
+function setupHamburgerMenu() {
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinks = document.getElementById('nav-links');
+
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita clics fantasma
+            navLinks.classList.toggle('active');
+            
+            // Opcional: Si quieres que cambie el icono
+            if (navLinks.classList.contains('active')) {
+                hamburgerBtn.textContent = '✕'; // Cambia a X al abrir
+            } else {
+                hamburgerBtn.textContent = '☰'; // Vuelve a hamburguesa
+            }
+        });
+
+        // Cerrar el menú si se hace clic fuera de él
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active') && 
+                !navLinks.contains(e.target) && 
+                !hamburgerBtn.contains(e.target)) {
+                navLinks.classList.remove('active');
+                hamburgerBtn.textContent = '☰';
+            }
+        });
+    }
+}
 
