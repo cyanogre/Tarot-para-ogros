@@ -606,4 +606,37 @@ button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
     from { opacity: 1; transform: translateY(0); }
     to { opacity: 0; transform: translateY(-10px); }
 }
+/* Estilos para la pregunta del usuario */
+.question-container {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#userQuestion {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid #4a90e2; /* Azul ogro */
+    background: rgba(30, 12, 58, 0.8); /* Fondo oscuro */
+    color: #fff;
+    font-family: inherit; /* Usa tu fuente actual */
+    font-size: 1.1rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#userQuestion::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#userQuestion:focus {
+    border-color: #a0c4ff;
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.4);
+    transform: scale(1.02);
+}
 
