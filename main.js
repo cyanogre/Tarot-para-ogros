@@ -231,14 +231,29 @@ async function getOgreInterpretation(reading) {
     
     playOgreAnimation();
 
+// --- INICIO DE LOS CAMBIOS ---
+    
+    // 1. Capturamos la pregunta del HTML (si existe)
+    const questionInput = document.getElementById('userQuestion');
+    const userQuestion = questionInput ? questionInput.value.trim() : '';
+
+    // 2. Preparamos el resumen de las cartas
     const readingSummary = reading.map(item => 
         `${item.position}: ${item.card.name} (${item.card.inverted ? 'Invertida' : 'Derecha'})`
     ).join(', ');
 
-    // --- ESTA ES LA PARTE MODIFICADA ---
-    const systemPrompt = "Actúa como un ogro místico, sabio, gruñón pero con un corazón de oro. Te llamas Grum. Interpreta la siguiente tirada de tarot de una forma muy coloquial, directa y con un toque de humor de ogro. Tu respuesta debe ser HTML. Usa `<br>` para saltos de línea y `<b>` para negritas. Para las palabras clave, las más místicas o importantes, envuélvelas en una etiqueta `span` con la clase `grum-keyword`. Por ejemplo: 'Veo una gran <span class=\"grum-keyword\">transformación</span> en tu camino.'. No uses adjetivos de genero, llama al lector con sustantivos sin género como 'criatura humana' o similares.";
+    // 3. Modificamos el prompt para que sepa manejar preguntas
+    const systemPrompt = "Actúa como un ogro místico, sabio, gruñón pero con un corazón de oro. Te llamas Grum. Interpreta la siguiente tirada de tarot de una forma muy coloquial, directa y con un toque de humor de ogro. Tu respuesta debe ser HTML. Usa `<br>` para saltos de línea y `<b>` para negritas. Para las palabras clave importantes, envuélvelas en `<span class=\"grum-keyword\">`. No uses adjetivos de género, llama al consultante 'criatura', 'humano' o similar. Si hay una pregunta específica, respóndela usando las cartas.";
     
-    const userQuery = `Grum, mi tirada es: ${readingSummary}. ¿Qué ves tú, grandullón?`;
+    // 4. Construimos la petición incluyendo la pregunta si el usuario escribió algo
+    let specificQuestionText = "";
+    if (userQuestion) {
+        specificQuestionText = ` La criatura pregunta específicamente: "${userQuestion}". Concéntrate en responder a eso usando las cartas.`;
+    } else {
+        specificQuestionText = " La criatura no ha preguntado nada en concreto, diles lo que necesitan saber.";
+    }
+
+    const userQuery = `Grum, mi tirada es: ${readingSummary}.${specificQuestionText} ¿Qué ves tú, grandullón?`;
 
     try {
         const fullPrompt = `${systemPrompt}\n\n${userQuery}`;
@@ -575,3 +590,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
