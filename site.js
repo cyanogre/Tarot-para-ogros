@@ -6,7 +6,8 @@
 (function () {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const finePointer = window.matchMedia('(pointer: fine)').matches;
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const coarsePointer = !finePointer;
+    const DPR = Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.5 : 2);
 
     // ---------- Cielo estrellado ----------
     function createSky() {
@@ -34,27 +35,44 @@
 
     const STAR_COLORS = ['255,255,255', '247,226,179', '169,210,255', '214,196,255'];
 
-    function resize() {
-        W = window.innerWidth;
-        H = window.innerHeight;
+    // En móvil, la barra de direcciones aparece y desaparece al hacer scroll y
+    // dispara "resize" constantemente. Para que el cielo no parpadee:
+    //  - el lienzo se dimensiona a la altura máxima posible de la pantalla,
+    //  - las estrellas se guardan en coordenadas relativas (0..1),
+    //  - solo se regenera todo si cambia el ancho (p. ej. al girar el móvil).
+    function sizeCanvases() {
         [sky, fx].forEach(c => {
-            c.width = W * DPR;
-            c.height = H * DPR;
+            c.width = Math.round(W * DPR);
+            c.height = Math.round(H * DPR);
             c.style.width = W + 'px';
             c.style.height = H + 'px';
         });
         sctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         fctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-        const count = Math.min(420, Math.round((W * H) / 4200));
+    }
+
+    function makeStars() {
+        const count = Math.min(coarsePointer ? 220 : 420, Math.round((W * H) / (coarsePointer ? 5200 : 4200)));
         stars = Array.from({ length: count }, () => ({
-            x: Math.random() * W,
-            y: Math.random() * H,
+            nx: Math.random(),
+            ny: Math.random(),
             z: Math.random() * 0.9 + 0.1,          // profundidad (parallax)
             r: Math.random() * 1.3 + 0.2,
             tw: Math.random() * Math.PI * 2,       // fase del parpadeo
             ts: Math.random() * 0.02 + 0.004,      // velocidad del parpadeo
             c: STAR_COLORS[Math.random() < 0.7 ? 0 : Math.floor(Math.random() * STAR_COLORS.length)]
         }));
+    }
+
+    function resize(force) {
+        const newW = window.innerWidth;
+        const tallest = Math.max(window.innerHeight, coarsePointer ? (window.screen && window.screen.height) || 0 : 0);
+        const widthChanged = Math.abs(newW - W) > 1;
+        if (!force && !widthChanged && tallest <= H) return; // solo la barra del navegador: no tocamos nada
+        W = newW;
+        H = widthChanged || force ? tallest : Math.max(H, tallest);
+        sizeCanvases();
+        if (force || widthChanged || !stars.length) makeStars();
         if (reduceMotion) drawSky(0);
     }
 
@@ -67,8 +85,8 @@
         for (const s of stars) {
             s.tw += s.ts;
             const alpha = 0.35 + Math.sin(s.tw) * 0.35 + s.z * 0.3;
-            let x = s.x - pointer.x * s.z * 18;
-            let y = (s.y - scroll * s.z * 0.15 - pointer.y * s.z * 18) % H;
+            let x = s.nx * W - pointer.x * s.z * 18;
+            let y = (s.ny * H - scroll * s.z * 0.15 - pointer.y * s.z * 18) % H;
             if (y < 0) y += H;
             const r = s.r * (0.6 + s.z);
             sctx.beginPath();
@@ -184,8 +202,8 @@
         requestAnimationFrame(loop);
     }
 
-    window.addEventListener('resize', resize);
-    resize();
+    window.addEventListener('resize', () => resize(false));
+    resize(true);
     if (!reduceMotion) requestAnimationFrame(loop);
 
     document.addEventListener('visibilitychange', () => {

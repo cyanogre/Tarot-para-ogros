@@ -47,15 +47,21 @@ body {
     line-height: 1.6;
     color: var(--text);
     background-color: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Fondo en una capa fija propia: "background-attachment: fixed" hace que los
+   móviles repinten toda la página en cada scroll (parpadeos y tirones). */
+body::before {
+    content: ''; position: fixed; inset: 0; z-index: -1;
+    pointer-events: none;
     background-image:
         radial-gradient(1200px 700px at 85% -10%, rgba(90, 167, 255, 0.16), transparent 60%),
         radial-gradient(900px 600px at -10% 20%, rgba(139, 92, 246, 0.18), transparent 60%),
         radial-gradient(900px 900px at 50% 120%, rgba(244, 114, 182, 0.10), transparent 60%),
         linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 60%, var(--bg) 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
 }
 
 ::selection { background: rgba(230, 200, 142, 0.35); color: #fff; }
@@ -87,6 +93,10 @@ img { max-width: 100%; display: block; }
         radial-gradient(25% 20% at 55% 25%, rgba(244, 114, 182, 0.08), transparent 70%);
     filter: blur(20px);
     animation: nebula-drift 60s ease-in-out infinite alternate;
+}
+/* En pantallas táctiles la nebulosa queda quieta y sin desenfoque (muy costoso) */
+@media (pointer: coarse) {
+    .nebula { filter: none; animation: none; }
 }
 @keyframes nebula-drift {
     0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }

@@ -945,3 +945,14 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
 .is-exporting .speech-bubble,
 .is-exporting .eyebrow { box-shadow: none; border: 1px solid rgba(230, 200, 142, 0.3); }
 .is-exporting .speech-bubble .skip-hint { display: none; }
+
+/* Móvil: sin backdrop-filter en paneles grandes (provoca parpadeos al hacer scroll) */
+@media (max-width: 820px), (pointer: coarse) {
+    .ritual, .cookie-banner, .lightbox, .modal-overlay, .share-modal { backdrop-filter: none; -webkit-backdrop-filter: none; }
+    .ritual { background: linear-gradient(160deg, rgba(40, 26, 80, 0.92), rgba(16, 10, 34, 0.95)); }
+    .lightbox, .modal-overlay, .share-modal { background: rgba(4, 2, 10, 0.92); }
+    .cookie-banner { background: rgba(20, 12, 40, 0.97); }
+}
+@media (pointer: coarse) {
+    .hero__halo { animation: halo-pulse 5s ease-in-out infinite; will-change: transform, opacity; }
+}
