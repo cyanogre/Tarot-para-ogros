@@ -82,16 +82,23 @@ function revealCard(el, card) {
 function enableTilt(el, strength = 14) {
     if (!HAS_FINE_POINTER || REDUCED_MOTION || el.dataset.tilt) return;
     el.dataset.tilt = '1';
-    el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width;
-        const py = (e.clientY - r.top) / r.height;
+    // Se agrupan los movimientos del ratón en un único cambio por fotograma
+    let raf = 0, px = 0.5, py = 0.5;
+    const apply = () => {
+        raf = 0;
         el.style.setProperty('--ry', ((px - 0.5) * strength * 2).toFixed(2) + 'deg');
         el.style.setProperty('--rx', ((0.5 - py) * strength * 2).toFixed(2) + 'deg');
         el.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
         el.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+    };
+    el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        px = (e.clientX - r.left) / r.width;
+        py = (e.clientY - r.top) / r.height;
+        if (!raf) raf = requestAnimationFrame(apply);
     });
     el.addEventListener('pointerleave', () => {
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
         el.style.setProperty('--rx', '0deg');
         el.style.setProperty('--ry', '0deg');
         el.style.setProperty('--mx', '50%');
