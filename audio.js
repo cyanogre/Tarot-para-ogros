@@ -23,6 +23,7 @@ function playClickSound() {
 
 function playCardRevealSound() {
     if (isMuted) return;
+    setupAudio();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = 'triangle';
@@ -76,11 +77,16 @@ function toggleMute() {
             clearInterval(intervalId);
             intervalId = null;
         }
-        muteBtn.innerHTML = '🔇 Silenciar';
     } else {
         setupAudio();
-        muteBtn.innerHTML = '🔊 Sonido';
     }
+    if (muteBtn) {
+        muteBtn.textContent = isMuted ? '🔇' : '🔊';
+        muteBtn.setAttribute('aria-label', isMuted ? 'Activar sonido' : 'Silenciar sonido');
+    }
+    const video = document.getElementById('ogre-video');
+    if (video) video.muted = isMuted;
+    try { localStorage.setItem('grum_muted', JSON.stringify(isMuted)); } catch (e) { /* sin almacenamiento */ }
 }
 
 function tocarNota(frecuencia, duracion) {

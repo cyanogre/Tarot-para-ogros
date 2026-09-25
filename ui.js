@@ -1,121 +1,188 @@
-function createShootingStar() {
-    const star = document.createElement('div');
-    star.className = 'shooting-star';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.left = '-100px';
-    star.style.animationDuration = (Math.random() * 2 + 3) + 's';
-    document.body.appendChild(star);
-    setTimeout(() => {
-        star.remove();
-    }, 5000);
+// ==========================================================================
+// Piezas visuales de la tirada: cartas, inclinación 3D, máquina de escribir
+// y animación del ogro.
+// ==========================================================================
+
+const ROMAN = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
+const HAS_FINE_POINTER = window.matchMedia('(pointer: fine)').matches;
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function escapeHTML(str) {
+    return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-function generateStars() {
-    const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 100; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
-        star.style.animationDelay = Math.random() * 2 + 's';
-        starsContainer.appendChild(star);
-    }
-}
-
-function generateParticles() {
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 3 + 's';
-        particlesContainer.appendChild(particle);
-    }
-}
-
-function createCardElement(card, position, index, isRevealed = false) {
-    const cardEl = document.createElement('div');
-    cardEl.className = 'card';
-
+function cardTopLabel(card) {
     if (card.type === 'major') {
-        cardEl.classList.add('card--major-arcana');
+        const idx = MAJOR_ARCANA.findIndex(c => c.name === card.name);
+        return ROMAN[idx] ?? '';
     }
-
-    cardEl.style.animationDelay = (index * 0.2) + 's';
-    const isInverted = Math.random() < 0.5;
-    card.inverted = isInverted;
-    cardEl.innerHTML = `
-        <div class="card-position">${position}</div>
-        <div class="card-content">
-            <div class="card-name">${card.name}</div>
-            <div class="card-symbol">${card.symbol}</div>
-            <div class="card-orientation">${isInverted ? '(Invertida)' : '(Derecha)'}</div>
-        </div>
-    `;
-    if (isInverted) {
-        cardEl.classList.add('inverted');
-    }
-    if (!isRevealed) {
-        cardEl.style.transform = 'rotateY(180deg)';
-        cardEl.querySelector('.card-content').style.display = 'none';
-    }
-    cardEl.addEventListener('click', () => {
-        if (cardEl.classList.contains('revealed')) {
-            cardEl.classList.add('spinning');
-            playClickSound(); 
-            setTimeout(() => {
-                cardEl.classList.remove('spinning');
-            }, 1000); 
-        } else {
-            revealCard(cardEl, card);
-        }
-    });
-    return cardEl;
+    if (card.court) return card.court;
+    return card.number === 1 ? 'As' : String(card.number);
 }
 
-function revealCard(cardEl, card) {
-    cardEl.classList.add('flipping');
-    cardEl.querySelector('.card-content').style.display = 'flex';
-    playCardRevealSound();
-    setTimeout(() => {
-        cardEl.classList.add('revealed');
-        cardEl.style.transform = card.inverted ? 'rotateY(0deg) rotate(180deg)' : 'rotateY(0deg)';
-    }, 500);
+// Crea una carta boca abajo. Se revela con revealCard().
+function createCardElement(card, { flat = false } = {}) {
+    const el = document.createElement('div');
+    el.className = 'tcard';
+    if (card.type === 'major') el.classList.add('tcard--major');
+    if (card.inverted) el.classList.add('tcard--inverted');
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '-1');
+    el.setAttribute('aria-label', 'Carta boca abajo');
+
+    const accent = card.type === 'minor' && SUITS[card.suit] ? SUITS[card.suit].color : null;
+    el.innerHTML = `
+        <div class="tcard__inner">
+            <div class="tcard__face tcard__back"></div>
+            <div class="tcard__face tcard__front"${accent ? ` style="--accent:${accent}"` : ''}>
+                <div class="tcard__frame">
+                    <span class="tcard__num">${escapeHTML(cardTopLabel(card))}</span>
+                    <span class="tcard__symbol">${card.symbol}</span>
+                    <span class="tcard__name">${escapeHTML(card.name)}</span>
+                </div>
+                <span class="tcard__shine"></span>
+            </div>
+        </div>`;
+
+    if (flat) setCardFlat(el, card);
+    return el;
 }
 
-function displaySpread() {
-    const container = document.getElementById('spreadContainer');
-    container.innerHTML = '';
-    currentReading.forEach((reading, index) => {
-        const cardEl = createCardElement(reading.card, reading.position, index);
-        container.appendChild(cardEl);
+// Tras el giro, la carta pasa a un modo "plano" (sin 3D) que permite la
+// inclinación con el ratón y que html2canvas pueda capturarla bien.
+function setCardFlat(el, card) {
+    el.classList.add('no-anim', 'is-flipped', 'is-flat');
+    void el.offsetWidth;
+    el.classList.remove('no-anim');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-label', `${card.name}${card.inverted ? ' (invertida)' : ''}`);
+    enableTilt(el);
+}
+
+function revealCard(el, card) {
+    return new Promise(resolve => {
+        el.classList.add('is-flipped', 'is-revealing');
+        if (typeof playCardRevealSound === 'function') playCardRevealSound();
         setTimeout(() => {
-            cardEl.style.animation = 'fadeInUp 0.6s ease-out forwards';
-        }, index * 200);
-    });
-    setTimeout(() => {
-        showAllCards();
-    }, currentReading.length * 200 + 2000);
-}
-
-function showAllCards() {
-    const cards = document.querySelectorAll('.card:not(.revealed)');
-    cards.forEach((card, index) => {
-        setTimeout(() => {
-            if (!card.classList.contains('revealed')) {
-                const cardData = currentReading[Array.from(card.parentNode.children).indexOf(card)];
-                revealCard(card, cardData.card);
+            if (window.SiteFX) {
+                const major = card.type === 'major';
+                window.SiteFX.burstAt(el, major
+                    ? { count: 70, speed: 7, size: 2.8, color: undefined }
+                    : { count: 28, speed: 4.5, size: 2.2, color: '247,226,179' });
             }
-        }, index * 300);
+        }, 320);
+        setTimeout(() => {
+            el.classList.remove('is-revealing');
+            setCardFlat(el, card);
+            resolve();
+        }, REDUCED_MOTION ? 50 : 950);
     });
-    setTimeout(() => {
-        showResults();
-    }, cards.length * 300 + 1000);
 }
 
-// --- CÓDIGO CORREGIDO ---
+function enableTilt(el, strength = 14) {
+    if (!HAS_FINE_POINTER || REDUCED_MOTION || el.dataset.tilt) return;
+    el.dataset.tilt = '1';
+    el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        el.style.setProperty('--ry', ((px - 0.5) * strength * 2).toFixed(2) + 'deg');
+        el.style.setProperty('--rx', ((0.5 - py) * strength * 2).toFixed(2) + 'deg');
+        el.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+        el.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+    });
+    el.addEventListener('pointerleave', () => {
+        el.style.setProperty('--rx', '0deg');
+        el.style.setProperty('--ry', '0deg');
+        el.style.setProperty('--mx', '50%');
+        el.style.setProperty('--my', '50%');
+    });
+}
+
+// Animación FLIP: hace volar un elemento desde un rectángulo de origen a su sitio.
+function flyFrom(el, fromRect, { rotate = 0, duration = 650 } = {}) {
+    if (REDUCED_MOTION || !el.animate) return Promise.resolve();
+    const to = el.getBoundingClientRect();
+    const dx = fromRect.left + fromRect.width / 2 - (to.left + to.width / 2);
+    const dy = fromRect.top + fromRect.height / 2 - (to.top + to.height / 2);
+    const s = fromRect.width / to.width;
+    const anim = el.animate([
+        { transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg) scale(${s})` },
+        { transform: `translate(${dx * 0.4}px, ${dy * 0.4 - 60}px) rotate(${rotate * 0.3}deg) scale(${(s + 1) / 2 * 1.1})`, offset: 0.55 },
+        { transform: 'none' }
+    ], { duration, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+    return anim.finished.catch(() => {});
+}
+
+// ---------- Máquina de escribir sobre HTML ----------
+let typingJob = null;
+
+function typeHTML(target, html, { cps = 90 } = {}) {
+    finishTyping();
+    target.innerHTML = html;
+    if (REDUCED_MOTION) return Promise.resolve();
+
+    // Recorremos texto y saltos de línea en orden; los <br> se ocultan hasta
+    // llegar a ellos para que el bocadillo crezca a medida que se escribe.
+    const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+    const nodes = [];
+    while (walker.nextNode()) {
+        const n = walker.currentNode;
+        if (n.nodeType === Node.TEXT_NODE) {
+            nodes.push({ node: n, text: n.nodeValue });
+            n.nodeValue = '';
+        } else if (n.tagName === 'BR') {
+            nodes.push({ node: n, br: true });
+            n.style.display = 'none';
+        }
+    }
+    const hint = document.createElement('span');
+    hint.className = 'skip-hint';
+    hint.textContent = 'Toca para leerlo de golpe';
+    target.appendChild(hint);
+    target.classList.add('is-typing');
+
+    return new Promise(resolve => {
+        let i = 0, pos = 0, last = performance.now(), carry = 0;
+        const job = {
+            finish() {
+                nodes.forEach(n => { if (n.br) n.node.style.display = ''; else n.node.nodeValue = n.text; });
+                hint.remove();
+                target.classList.remove('is-typing');
+                target.removeEventListener('click', job.finish);
+                cancelAnimationFrame(job.raf);
+                typingJob = null;
+                resolve();
+            }
+        };
+        target.addEventListener('click', job.finish);
+        // Avance basado en el tiempo (caracteres por segundo), no en fotogramas
+        const step = (now) => {
+            carry += ((now - last) / 1000) * cps;
+            last = now;
+            let budget = Math.floor(carry);
+            carry -= budget;
+            while (budget > 0 && i < nodes.length) {
+                const n = nodes[i];
+                if (n.br) { n.node.style.display = ''; i++; budget--; continue; }
+                const take = Math.min(budget, n.text.length - pos);
+                pos += take; budget -= take;
+                n.node.nodeValue = n.text.slice(0, pos);
+                if (pos >= n.text.length) { i++; pos = 0; }
+            }
+            if (i >= nodes.length) job.finish();
+            else job.raf = requestAnimationFrame(step);
+        };
+        typingJob = job;
+        job.raf = requestAnimationFrame(step);
+    });
+}
+
+function finishTyping() {
+    if (typingJob) typingJob.finish();
+}
+
+// ---------- El ogro cobra vida (vídeo) ----------
 function playOgreAnimation() {
     const ogreContainer = document.getElementById('ogre-container');
     const ogreImage = document.getElementById('ogre-image');
@@ -127,10 +194,9 @@ function playOgreAnimation() {
     ogreVideo.src = 'Ogro.webm';
     ogreVideo.id = 'ogre-video';
     ogreVideo.autoplay = true;
-    ogreVideo.muted = false;
+    ogreVideo.muted = isMuted;
     ogreVideo.playsInline = true;
-    ogreVideo.style.opacity = '0'; // Comienza transparente
-
+    ogreVideo.style.opacity = '0';
     ogreContainer.appendChild(ogreVideo);
 
     requestAnimationFrame(() => {
@@ -140,105 +206,16 @@ function playOgreAnimation() {
         });
     });
 
-    ogreVideo.addEventListener('ended', () => {
-        fadeAmbientVolume(1.0, 1.5);
+    const restore = (volumeTime) => {
+        fadeAmbientVolume(1.0, volumeTime);
         ogreVideo.style.opacity = '0';
         ogreImage.style.opacity = '1';
-        setTimeout(() => {
-            if (ogreVideo.parentNode) {
-                ogreContainer.removeChild(ogreVideo);
-            }
-        }, 300); // Coincide con la duración de la transición en CSS
-    }, { once: true });
+        setTimeout(() => ogreVideo.remove(), 300);
+    };
 
+    ogreVideo.addEventListener('ended', () => restore(1.5), { once: true });
     ogreVideo.play().catch(error => {
-         console.error("Error al reproducir el video del ogro:", error);
-         if (ogreVideo.parentNode) {
-            ogreContainer.removeChild(ogreVideo);
-         }
-         ogreImage.style.opacity = '1';
-         fadeAmbientVolume(1.0, 0.5);
+        console.error('Error al reproducir el video del ogro:', error);
+        restore(0.5);
     });
 }
-// --- FIN DEL CÓDIGO CORREGIDO ---
-
-function showResults() {
-    const resultsDiv = document.getElementById('results');
-    const resultsContent = document.getElementById('resultsContent');
-    const exportBtn = document.getElementById('exportBtn');
-    const shareBtn = document.getElementById('shareBtn'); // AÑADIR ESTA LÍNEA
-    
-    let resultsHTML = '';
-    currentReading.forEach((reading, index) => {
-        const cardData = reading.card;
-        const orientation = cardData.inverted ? 'invertida' : 'derecha';
-        const fullInterpretation = getInterpretation(cardData, cardData.inverted);
-        resultsHTML += `
-            <div class="result-item">
-                <h3>Carta ${index + 1} (${reading.position}):</h3>
-                <h4>${cardData.name} (${orientation})</h4>
-                <p>${fullInterpretation}</p>
-            </div>
-        `;
-    });
-    resultsContent.innerHTML = resultsHTML;
-    resultsDiv.style.display = 'block';
-    exportBtn.style.display = 'inline-block';
-    shareBtn.style.display = 'inline-block'; // AÑADIR ESTA LÍNEA
-    
-    getOgreInterpretation(currentReading);
-}
-
-async function exportReading() {
-    const exportBtn = document.getElementById('exportBtn');
-    exportBtn.disabled = true;
-    exportBtn.innerHTML = '<span class="loading"></span> Exportando...';
-    const elementToCapture = document.getElementById('reading-snapshot');
-    try {
-        const canvas = await html2canvas(elementToCapture, {
-            backgroundColor: '#1e0c3a',
-            useCORS: true,
-            scale: 2
-        });
-        const link = document.createElement('a');
-        link.download = 'mi-tirada-tarot-ogro.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    } catch (error) {
-        console.error('Error al exportar la imagen:', error);
-        alert('Hubo un problema al exportar la imagen.');
-    } finally {
-         exportBtn.disabled = false;
-         exportBtn.innerHTML = '📸 Exportar PNG';
-    }
-}
-// --- CORRECCIÓN MENÚ HAMBURGUESA ---
-function setupHamburgerMenu() {
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navLinks = document.getElementById('nav-links');
-
-    if (hamburgerBtn && navLinks) {
-        hamburgerBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Evita clics fantasma
-            navLinks.classList.toggle('active');
-            
-            // Opcional: Si quieres que cambie el icono
-            if (navLinks.classList.contains('active')) {
-                hamburgerBtn.textContent = '✕'; // Cambia a X al abrir
-            } else {
-                hamburgerBtn.textContent = '☰'; // Vuelve a hamburguesa
-            }
-        });
-
-        // Cerrar el menú si se hace clic fuera de él
-        document.addEventListener('click', (e) => {
-            if (navLinks.classList.contains('active') && 
-                !navLinks.contains(e.target) && 
-                !hamburgerBtn.contains(e.target)) {
-                navLinks.classList.remove('active');
-                hamburgerBtn.textContent = '☰';
-            }
-        });
-    }
-}
-

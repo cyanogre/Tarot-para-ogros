@@ -7,17 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-9443552615965258">
     <title>Sobre Grum - Tarot del Ogro Azul</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico">
+    <meta name="theme-color" content="#07040f">
+    <link rel="stylesheet" href="site.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Cormorant Garamond', serif;
-            background: radial-gradient(circle at 20% 30%, #1a0326 0%, #0f0120 40%, #000000 100%);
-            color: #f0f0f0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
 
         /* Fondo de estrellas mejorado */
         #star-background {
@@ -79,7 +75,7 @@
         .content-page {
             background: rgba(16, 8, 32, 0.85);
             backdrop-filter: blur(15px);
-            border: 2px solid #c0a87a;
+            border: 1px solid rgba(230, 200, 142, 0.35);
             border-radius: 20px;
             padding: 40px;
             animation: fadeIn 1.5s ease-out;
@@ -178,7 +174,7 @@
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             border-radius: 12px;
-            border: 2px solid #c0a87a;
+            border: 1px solid rgba(230, 200, 142, 0.35);
             box-shadow: 
                 0 0 25px rgba(192, 168, 122, 0.6),
                 0 8px 20px rgba(0, 0, 0, 0.4),
@@ -190,14 +186,14 @@
         }
 
         .card-front {
-            background-image: url('carta-frente.png');
+            background-image: url('img/carta-frente.webp');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
 
         .card-back {
-            background-image: url('carta-atras.png');
+            background-image: url('img/carta-atras.webp');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -442,8 +438,23 @@
     </style>
 </head>
 <body>
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand__logo"><img src="img/ogro.webp" alt="" width="36" height="36"></span>
+            <span class="brand__text">Tarot de <span>Grum</span></span>
+        </a>
+        <nav class="site-nav" aria-label="Principal">
+            <a href="index.html">Tirada</a>
+            <a href="sobre.html">Sobre Grum</a>
+            <a href="tarot.html">¿Qué es el Tarot?</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+        <div class="header-actions">
+            <a class="btn btn--sm header-cta" href="index.html#mesa">🔮 Tirada</a>
+            <button class="icon-btn nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false"><span class="nav-toggle__bars"></span></button>
+        </div>
+    </header>
     <div class="mystic-fog"></div>
-    <div id="star-background"></div>
     <div class="container">
         <div class="content-page">
             <h1 id="ogre-title" class="sparkle-container">
@@ -469,46 +480,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Crear estrellas mejoradas
-            const starBackground = document.getElementById('star-background');
-            const starCount = 200;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                const size = Math.random() * 4 + 1;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.opacity = Math.random() * 0.6 + 0.4;
-                star.dataset.speed = Math.random() * 0.15 + 0.02;
-                
-                // Algunas estrellas parpadean
-                if (Math.random() > 0.7) {
-                    star.classList.add('twinkle');
-                    star.style.animationDelay = `${Math.random() * 3}s`;
-                }
-                
-                starBackground.appendChild(star);
-            }
-
-            // Efecto parallax mejorado
-            document.body.addEventListener('mousemove', (e) => {
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
-                const mouseX = e.clientX - centerX;
-                const mouseY = e.clientY - centerY;
-                
-                const stars = document.querySelectorAll('.star');
-                stars.forEach(star => {
-                    const speed = parseFloat(star.dataset.speed);
-                    const x = -(mouseX * speed);
-                    const y = -(mouseY * speed);
-                    star.style.transform = `translate(${x}px, ${y}px)`;
-                });
-            });
-            
             // Chispas mejoradas en el texto
             const sparkleText = document.querySelector('.sparkle-text');
             const sparkleContainer = document.querySelector('.sparkle-container');
@@ -597,8 +568,8 @@
             frontImage.onload = () => { frontLoaded = true; showCard(); };
             backImage.onload = () => { backLoaded = true; showCard(); };
 
-            frontImage.src = 'carta-frente.png';
-            backImage.src = 'carta-atras.png';
+            frontImage.src = 'img/carta-frente.webp';
+            backImage.src = 'img/carta-atras.webp';
             
             // Temporizador de seguridad por si las imágenes no cargan
             setTimeout(() => {
@@ -635,12 +606,23 @@
                     cardBack.innerHTML = '<div style="font-size: 3rem; color: #c0a87a; text-shadow: 0 0 20px rgba(192, 168, 122, 0.8); animation: pulse 2s ease-in-out infinite;">✨</div>';
                 };
                 
-                testFront.src = 'carta-frente.png';
-                testBack.src = 'carta-atras.png';
+                testFront.src = 'img/carta-frente.webp';
+                testBack.src = 'img/carta-atras.webp';
             }
             
             checkAndSetFallback();
         });
     </script>
+
+    <footer class="site-footer">
+        <div class="site-footer__links">
+            <a href="index.html">Tirada</a>
+            <a href="sobre.html">Sobre Grum</a>
+            <a href="tarot.html">¿Qué es el Tarot?</a>
+            <a href="contacto.html">Contacto</a>
+        </div>
+        <p class="site-footer__sign">Hecho con 💙 y algún que otro gruñido en la Cueva de Grum.</p>
+    </footer>
+    <script src="site.js"></script>
 </body>
 </html>
