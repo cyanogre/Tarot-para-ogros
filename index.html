@@ -5,156 +5,288 @@
      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Realiza una tirada de tarot gratis con Grum, el ogro azul. Descubre lo que las cartas te deparan con interpretaciones directas y honestas. Elige tu mazo y tirada.">
+    <meta name="description" content="Realiza una tirada de tarot gratis con Grum, el ogro azul. Elige tú mismo tus cartas, descubre la carta del día y recibe interpretaciones directas y honestas.">
     <meta name="google-adsense-account" content="ca-pub-9443552615965258">
-    <title>🔮 Tarot de Grum el Ogro azul 🔮</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <meta name="theme-color" content="#07040f">
+    <meta property="og:title" content="Tarot de Grum, el ogro azul">
+    <meta property="og:description" content="Elige tus cartas y deja que un ogro gruñón pero sabio te lea el destino.">
+    <meta property="og:image" content="Ogro.png">
+    <meta property="og:type" content="website">
+    <title>Tarot de Grum, el ogro azul · Tirada de tarot gratis</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="img/ogro.webp">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <link rel="stylesheet" href="site.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="stars" id="stars"></div>
-    <div class="mystical-particles" id="particles"></div>
-    
-    <div class="main-nav">
-        <button id="hamburger-btn">☰</button>
-        <div id="nav-links">
+<body class="home">
+
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand__logo"><img src="img/ogro.webp" alt="" width="36" height="36"></span>
+            <span class="brand__text">Tarot de <span>Grum</span></span>
+        </a>
+        <nav class="site-nav" aria-label="Principal">
             <a href="index.html">Tirada</a>
             <a href="sobre.html">Sobre Grum</a>
             <a href="tarot.html">¿Qué es el Tarot?</a>
             <a href="contacto.html">Contacto</a>
+        </nav>
+        <div class="header-actions">
+            <button id="muteBtn" class="icon-btn" type="button" aria-label="Silenciar sonido" title="Sonido">🔊</button>
+            <button class="icon-btn nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false"><span class="nav-toggle__bars"></span></button>
         </div>
-    </div>
+    </header>
 
-    <div class="music-controls">
-        <button id="muteBtn">
-            🔊 Sonido
-        </button>
-    </div>
-
-    <div class="container">
-        <div id="reading-snapshot">
-            <div class="header">
-                <h1>🔮 Tarot de Grum el ogro azul ✨</h1>
-                <p>Descubre los secretos que las cartas de este ogro tienen para ti</p>
-                <div class="static-content">
-                    <h2>Bienvenid@ a la Cueva de Grum</h2>
-                    <p>¡Curiosa criatura! Has encontrado mi morada. Aquí, en la quietud del bosque digital, las cartas no mienten. Son un eco de tu energía, un mapa de los senderos que se abren ante ti.</p>
-                    <p>El Tarot no es para predecir un futuro de piedra. ¡Qué aburrido sería eso! Es una herramienta para que te entiendas mejor. Una charla entre tu alma y el universo, y yo, Grum, soy solo el traductor gruñón.</p>
-                    <h3>¿Cómo funciona este oráculo?</h3>
-                    <ol>
-                        <li><strong>Elige tu Mazo:</strong> Puedes usar el mazo completo de 78 cartas para una visión detallada, o solo los 22 Arcanos Mayores si buscas respuestas sobre los grandes temas de tu vida.</li>
-                        <li><strong>Selecciona una Tirada:</strong> Desde una sola carta para una respuesta rápida hasta la Cruz Celta para un análisis profundo. Escoge la que más resuene contigo ahora mismo.</li>
-                        <li><strong>Realiza la Tirada:</strong> Concéntrate en tu pregunta o en la situación que te inquieta y pulsa el botón. Dejaré que las cartas se mezclen con la energía del cosmos.</li>
-                        <li><strong>Recibe tu Lectura:</strong> Revelaré las cartas y te daré mi interpretación directa y sin rodeos, junto a la sabiduría tradicional de cada arcano.</li>
-                    </ol>
-                    <p>Ahora, respira hondo, deja que el ruido del mundo se apague y, cuando estés lista, comienza tu lectura.</p>
+    <main>
+        <!-- ================= PORTADA ================= -->
+        <section class="hero">
+            <div class="hero__copy">
+                <span class="eyebrow">✦ Oráculo gratuito · 78 cartas</span>
+                <h1 class="hero__title">El Tarot de <span class="shimmer">Grum</span></h1>
+                <p class="hero__lead">Un ogro azul, gruñón y con un corazón enorme, custodia un mazo muy antiguo. Baraja, <strong>elige tú mismo tus cartas</strong> y escucha lo que tiene que decirte. Sin rodeos.</p>
+                <div class="hero__cta">
+                    <a href="#mesa" class="btn" id="heroStartBtn">🔮 Empezar mi tirada</a>
+                    <button type="button" class="btn btn--ghost" id="dailyBtn">✨ Carta del día</button>
                 </div>
-                <div class="ogre-area">
-                    <div id="ogre-container">
-                        <img id="ogre-image" src="Ogro.png" alt="Ogro">
+                <ul class="hero__facts">
+                    <li><strong>4</strong> tiradas distintas</li>
+                    <li><strong>78</strong> arcanos</li>
+                    <li><strong>1</strong> ogro sabio</li>
+                </ul>
+            </div>
+
+            <div class="hero__stage" id="heroStage">
+                <svg class="rune-ring" viewBox="0 0 400 400" aria-hidden="true">
+                    <defs>
+                        <path id="ringPath" d="M200,200 m-170,0 a170,170 0 1,1 340,0 a170,170 0 1,1 -340,0"></path>
+                    </defs>
+                    <circle cx="200" cy="200" r="186" class="rune-ring__line"></circle>
+                    <circle cx="200" cy="200" r="154" class="rune-ring__line rune-ring__line--thin"></circle>
+                    <text><textPath href="#ringPath">✦ PASADO ✦ PRESENTE ✦ FUTURO ✦ LA ESTRELLA ✦ LA LUNA ✦ EL SOL ✦ EL MUNDO ✦ EL LOCO ✦</textPath></text>
+                </svg>
+                <div class="hero__halo" aria-hidden="true"></div>
+                <div class="orbit" aria-hidden="true">
+                    <span class="orbit__card"></span>
+                    <span class="orbit__card"></span>
+                    <span class="orbit__card"></span>
+                </div>
+                <button type="button" class="hero__ogre" id="heroOgre" aria-label="Hablar con Grum">
+                    <img src="img/ogro.webp" alt="Grum, el ogro azul, sujetando cartas de tarot" width="640" height="640">
+                </button>
+                <div class="hero__quip" id="heroQuip" role="status">¡Eh, tú! Sí, tú. Pínchame si te atreves.</div>
+            </div>
+        </section>
+
+        <!-- ================= LA MESA ================= -->
+        <section class="table-section" id="mesa">
+            <div id="reading-snapshot" class="snapshot">
+                <header class="section-head" data-reveal>
+                    <span class="eyebrow">✦ La mesa de Grum</span>
+                    <h2>Prepara tu tirada</h2>
+                    <p id="questionEcho" class="question-echo">Concéntrate en tu pregunta… o deja que el cosmos hable.</p>
+                </header>
+
+                <!-- Ritual: pregunta, mazo y tirada -->
+                <form class="ritual" id="ritualForm" data-html2canvas-ignore data-reveal autocomplete="off">
+                    <div class="ritual__step ritual__step--question">
+                        <label class="ritual__label" for="userQuestion"><span class="ritual__num">1</span> Tu pregunta <em>(opcional)</em></label>
+                        <input type="text" id="userQuestion" maxlength="160" placeholder="¿Qué le quieres preguntar al ogro?">
                     </div>
-                    <div class="speech-bubble" id="ogre-interpretation">
+
+                    <fieldset class="ritual__step">
+                        <legend class="ritual__label"><span class="ritual__num">2</span> El mazo</legend>
+                        <div class="chips">
+                            <label class="chip"><input type="radio" name="deckType" value="full" checked><span>🂠 Completo <small>78 cartas</small></span></label>
+                            <label class="chip"><input type="radio" name="deckType" value="major"><span>☀️ Arcanos Mayores <small>22 cartas</small></span></label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="ritual__step">
+                        <legend class="ritual__label"><span class="ritual__num">3</span> La tirada</legend>
+                        <div class="chips chips--spreads">
+                            <label class="chip chip--spread"><input type="radio" name="spreadType" value="1"><span><i class="mini-layout mini-layout--1"><b></b></i>Respuesta<small>1 carta</small></span></label>
+                            <label class="chip chip--spread"><input type="radio" name="spreadType" value="3" checked><span><i class="mini-layout mini-layout--3"><b></b><b></b><b></b></i>Pasado · Presente · Futuro<small>3 cartas</small></span></label>
+                            <label class="chip chip--spread"><input type="radio" name="spreadType" value="5"><span><i class="mini-layout mini-layout--5"><b></b><b></b><b></b><b></b><b></b></i>Cruz simple<small>5 cartas</small></span></label>
+                            <label class="chip chip--spread"><input type="radio" name="spreadType" value="10"><span><i class="mini-layout mini-layout--10"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></i>Cruz Celta<small>10 cartas</small></span></label>
+                        </div>
+                    </fieldset>
+
+                    <div class="ritual__go">
+                        <button type="submit" id="shuffleBtn" class="btn">🔮 Barajar el mazo</button>
+                    </div>
+                </form>
+
+                <!-- Tapete -->
+                <div class="tapete" id="tapete">
+                    <div class="tapete__corner tapete__corner--tl" aria-hidden="true"></div>
+                    <div class="tapete__corner tapete__corner--tr" aria-hidden="true"></div>
+                    <div class="tapete__corner tapete__corner--bl" aria-hidden="true"></div>
+                    <div class="tapete__corner tapete__corner--br" aria-hidden="true"></div>
+
+                    <div class="deck-zone" id="deck-area" data-html2canvas-ignore>
+                        <div class="deck-wrapper">
+                            <div id="shuffling-container" class="shuffling-container"></div>
+                            <button type="button" class="deck" id="deck" aria-label="Barajar el mazo">
+                                <span class="card-back"></span>
+                                <span class="card-back"></span>
+                                <span class="card-back"></span>
+                                <span class="card-back"></span>
+                            </button>
+                        </div>
+                        <div class="fan" id="fan" aria-label="Elige tus cartas"></div>
+                        <div class="deck-status">
+                            <p id="deckStatus">Toca el mazo o pulsa <strong>Barajar</strong> para empezar.</p>
+                            <div class="pick-progress" id="pickProgress" hidden>
+                                <span class="pick-progress__bar"><span id="pickBar"></span></span>
+                                <button type="button" class="btn btn--ghost btn--sm" id="randomPickBtn">🎲 Que elija Grum</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="spread" id="spreadContainer"></div>
+                </div>
+
+                <!-- Grum habla -->
+                <div class="grum-says ogre-area" id="grumSays" hidden>
+                    <div id="ogre-container" class="grum-says__avatar">
+                        <img id="ogre-image" src="img/ogro.webp" alt="Grum" width="640" height="640">
+                    </div>
+                    <div class="speech-bubble" id="ogre-interpretation" aria-live="polite">
                         El Ogro espera tu tirada...
                     </div>
                 </div>
-            </div>
-            <div class="reading-area">
-                <div class="spread-container" id="spreadContainer"></div>
-            </div>
 
-            <div class="results" id="results" style="display: none;">
-                <h2>📜 Tu Lectura de Tarot</h2>
-                <div id="resultsContent"></div>
-            </div>
-        </div>
-        <div class="controls">
-            <div class="control-group">
-                <h3>Tipo de Mazo</h3>
-                <select id="deckType">
-                    <option value="full">Mazo Completo (78 cartas)</option>
-                    <option value="major">Solo Arcanos Mayores (22 cartas)</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <h3>Tipo de Tirada</h3>
-                <select id="spreadType">
-                    <option value="1">1 Carta (Respuesta)</option>
-                    <option value="3">3 Cartas (Pasado, Presente, Futuro)</option>
-                    <option value="5">5 Cartas (Cruz Simple)</option>
-                    <option value="10">10 Cartas (Cruz Celta)</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <button id="shuffleBtn">
-                    🔮 Realizar Tirada
-                </button>
-                <div class="question-container">
-                    <input type="text" id="userQuestion" placeholder="¿Qué le quieres preguntar al Ogro? (Opcional)" autocomplete="off">
+                <!-- Lectura detallada -->
+                <div class="results" id="results" hidden>
+                    <h2>📜 Tu lectura, carta a carta</h2>
+                    <div id="resultsContent" class="results__grid"></div>
                 </div>
 
-                <div class="controls">
-                    <button id="shuffleBtn">🔮 Barajar y Consultar</button>
-                </div>
-                <button id="exportBtn" style="display: none;" class="export-btn">
-                    📸 Exportar PNG
-                </button>
-                <!-- NUEVOS BOTONES PARA COMPARTIR -->
-                <button id="shareBtn" style="display: none;" class="share-btn">
-                    🔗 Compartir
-                </button>
+                <p class="snapshot-brand">🔮 Tarot de Grum · el ogro azul ✦</p>
             </div>
+
+            <div class="reading-actions" id="readingActions" hidden>
+                <button type="button" id="newReadingBtn" class="btn">🔮 Nueva tirada</button>
+                <button type="button" id="exportBtn" class="btn btn--ghost">📸 Guardar imagen</button>
+                <button type="button" id="shareBtn" class="btn btn--blue">🔗 Compartir</button>
+            </div>
+        </section>
+
+        <!-- ================= GRIMORIO ================= -->
+        <section class="grimoire" id="grimorio" hidden>
+            <header class="section-head" data-reveal>
+                <span class="eyebrow">✦ Tu grimorio</span>
+                <h2>Tus últimas tiradas</h2>
+                <p>Grum apunta aquí tus lecturas (solo en este navegador), por si quieres ver cómo cambian los vientos.</p>
+            </header>
+            <ol class="grimoire__list" id="historyList"></ol>
+            <div class="grimoire__foot">
+                <button type="button" class="btn btn--ghost btn--sm" id="clearHistoryBtn">🧹 Borrar grimorio</button>
+            </div>
+        </section>
+
+        <!-- ================= GUÍA ================= -->
+        <section class="guide" id="como-funciona">
+            <header class="section-head" data-reveal>
+                <span class="eyebrow">✦ Bienvenid@ a la Cueva de Grum</span>
+                <h2>¿Cómo funciona este oráculo?</h2>
+                <p>¡Curiosa criatura! Has encontrado mi morada. Aquí, en la quietud del bosque digital, las cartas no mienten. Son un eco de tu energía, un mapa de los senderos que se abren ante ti.</p>
+            </header>
+            <ol class="steps">
+                <li class="step" data-reveal style="--reveal-delay:.0s">
+                    <span class="step__icon">🂠</span>
+                    <h3>Elige tu mazo</h3>
+                    <p>El mazo completo de 78 cartas para una visión detallada, o solo los 22 Arcanos Mayores si buscas respuestas sobre los grandes temas de tu vida.</p>
+                </li>
+                <li class="step" data-reveal style="--reveal-delay:.1s">
+                    <span class="step__icon">✚</span>
+                    <h3>Selecciona una tirada</h3>
+                    <p>Desde una sola carta para una respuesta rápida hasta la Cruz Celta para un análisis profundo. Escoge la que más resuene contigo ahora mismo.</p>
+                </li>
+                <li class="step" data-reveal style="--reveal-delay:.2s">
+                    <span class="step__icon">🖐️</span>
+                    <h3>Baraja y elige</h3>
+                    <p>Concéntrate en tu pregunta, baraja y escoge tus cartas del abanico, una a una. Tu intuición manda (o deja que Grum elija por ti).</p>
+                </li>
+                <li class="step" data-reveal style="--reveal-delay:.3s">
+                    <span class="step__icon">📜</span>
+                    <h3>Recibe tu lectura</h3>
+                    <p>Revelaré las cartas y te daré mi interpretación directa y sin rodeos, junto a la sabiduría tradicional de cada arcano.</p>
+                </li>
+            </ol>
+            <blockquote class="guide__quote" data-reveal>
+                “El Tarot no es para predecir un futuro de piedra. ¡Qué aburrido sería eso! Es una herramienta para que te entiendas mejor. Una charla entre tu alma y el universo, y yo, Grum, soy solo el traductor gruñón.”
+                <cite>— Grum, ogro y tarotista</cite>
+            </blockquote>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer__links">
+            <a href="index.html">Tirada</a>
+            <a href="sobre.html">Sobre Grum</a>
+            <a href="tarot.html">¿Qué es el Tarot?</a>
+            <a href="contacto.html">Contacto</a>
+            <button type="button" class="linkish" id="privacy-policy-link">🍪 Privacidad y cookies</button>
         </div>
-        <div class="deck-area" id="deck-area">
-            <div class="deck-wrapper">
-                <div id="shuffling-container" class="shuffling-container" style="display: none;"></div>
-                <div class="deck" id="deck">
-                    <div class="card-back"></div>
-                    <div class="card-back"></div>
-                    <div class="card-back"></div>
-                </div>
+        <p class="site-footer__sign">Hecho con 💙 y algún que otro gruñido en la Cueva de Grum.</p>
+    </footer>
+
+    <!-- ================= CAPAS FLOTANTES ================= -->
+    <div class="lightbox" id="lightbox" hidden>
+        <div class="lightbox__panel" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
+            <button type="button" class="lightbox__close" id="lightboxClose" aria-label="Cerrar">&times;</button>
+            <div class="lightbox__card" id="lightboxCard"></div>
+            <div class="lightbox__info">
+                <span class="eyebrow" id="lightboxEyebrow">✦ Carta</span>
+                <h2 id="lightboxTitle"></h2>
+                <p class="lightbox__meta" id="lightboxMeta"></p>
+                <p class="lightbox__text" id="lightboxText"></p>
+                <p class="lightbox__ogre" id="lightboxOgre"></p>
             </div>
-            <p id="deckStatus">Haz clic para comenzar tu lectura...</p>
         </div>
     </div>
 
-    <div id="privacy-policy-link" class="privacy-button">🍪</div>
-
     <div id="cookie-banner" class="cookie-banner" style="display: none;">
-        <p>Este sitio web utiliza cookies de análisis para mejorar tu experiencia. ¿Aceptas su uso? Puedes consultar nuestra <a href="#" id="privacy-link-banner">política de privacidad</a>.</p>
+        <p>🍪 Este sitio utiliza cookies de análisis para mejorar tu experiencia. ¿Aceptas su uso? Consulta la <a href="#" id="privacy-link-banner">política de privacidad</a>.</p>
         <div class="cookie-buttons">
-            <button id="cookie-accept">Aceptar</button>
-            <button id="cookie-decline">Rechazar</button>
+            <button type="button" id="cookie-accept" class="btn btn--sm">Aceptar</button>
+            <button type="button" id="cookie-decline" class="btn btn--ghost btn--sm">Rechazar</button>
         </div>
     </div>
 
     <div id="privacy-modal" class="modal-overlay">
         <div class="modal-content">
-            <button id="modal-close" class="modal-close">&times;</button>
+            <button type="button" id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
             <h2>Política de Privacidad y Cookies</h2>
             <p><strong>Última actualización:</strong> 23 de septiembre de 2025</p>
-            
+
             <h3>1. Introducción</h3>
             <p>En Tarot del Ogro Azul ("nosotros", "nuestro sitio"), tu privacidad es una prioridad. Esta política detalla qué información recopilamos, cómo la utilizamos y los derechos que tienes sobre tus datos. Al utilizar nuestro sitio, aceptas las prácticas descritas aquí.</p>
-    
+
             <h3>2. Información que Recopilamos y su Finalidad</h3>
             <p>Recopilamos información mínima para poder ofrecer y mejorar nuestros servicios:</p>
             <ul>
                 <li>
-                    <strong>Cookies Técnicas y de Preferencia:</strong> Utilizamos el almacenamiento local (LocalStorage) para guardar tu decisión sobre el consentimiento de cookies. Esto es esencial para no preguntarte repetidamente y recordar tu preferencia. No almacena información personal.
+                    <strong>Cookies Técnicas y de Preferencia:</strong> Utilizamos el almacenamiento local (LocalStorage) para guardar tu decisión sobre el consentimiento de cookies, tu preferencia de sonido, tu carta del día y el historial de tus últimas tiradas (tu "grimorio"). Esta información se queda en tu navegador y nunca se envía a ningún servidor. Puedes borrar el grimorio en cualquier momento.
                 </li>
                 <li>
                     <strong>Cookies de Análisis (Google Analytics):</strong> Si otorgas tu consentimiento, utilizamos estas cookies para recopilar datos anónimos sobre cómo interactúas con nuestra web (por ejemplo, qué tiradas son más populares o el tiempo de visita). Esto nos ayuda a entender qué funciona y a mejorar la experiencia para todos.
                 </li>
                 <li>
-                    <strong>Cookies de Publicidad (Google AdSense):</strong> Con tu consentimiento, nuestro socio Google AdSense y sus afiliados pueden utilizar cookies para mostrar anuncios relevantes basados en tus visitas a este y otros sitios web. Esta publicidad nos ayuda a mantener el oráculo de Grum en funcionamiento de forma gratuita. Puedes gestionar tus preferencias de anuncios personalizados en la <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer" style="color: #e6c88e;">Configuración de Anuncios de Google</a>.
+                    <strong>Cookies de Publicidad (Google AdSense):</strong> Con tu consentimiento, nuestro socio Google AdSense y sus afiliados pueden utilizar cookies para mostrar anuncios relevantes basados en tus visitas a este y otros sitios web. Esta publicidad nos ayuda a mantener el oráculo de Grum en funcionamiento de forma gratuita. Puedes gestionar tus preferencias de anuncios personalizados en la <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer">Configuración de Anuncios de Google</a>.
                 </li>
             </ul>
-    
+
             <h3>3. Información enviada a Terceros</h3>
             <p>
-                <strong>API de Google Gemini:</strong> Para generar las interpretaciones del Ogro, la información de tu tirada (los nombres de las cartas, sus posiciones y su orientación) se envía de forma completamente anónima a la API de Google Gemini. No se incluye ninguna información que pueda identificarte.
+                <strong>API de Google Gemini:</strong> Para generar las interpretaciones del Ogro, la información de tu tirada (los nombres de las cartas, sus posiciones, su orientación y, si la escribes, tu pregunta) se envía de forma anónima a la API de Google Gemini. No se incluye ninguna información que pueda identificarte.
             </p>
-    
+
             <h3>4. Tus Derechos como Usuario</h3>
             <p>Como usuario, tienes derecho a:</p>
             <ul>
@@ -164,55 +296,39 @@
                 <li><strong>Oposición y Limitación:</strong> Oponerte o limitar el tratamiento de tus datos.</li>
             </ul>
             <p>Para ejercer estos derechos, puedes contactarnos a través del correo electrónico proporcionado en nuestra página de contacto.</p>
-    
+
             <h3>5. Gestión de tu Consentimiento</h3>
             <p>Puedes retirar tu consentimiento para el uso de cookies no esenciales en cualquier momento. La forma más sencilla es borrar las cookies de tu navegador, lo que hará que el banner de consentimiento vuelva a aparecer en tu próxima visita, permitiéndote elegir de nuevo.</p>
-            
+
             <h3>6. Cambios en esta Política</h3>
             <p>Nos reservamos el derecho de modificar esta política en el futuro. Cualquier cambio será publicado en esta página y se actualizará la fecha de "Última actualización".</p>
         </div>
     </div>
 
-    <script src="tarot-data.js"></script>
-    <script src="fallback-interpretations.js"></script> <script src="audio.js"></script>
-    <script src="ui.js"></script>
-    <script src="main.js"></script>
-    <!-- Modal para compartir en redes sociales -->
     <div id="share-modal" class="share-modal">
         <div class="share-modal-content">
-            <h2>🌟 Compartir mi Tirada</h2>
-            <p style="color: #e0e0e0; margin-bottom: 15px;">La imagen se descargará automáticamente para que puedas subirla</p>
+            <h2>🌟 Compartir mi tirada</h2>
+            <p class="share-modal__hint">La imagen se descargará automáticamente para que puedas subirla.</p>
             <div class="share-buttons">
-                <!-- Compartir nativo (solo móviles compatibles) -->
-                <button class="social-btn native" id="share-native" style="display: none;">
+                <button type="button" class="social-btn native" id="share-native" style="display: none;">
                     <span>📱</span> Compartir (con imagen)
                 </button>
-                
-                <a href="#" class="social-btn twitter" id="share-twitter">
-                    <span>🐦</span> Descargar y abrir Twitter/X
-                </a>
-                <a href="#" class="social-btn facebook" id="share-facebook">
-                    <span>📘</span> Descargar y abrir Facebook
-                </a>
-                <a href="#" class="social-btn whatsapp" id="share-whatsapp">
-                    <span>💬</span> Descargar y abrir WhatsApp
-                </a>
-                <a href="#" class="social-btn telegram" id="share-telegram">
-                    <span>✈️</span> Descargar y abrir Telegram
-                </a>
-                <button class="social-btn download" id="download-only">
-                    <span>💾</span> Solo descargar imagen
-                </button>
-                <button class="social-btn copy" id="copy-link">
-                    <span>📋</span> Copiar enlace
-                </button>
+                <a href="#" class="social-btn twitter" id="share-twitter"><span>𝕏</span> Twitter / X</a>
+                <a href="#" class="social-btn facebook" id="share-facebook"><span>📘</span> Facebook</a>
+                <a href="#" class="social-btn whatsapp" id="share-whatsapp"><span>💬</span> WhatsApp</a>
+                <a href="#" class="social-btn telegram" id="share-telegram"><span>✈️</span> Telegram</a>
+                <button type="button" class="social-btn download" id="download-only"><span>💾</span> Solo descargar</button>
+                <button type="button" class="social-btn copy" id="copy-link"><span>📋</span> Copiar enlace</button>
             </div>
-            <button class="close-share-modal" id="close-share-modal">Cerrar</button>
+            <button type="button" class="close-share-modal" id="close-share-modal">Cerrar</button>
         </div>
     </div>
+
+    <script src="site.js"></script>
+    <script src="tarot-data.js"></script>
+    <script src="fallback-interpretations.js"></script>
+    <script src="audio.js"></script>
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
-
-
-
-
